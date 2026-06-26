@@ -24,3 +24,4 @@ Added plugin system architecture for custom parsers.
 Created Dockerfile for containerized deployment.
 Added GitHub Actions CI workflow configuration.
 Implemented log deduplication by hash comparison.
+Added support for compressed (.gz) log files.
