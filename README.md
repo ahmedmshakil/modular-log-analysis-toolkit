@@ -5,3 +5,4 @@ Defined core log parsing module architecture.
 Added configuration file support for log paths.
 Implemented basic file reader utility function.
 Added error handling for missing log files.
+Created log entry data model and schema.
