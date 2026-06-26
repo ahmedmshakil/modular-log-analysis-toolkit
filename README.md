@@ -26,3 +26,4 @@ Added GitHub Actions CI workflow configuration.
 Implemented log deduplication by hash comparison.
 Added support for compressed (.gz) log files.
 Created documentation for all public API functions.
+Added performance benchmarks for parser module.
