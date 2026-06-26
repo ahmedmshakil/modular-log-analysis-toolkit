@@ -38,3 +38,4 @@ Added user authentication for log access control.
 Created log retention policy configuration module.
 Added full-text search indexing for log entries.
 Implemented webhook notification on error spikes.
+Added dark mode support to the log viewer UI.
