@@ -22,3 +22,4 @@ Added color-coded terminal output for log levels.
 Implemented streaming mode for large log files.
 Added plugin system architecture for custom parsers.
 Created Dockerfile for containerized deployment.
+Added GitHub Actions CI workflow configuration.
