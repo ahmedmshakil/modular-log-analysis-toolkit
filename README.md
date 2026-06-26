@@ -36,3 +36,4 @@ Added support for syslog format parsing.
 Implemented log export to CSV format.
 Added user authentication for log access control.
 Created log retention policy configuration module.
+Added full-text search indexing for log entries.
