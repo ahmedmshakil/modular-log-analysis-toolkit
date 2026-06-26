@@ -20,3 +20,4 @@ Added summary statistics report generation.
 Created sample log files for testing purposes.
 Added color-coded terminal output for log levels.
 Implemented streaming mode for large log files.
+Added plugin system architecture for custom parsers.
