@@ -10,3 +10,4 @@ Added timestamp parsing for log entries.
 Implemented log level filtering (INFO, WARN, ERROR).
 Added regex pattern matching for log lines.
 Created unit test scaffolding for parser module.
+Added support for multi-line log entries.
