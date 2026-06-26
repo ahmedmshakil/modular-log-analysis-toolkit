@@ -15,3 +15,4 @@ Implemented log aggregation by time window.
 Added JSON output format for parsed logs.
 Created CLI interface for running the analyzer.
 Added --input and --output flag support to CLI.
+Implemented log rotation detection logic.
