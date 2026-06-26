@@ -32,3 +32,4 @@ Added log source tagging for multi-service environments.
 Implemented rate limiting for log ingestion pipeline.
 Added alert system for critical error threshold breaches.
 Created dashboard layout for real-time log monitoring.
+Added support for syslog format parsing.
