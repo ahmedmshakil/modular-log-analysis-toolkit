@@ -28,3 +28,4 @@ Added support for compressed (.gz) log files.
 Created documentation for all public API functions.
 Added performance benchmarks for parser module.
 Final cleanup and version bump to v1.0.0.
+Added log source tagging for multi-service environments.
