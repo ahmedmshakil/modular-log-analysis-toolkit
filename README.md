@@ -8,3 +8,4 @@ Added error handling for missing log files.
 Created log entry data model and schema.
 Added timestamp parsing for log entries.
 Implemented log level filtering (INFO, WARN, ERROR).
+Added regex pattern matching for log lines.
