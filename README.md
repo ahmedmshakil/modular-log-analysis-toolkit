@@ -17,3 +17,4 @@ Created CLI interface for running the analyzer.
 Added --input and --output flag support to CLI.
 Implemented log rotation detection logic.
 Added summary statistics report generation.
+Created sample log files for testing purposes.
