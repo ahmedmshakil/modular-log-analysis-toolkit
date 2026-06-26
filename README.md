@@ -12,3 +12,4 @@ Added regex pattern matching for log lines.
 Created unit test scaffolding for parser module.
 Added support for multi-line log entries.
 Implemented log aggregation by time window.
+Added JSON output format for parsed logs.
