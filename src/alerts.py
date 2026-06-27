@@ -1,0 +1,99 @@
+"""Alert system for log monitoring thresholds."""
+
+import json
+import time
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import List, Dict, Optional, Callable
+from pathlib import Path
+
+
+class AlertSeverity(Enum):
+    """Alert severity levels."""
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
+
+
+@dataclass
+class Alert:
+    """Represents a triggered alert."""
+    severity: AlertSeverity
+    message: str
+    metric_name: str
+    current_value: float
+    threshold: float
+    timestamp: datetime = field(default_factory=datetime.now)
+    acknowledged: bool = False
+
+    def to_dict(self) -> Dict:
+        return {
+            "severity": self.severity.value,
+            "message": self.message,
+            "metric_name": self.metric_name,
+            "current_value": self.current_value,
+            "threshold": self.threshold,
+            "timestamp": self.timestamp.isoformat(),
+        }
+
+
+class AlertManager:
+    """Manage alert thresholds and notifications."""
+
+    def __init__(self):
+        self.thresholds: Dict[str, Dict] = {}
+        self.alerts: List[Alert] = []
+        self.callbacks: List[Callable[[Alert], None]] = []
+
+    def set_threshold(self, metric: str, value: float, severity: AlertSeverity = AlertSeverity.MEDIUM):
+        """Set an alert threshold."""
+        self.thresholds[metric] = {"value": value, "severity": severity}
+
+    def check(self, metric: str, current_value: float) -> Optional[Alert]:
+        """Check if a metric exceeds its threshold."""
+        if metric not in self.thresholds:
+            return None
+
+        threshold = self.thresholds[metric]
+        if current_value > threshold["value"]:
+            alert = Alert(
+                severity=threshold["severity"],
+                message=f"{metric} exceeded threshold: {current_value} > {threshold['value']}",
+                metric_name=metric,
+                current_value=current_value,
+                threshold=threshold["value"],
+            )
+            self.alerts.append(alert)
+            self._notify(alert)
+            return alert
+        return None
+
+    def register_callback(self, callback: Callable[[Alert], None]):
+        """Register a notification callback."""
+        self.callbacks.append(callback)
+
+    def _notify(self, alert: Alert):
+        """Send notifications for an alert."""
+        for callback in self.callbacks:
+            try:
+                callback(alert)
+            except Exception:
+                pass
+
+    def get_active_alerts(self) -> List[Alert]:
+        """Get unacknowledged alerts."""
+        return [a for a in self.alerts if not a.acknowledged]
+
+    def acknowledge(self, index: int):
+        """Acknowledge an alert."""
+        if 0 <= index < len(self.alerts):
+            self.alerts[index].acknowledged = True
+
+    def export_alerts(self, output_path: str):
+        """Export alerts to JSON file."""
+        path = Path(output_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with open(path, "w") as f:
+            json.dump([a.to_dict() for a in self.alerts], f, indent=2)
