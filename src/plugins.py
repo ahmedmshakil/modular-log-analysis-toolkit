@@ -1,0 +1,107 @@
+"""Plugin system for custom log parsers and processors."""
+
+import importlib
+import os
+from abc import ABC, abstractmethod
+from pathlib import Path
+from typing import Dict, List, Optional, Type
+
+from .models import LogEntry
+
+
+class LogPlugin(ABC):
+    """Base class for log analyzer plugins."""
+
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        """Plugin name."""
+        pass
+
+    @property
+    @abstractmethod
+    def version(self) -> str:
+        """Plugin version."""
+        pass
+
+    @abstractmethod
+    def process(self, entries: List[LogEntry]) -> List[LogEntry]:
+        """Process log entries."""
+        pass
+
+    def on_startup(self):
+        """Called when plugin is loaded."""
+        pass
+
+    def on_shutdown(self):
+        """Called when plugin is unloaded."""
+        pass
+
+
+class PluginManager:
+    """Manage log analyzer plugins."""
+
+    def __init__(self):
+        self._plugins: Dict[str, LogPlugin] = {}
+        self._enabled: Dict[str, bool] = {}
+
+    def register(self, plugin: LogPlugin):
+        """Register a plugin."""
+        self._plugins[plugin.name] = plugin
+        self._enabled[plugin.name] = True
+        plugin.on_startup()
+
+    def unregister(self, name: str):
+        """Unregister a plugin."""
+        if name in self._plugins:
+            self._plugins[name].on_shutdown()
+            del self._plugins[name]
+            del self._enabled[name]
+
+    def enable(self, name: str):
+        """Enable a plugin."""
+        if name in self._enabled:
+            self._enabled[name] = True
+
+    def disable(self, name: str):
+        """Disable a plugin."""
+        if name in self._enabled:
+            self._enabled[name] = False
+
+    def get_plugin(self, name: str) -> Optional[LogPlugin]:
+        """Get a plugin by name."""
+        return self._plugins.get(name)
+
+    def list_plugins(self) -> List[Dict[str, str]]:
+        """List all registered plugins."""
+        return [
+            {"name": p.name, "version": p.version, "enabled": self._enabled.get(p.name, False)}
+            for p in self._plugins.values()
+        ]
+
+    def process_all(self, entries: List[LogEntry]) -> List[LogEntry]:
+        """Run all enabled plugins on entries."""
+        result = entries
+        for name, plugin in self._plugins.items():
+            if self._enabled.get(name, False):
+                result = plugin.process(result)
+        return result
+
+    def load_from_directory(self, directory: str):
+        """Load plugins from a directory."""
+        plugin_dir = Path(directory)
+        if not plugin_dir.exists():
+            return
+        for file in plugin_dir.glob("*.py"):
+            if file.name.startswith("_"):
+                continue
+            module_name = file.stem
+            spec = importlib.util.spec_from_file_location(module_name, str(file))
+            if spec and spec.loader:
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                for attr_name in dir(module):
+                    attr = getattr(module, attr_name)
+                    if (isinstance(attr, type) and issubclass(attr, LogPlugin)
+                            and attr is not LogPlugin):
+                        self.register(attr())
