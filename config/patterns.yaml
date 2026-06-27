@@ -1,0 +1,35 @@
+# Custom log patterns for sk-loganalyzer
+# Define regex patterns with named groups for parsing different log formats
+
+patterns:
+  nginx:
+    regex: '(?P<ip>\S+) - - \[(?P<timestamp>[^\]]+)\] "(?P<request>[^"]*)" (?P<status>\d+) (?P<size>\d+)'
+    description: "Nginx access log format"
+
+  django:
+    regex: '\[(?P<timestamp>[^\]]+)\] (?P<level>\w+) (?P<logger>\S+): (?P<message>.*)'
+    description: "Django application log format"
+
+  gunicorn:
+    regex: '\[(?P<timestamp>[^\]]+)\] \[(?P<pid>\d+)\] \[(?P<level>\w+)\] (?P<message>.*)'
+    description: "Gunicorn server log format"
+
+  postgres:
+    regex: '(?P<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+ \w+) \[(?P<pid>\d+)\] (?P<level>\w+):\s+(?P<message>.*)'
+    description: "PostgreSQL log format"
+
+  mongodb:
+    regex: '(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+[+-]\d{4})\s+(?P<severity>\w)\s+\[(?P<component>\w+)\]\s+(?P<message>.*)'
+    description: "MongoDB log format"
+
+  elasticsearch:
+    regex: '\[(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2},\d{3})\]\[(?P<level>\w+)\s*)\]\[(?P<logger>\S+)\s*\]\s+(?P<message>.*)'
+    description: "Elasticsearch log format"
+
+  kafka:
+    regex: '\[(?P<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\] (?P<level>\w+) (?P<class>\S+) \[(?P<thread>[^\]]+)\] (?P<message>.*)'
+    description: "Apache Kafka log format"
+
+  spring:
+    regex: '(?P<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3})\s+(?P<level>\w+)\s+\d+\s+---\s+\[(?P<thread>[^\]]+)\]\s+(?P<logger>\S+)\s*:\s+(?P<message>.*)'
+    description: "Spring Boot log format"
