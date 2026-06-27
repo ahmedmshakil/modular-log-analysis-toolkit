@@ -1,0 +1,40 @@
+"""File reader utilities for log analysis."""
+
+import gzip
+import os
+from pathlib import Path
+from typing import Iterator, Optional
+
+
+def read_log_lines(file_path: str, encoding: str = "utf-8") -> Iterator[str]:
+    """Read log file line by line with memory efficiency."""
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Log file not found: {file_path}")
+    with open(path, "r", encoding=encoding) as f:
+        for line in f:
+            yield line.rstrip("\n")
+
+
+def read_compressed_log(file_path: str, encoding: str = "utf-8") -> Iterator[str]:
+    """Read gzip-compressed log files."""
+    with gzip.open(file_path, "rt", encoding=encoding) as f:
+        for line in f:
+            yield line.rstrip("\n")
+
+
+def get_file_size(file_path: str) -> int:
+    """Return file size in bytes."""
+    return os.path.getsize(file_path)
+
+
+def detect_encoding(file_path: str) -> str:
+    """Auto-detect file encoding."""
+    try:
+        with open(file_path, "rb") as f:
+            sample = f.read(4096)
+        if sample.startswith(b"\xef\xbb\xbf"):
+            return "utf-8-sig"
+        return "utf-8"
+    except Exception:
+        return "utf-8"
