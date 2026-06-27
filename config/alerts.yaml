@@ -1,0 +1,52 @@
+# Alert configuration for sk-loganalyzer
+# Define thresholds and notification channels
+
+thresholds:
+  error_rate:
+    value: 5.0
+    severity: high
+    description: "Error rate percentage threshold"
+
+  critical_count:
+    value: 3
+    severity: critical
+    description: "Number of critical errors in window"
+
+  warn_rate:
+    value: 20.0
+    severity: medium
+    description: "Warning rate per minute"
+
+  response_time:
+    value: 5000
+    severity: high
+    description: "Max response time in milliseconds"
+
+notifications:
+  slack:
+    enabled: false
+    webhook_url: ""
+    channel: "#alerts"
+    mention_on_critical: "@channel"
+
+  email:
+    enabled: false
+    smtp_host: "smtp.example.com"
+    smtp_port: 587
+    from_addr: "alerts@example.com"
+    to_addrs:
+      - "admin@example.com"
+
+  webhook:
+    enabled: false
+    url: "https://hooks.example.com/alerts"
+    method: "POST"
+    headers:
+      Content-Type: "application/json"
+
+silence_rules:
+  - name: "maintenance_window"
+    start: "02:00"
+    end: "04:00"
+    days: ["Sunday"]
+    description: "Suppress alerts during maintenance"
