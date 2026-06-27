@@ -1,0 +1,55 @@
+"""Log deduplication by hash comparison."""
+
+import hashlib
+from collections import defaultdict
+from typing import List, Dict, Tuple
+
+from .models import LogEntry
+
+
+class LogDeduplicator:
+    """Remove duplicate log entries based on content hashing."""
+
+    def __init__(self, ignore_timestamp: bool = True):
+        self.ignore_timestamp = ignore_timestamp
+        self._seen: Dict[str, int] = {}
+
+    def _hash_entry(self, entry: LogEntry) -> str:
+        """Generate hash for a log entry."""
+        parts = [
+            entry.level.value,
+            entry.message,
+            entry.source or "",
+        ]
+        if not self.ignore_timestamp:
+            parts.append(entry.timestamp.isoformat())
+        content = "|".join(parts)
+        return hashlib.md5(content.encode()).hexdigest()
+
+    def deduplicate(self, entries: List[LogEntry]) -> Tuple[List[LogEntry], Dict[str, int]]:
+        """Remove duplicates, return unique entries and counts."""
+        unique = []
+        counts: Dict[str, int] = defaultdict(int)
+
+        for entry in entries:
+            h = self._hash_entry(entry)
+            counts[h] += 1
+            if h not in self._seen:
+                self._seen[h] = 1
+                unique.append(entry)
+            else:
+                self._seen[h] += 1
+
+        return unique, dict(counts)
+
+    def get_duplicate_summary(self) -> List[Tuple[str, int]]:
+        """Get summary of duplicated entries."""
+        return [(h, count) for h, count in self._seen.items() if count > 1]
+
+    def total_duplicates_removed(self) -> int:
+        """Count total duplicates found."""
+        return sum(count - 1 for count in self._seen.values() if count > 1)
+
+    def reset(self):
+        """Clear deduplication state."""
+        self._seen.clear()
