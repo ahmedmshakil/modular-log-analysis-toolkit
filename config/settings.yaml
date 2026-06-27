@@ -1,0 +1,23 @@
+# Default configuration for sk-loganalyzer
+log_paths:
+  - /var/log/syslog
+  - /var/log/auth.log
+  - /var/log/application.log
+
+output:
+  format: json
+  directory: ./output
+
+parsing:
+  timestamp_format: "%Y-%m-%d %H:%M:%S"
+  multiline: true
+  max_line_length: 4096
+
+retention:
+  days: 30
+  compress_old: true
+
+alerts:
+  enabled: true
+  threshold_error: 10
+  threshold_warn: 50
