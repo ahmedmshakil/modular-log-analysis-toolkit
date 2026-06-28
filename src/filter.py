@@ -61,6 +61,8 @@ class LogFilter:
 
     def count_by_level(self) -> dict:
         """Count entries grouped by level."""
+        if not self.entries:
+            return {}
         counts = {}
         for entry in self.entries:
             level = entry.level.value
