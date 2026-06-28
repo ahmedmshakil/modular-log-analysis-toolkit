@@ -13,6 +13,8 @@ class WebhookSender:
     """Send webhook notifications for log events."""
 
     def __init__(self, url: str, headers: Optional[Dict[str, str]] = None, timeout: int = 10):
+        if not url.startswith(("http://", "https://")):
+            raise ValueError("Webhook URL must start with http:// or https://")
         self.url = url
         self.headers = headers or {"Content-Type": "application/json"}
         self.timeout = timeout
