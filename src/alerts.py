@@ -28,6 +28,9 @@ class Alert:
     timestamp: datetime = field(default_factory=datetime.now)
     acknowledged: bool = False
 
+    def __repr__(self) -> str:
+        return f"Alert(severity={self.severity.value}, metric={self.metric_name}, value={self.current_value})"
+
     def to_dict(self) -> Dict:
         return {
             "severity": self.severity.value,
