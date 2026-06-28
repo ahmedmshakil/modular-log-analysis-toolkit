@@ -27,6 +27,7 @@ class Alert:
     threshold: float
     timestamp: datetime = field(default_factory=datetime.now)
     acknowledged: bool = False
+    acknowledged_at: Optional[datetime] = None
 
     def __repr__(self) -> str:
         return f"Alert(severity={self.severity.value}, metric={self.metric_name}, value={self.current_value})"
@@ -93,6 +94,7 @@ class AlertManager:
         """Acknowledge an alert."""
         if 0 <= index < len(self.alerts):
             self.alerts[index].acknowledged = True
+            self.alerts[index].acknowledged_at = datetime.now()
 
     def export_alerts(self, output_path: str):
         """Export alerts to JSON file."""
