@@ -36,7 +36,8 @@ class LogParser:
         elif pattern_name in PATTERNS:
             self.pattern = PATTERNS[pattern_name]
         else:
-            raise ValueError(f"Unknown pattern: {pattern_name}")
+            available = ", ".join(PATTERNS.keys())
+            raise ValueError(f"Unknown pattern: {pattern_name}. Available patterns: {available}")
         self.pattern_name = pattern_name
 
     def parse_line(self, line: str, line_number: int = 0) -> Optional[LogEntry]:
