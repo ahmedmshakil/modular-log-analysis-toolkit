@@ -17,7 +17,7 @@ def build_parser() -> argparse.ArgumentParser:
     """Build the CLI argument parser."""
     p = argparse.ArgumentParser(
         prog="sk-loganalyzer",
-        description="Analyze and process log files efficiently.",
+        description="Analyze, filter, and export log files with powerful pattern matching.",
     )
     p.add_argument("input", nargs="+", help="Log file(s) to analyze")
     p.add_argument("-o", "--output", help="Output file path")
