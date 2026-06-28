@@ -17,7 +17,7 @@ class WebhookSender:
             raise ValueError("Webhook URL must start with http:// or https://")
         self.url = url
         self.headers = headers or {"Content-Type": "application/json"}
-        self.timeout = timeout
+        self.timeout = max(1, min(timeout, 120))
         self._sent_count = 0
         self._error_count = 0
 
