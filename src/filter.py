@@ -54,6 +54,11 @@ class LogFilter:
         self._filters.append(_filter)
         return self
 
+    def clear_filters(self) -> "LogFilter":
+        """Remove all pending filters."""
+        self._filters.clear()
+        return self
+
     def apply(self) -> List[LogEntry]:
         """Apply all filters and return matching entries."""
         result = self.entries
