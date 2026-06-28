@@ -94,5 +94,6 @@ class LogParser:
             "ERR": LogLevel.ERROR,
             "CRITICAL": LogLevel.CRITICAL,
             "FATAL": LogLevel.CRITICAL,
+            "TRACE": LogLevel.TRACE,
         }
         return mapping.get(level_str.upper(), LogLevel.INFO)
