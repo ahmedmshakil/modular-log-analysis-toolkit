@@ -18,9 +18,12 @@ def read_log_lines(file_path: str, encoding: str = "utf-8") -> Iterator[str]:
 
 def read_compressed_log(file_path: str, encoding: str = "utf-8") -> Iterator[str]:
     """Read gzip-compressed log files."""
-    with gzip.open(file_path, "rt", encoding=encoding) as f:
-        for line in f:
-            yield line.rstrip("\n")
+    try:
+        with gzip.open(file_path, "rt", encoding=encoding) as f:
+            for line in f:
+                yield line.rstrip("\n")
+    except gzip.BadGzipFile:
+        raise ValueError(f"File is not a valid gzip file: {file_path}")
 
 
 def get_file_size(file_path: str) -> int:
