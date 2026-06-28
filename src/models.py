@@ -50,3 +50,4 @@ class AnalysisResult:
     time_range: Optional[tuple] = None
     top_errors: List[str] = field(default_factory=list)
     sources: List[str] = field(default_factory=list)
+    duration_seconds: float = 0.0
