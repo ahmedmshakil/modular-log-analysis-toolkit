@@ -30,7 +30,9 @@ class LogFilter:
     def by_source(self, source: str) -> "LogFilter":
         """Filter by log source."""
         def _filter(entry: LogEntry) -> bool:
-            return entry.source and source.lower() in entry.source.lower()
+            if not entry.source:
+                return False
+            return source.lower() in entry.source.lower()
         self._filters.append(_filter)
         return self
 
