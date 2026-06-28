@@ -90,7 +90,9 @@ class LogSearchIndex:
     @property
     def stats(self) -> Dict[str, int]:
         """Get index statistics."""
+        total_words = sum(len(indices) for indices in self._index.values())
         return {
             "entries": len(self._entries),
             "unique_words": len(self._index),
+            "total_word_occurrences": total_words,
         }
