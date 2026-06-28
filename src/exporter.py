@@ -13,12 +13,12 @@ class LogExporter:
     """Export log entries and analysis results."""
 
     @staticmethod
-    def to_json(entries: List[LogEntry], output_path: str, indent: int = 2) -> str:
+    def to_json(entries: List[LogEntry], output_path: str, indent: int = 2, encoding: str = "utf-8") -> str:
         """Export entries to JSON format."""
         data = [entry.to_dict() for entry in entries]
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, "w") as f:
+        with open(path, "w", encoding=encoding) as f:
             json.dump(data, f, indent=indent, default=str)
         return str(path)
 
