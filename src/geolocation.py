@@ -20,6 +20,14 @@ class GeoLocation:
     org: str = ""
     timezone: str = ""
 
+    def __str__(self) -> str:
+        parts = [self.ip]
+        if self.city:
+            parts.append(self.city)
+        if self.country:
+            parts.append(self.country)
+        return " - ".join(parts)
+
     def to_dict(self) -> Dict:
         return {
             "ip": self.ip,
