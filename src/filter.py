@@ -13,6 +13,11 @@ class LogFilter:
         self.entries = entries
         self._filters: List[Callable[[LogEntry], bool]] = []
 
+    @property
+    def is_empty(self) -> bool:
+        """Check if there are no entries to filter."""
+        return len(self.entries) == 0
+
     def by_level(self, *levels: LogLevel) -> "LogFilter":
         """Filter by log level."""
         def _filter(entry: LogEntry) -> bool:
