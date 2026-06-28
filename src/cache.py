@@ -63,12 +63,12 @@ _global_cache = LRUCache()
 
 
 def cached(ttl: int = 300):
-    """Decorator to cache function results."""
+    """Decorator to cache function results with TTL in seconds."""
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs):
-            key_parts = [func.__name__] + [str(a) for a in args] + [f"{k}={v}" for k, v in sorted(kwargs.items())]
-            cache_key = hashlib.md5("|".join(key_parts).encode()).hexdigest()
+            key_parts = [func.__module__, func.__name__] + [str(a) for a in args] + [f"{k}={v}" for k, v in sorted(kwargs.items())]
+            cache_key = hashlib.sha256("|".join(key_parts).encode()).hexdigest()
 
             result = _global_cache.get(cache_key)
             if result is not None:
