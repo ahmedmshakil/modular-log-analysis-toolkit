@@ -63,9 +63,10 @@ class LogSearchIndex:
             return [self._entries[i] for i in sorted(indices)]
         return []
 
-    def search_regex(self, pattern: str, limit: int = 100) -> List[LogEntry]:
+    def search_regex(self, pattern: str, limit: int = 100, case_sensitive: bool = False) -> List[LogEntry]:
         """Search using regex pattern."""
-        compiled = re.compile(pattern, re.IGNORECASE)
+        flags = 0 if case_sensitive else re.IGNORECASE
+        compiled = re.compile(pattern, flags)
         results = []
         for entry in self._entries:
             if compiled.search(entry.message):
