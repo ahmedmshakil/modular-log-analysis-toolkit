@@ -77,7 +77,7 @@ class LogSearchIndex:
     def suggest(self, prefix: str, limit: int = 10) -> List[str]:
         """Suggest completions for a search prefix."""
         prefix = prefix.lower()
-        return [word for word in self._index if word.startswith(prefix)][:limit]
+        return sorted([word for word in self._index if word.startswith(prefix)])[:limit]
 
     def _tokenize(self, text: str) -> List[str]:
         """Tokenize text into searchable words."""
