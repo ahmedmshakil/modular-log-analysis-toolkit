@@ -31,6 +31,15 @@ def get_file_size(file_path: str) -> int:
     return os.path.getsize(file_path)
 
 
+def count_lines(file_path: str) -> int:
+    """Count total lines in a file efficiently."""
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+    with open(path, "rb") as f:
+        return sum(1 for _ in f)
+
+
 def detect_encoding(file_path: str) -> str:
     """Auto-detect file encoding."""
     try:
