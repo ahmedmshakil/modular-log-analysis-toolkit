@@ -86,7 +86,8 @@ refresh(); setInterval(refresh, 5000);
         self._json_response(data)
 
     def _serve_entries(self):
-        data = [e.to_dict() for e in self.entries[-100:]]
+        limit = min(100, len(self.entries))
+        data = [e.to_dict() for e in self.entries[-limit:]]
         self._json_response(data)
 
     def _serve_errors(self):
