@@ -52,8 +52,11 @@ class LogAggregator:
         """Calculate error rate as percentage."""
         if not self.entries:
             return 0.0
+        total = len(self.entries)
+        if total == 0:
+            return 0.0
         errors = sum(1 for e in self.entries if e.level in (LogLevel.ERROR, LogLevel.CRITICAL))
-        return (errors / len(self.entries)) * 100
+        return (errors / total) * 100
 
     def top_sources(self, limit: int = 10) -> List[Tuple[str, int]]:
         """Get top log sources by count."""
