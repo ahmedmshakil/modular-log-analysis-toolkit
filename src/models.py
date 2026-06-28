@@ -28,6 +28,9 @@ class LogEntry:
     tags: Dict[str, str] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+    def __repr__(self) -> str:
+        return f"LogEntry(level={self.level.value}, timestamp={self.timestamp}, message={self.message[:50]!r})"
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "timestamp": self.timestamp.isoformat(),
