@@ -13,6 +13,7 @@ class LogLevel(Enum):
     WARN = "WARN"
     ERROR = "ERROR"
     CRITICAL = "CRITICAL"
+    TRACE = "TRACE"
 
 
 @dataclass
