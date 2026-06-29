@@ -80,7 +80,7 @@ class GeoLookup:
         """Fetch geolocation from free API."""
         try:
             url = f"http://ip-api.com/json/{ip}"
-            req = urllib.request.Request(url, headers={"User-Agent": "sk-loganalyzer"})
+            req = urllib.request.Request(url, headers={"User-Agent": "modular-log-analysis-toolkit"})
             with urllib.request.urlopen(req, timeout=5) as resp:
                 data = json.loads(resp.read().decode())
                 if data.get("status") == "success":

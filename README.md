@@ -1,29 +1,43 @@
-# sk-loganalyzer
+# Modular Log Analysis Toolkit
 
-A powerful, modular log analysis toolkit built in Python for parsing, filtering, searching, and monitoring log files at scale.
+<p align="center">
+  <strong>A powerful, modular log analysis toolkit built in Python</strong><br>
+  Parse, filter, search, and monitor log files at scale.
+</p>
+
+<p align="center">
+  <img src="img/front.png" alt="Front" width="48%">
+  <img src="img/bottom.png" alt="Dashboard" width="48%">
+</p>
+
+---
 
 ## Features
 
-- **Multi-format Parsing** — Supports standard, syslog, Apache, Nginx, and custom regex patterns
-- **Log Filtering** — Filter by level, time range, source, keyword, or regex
-- **Aggregation & Statistics** — Time-window analysis, error rates, busiest hours
-- **Export** — JSON, CSV, and plain text output formats
-- **Full-text Search** — Indexed word search with regex support
-- **Streaming Mode** — Memory-efficient processing for large log files
-- **Deduplication** — Hash-based duplicate detection
-- **Alert System** — Configurable thresholds with Slack, email, and webhook notifications
-- **Web Dashboard** — Real-time monitoring with auto-refresh
-- **Plugin System** — Extensible architecture for custom log processors
-- **Retention Policies** — Automatic compression, rotation, and cleanup
-- **IP Geolocation** — Enrich network logs with location data
-- **Tagging** — Custom tags and labels for log categorization
-- **Authentication** — Role-based access control (viewer, analyst, admin)
-- **Caching** — LRU cache for improved query performance
+| Category | Capabilities |
+|----------|-------------|
+| **Parsing** | Multi-format support — standard, syslog, Apache, Nginx, custom regex |
+| **Filtering** | Filter by level, time range, source, keyword, or regex pattern |
+| **Analytics** | Time-window analysis, error rates, busiest hours aggregation |
+| **Export** | JSON, CSV, and plain text output formats |
+| **Search** | Full-text indexed search with regex support |
+| **Streaming** | Memory-efficient processing for large log files |
+| **Deduplication** | Hash-based duplicate detection |
+| **Alerts** | Configurable thresholds — Slack, email, and webhook notifications |
+| **Dashboard** | Web-based real-time monitoring with auto-refresh |
+| **Plugins** | Extensible architecture for custom log processors |
+| **Retention** | Automatic compression, rotation, and cleanup policies |
+| **Geolocation** | Enrich network logs with IP location data |
+| **Tagging** | Custom tags and labels for log categorization |
+| **Auth** | Role-based access control (viewer, analyst, admin) |
+| **Caching** | LRU cache for improved query performance |
+
+---
 
 ## Project Structure
 
 ```
-sk-loganalyzer/
+modular-log-analysis-toolkit/
 ├── src/
 │   ├── __init__.py          # Package initialization
 │   ├── models.py            # Data models (LogEntry, AnalysisResult)
@@ -56,13 +70,39 @@ sk-loganalyzer/
 └── README.md
 ```
 
+---
+
 ## Installation
 
+### Recommended: Using a Virtual Environment
+
 ```bash
-git clone https://github.com/ahmedmshakil/sk-loganalyzer.git
-cd sk-loganalyzer
+git clone https://github.com/ahmedmshakil/modular-log-analysis-toolkit.git
+cd modular-log-analysis-toolkit
+
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate        # Linux/Mac
+# venv\Scripts\activate         # Windows
+
+# Install the package
+pip install -e .
+
+# (Optional) Install extra features
+pip install flask pyyaml requests geoip2
+```
+
+### Quick Install (without venv)
+
+```bash
+git clone https://github.com/ahmedmshakil/modular-log-analysis-toolkit.git
+cd modular-log-analysis-toolkit
 pip install -e .
 ```
+
+> **Note:** A virtual environment is recommended to avoid dependency conflicts with other Python projects.
+
+---
 
 ## Usage
 
@@ -117,17 +157,23 @@ entries = parser.parse_lines(list(read_log_lines("app.log")))
 start_dashboard(port=8080, entries=entries)
 ```
 
+---
+
 ## Configuration
 
 Edit `config/settings.yaml` to configure log paths, output format, retention policies, and alert thresholds.
 
 Custom log patterns can be added to `config/patterns.yaml` using regex with named groups.
 
+---
+
 ## Running Tests
 
 ```bash
 pytest tests/
 ```
+
+---
 
 ## License
 

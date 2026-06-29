@@ -1,6 +1,6 @@
 # Configuration Guide
 
-sk-loganalyzer uses YAML files in the `config/` directory for configuration.
+modular-log-analysis-toolkit uses YAML files in the `config/` directory for configuration.
 
 ## settings.yaml
 

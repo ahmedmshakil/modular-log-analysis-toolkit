@@ -1,4 +1,4 @@
-# Custom log patterns for sk-loganalyzer
+# Custom log patterns for modular-log-analysis-toolkit
 # Define regex patterns with named groups for parsing different log formats
 
 patterns:

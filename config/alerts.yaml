@@ -1,4 +1,4 @@
-# Alert configuration for sk-loganalyzer
+# Alert configuration for modular-log-analysis-toolkit
 # Define thresholds and notification channels
 
 thresholds:

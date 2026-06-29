@@ -101,3 +101,25 @@ Added encoding parameter to JSON export method.
 Added __str__ method to GeoLocation for readable output.
 Added invalidate_pattern method to LRUCache for prefix-based eviction.
 Added acknowledged_at timestamp tracking to Alert class.
+Added __all__ exports list to core package __init__.py.
+Added __str__ method to AnalysisResult for readable output.
+Added CONTRIBUTING.md with development and PR guidelines.
+Added SECURITY.md with vulnerability reporting policy.
+Added .editorconfig for consistent code style across editors.
+Added docstring to LRUCache.stats property.
+Fixed redundant zero-check in aggregator error_rate method.
+Added requirements.txt with optional dependency declarations.
+Added docs/ARCHITECTURE.md with module overview and data flow.
+Moved re import to module level in filter.py for consistency.
+Added MIT LICENSE file to repository root.
+Added docs/CONFIGURATION.md with YAML config examples.
+Added Makefile with test, lint, clean, and install targets.
+Added __repr__ method to LogFilter for debugging.
+Added docs/TROUBLESHOOTING.md with common issues and fixes.
+Added py.typed marker for PEP 561 type checking support.
+Added CODE_OF_CONDUCT.md for community guidelines.
+Added pyproject.toml with build system and project metadata.
+Added __repr__ method to QueryCache for debugging.
+Added docs/EXAMPLES.md with common usage patterns.
+Added CHANGELOG.md with version history summary.
+Added __all__ exports to models.py for explicit API.

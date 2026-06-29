@@ -30,7 +30,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
     def _serve_dashboard(self):
         html = """<!DOCTYPE html>
 <html>
-<head><title>sk-loganalyzer Dashboard</title>
+<head><title>modular-log-analysis-toolkit Dashboard</title>
 <style>
 body { font-family: monospace; background: #1e1e1e; color: #d4d4d4; padding: 20px; }
 h1 { color: #569cd6; }
@@ -44,7 +44,7 @@ th { background: #2d2d2d; }
 .error { color: #f44747; } .warn { color: #cca700; } .info { color: #4fc1ff; }
 </style></head>
 <body>
-<h1>sk-loganalyzer Dashboard</h1>
+<h1>modular-log-analysis-toolkit Dashboard</h1>
 <div class="stats">
 <div class="stat"><h3>Total</h3><p id="total">-</p></div>
 <div class="stat"><h3>Errors</h3><p id="errors">-</p></div>

@@ -10,7 +10,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in sk-loganalyzer, please report it responsibly.
+If you discover a security vulnerability in modular-log-analysis-toolkit, please report it responsibly.
 
 **Do NOT open a public GitHub issue for security vulnerabilities.**
 

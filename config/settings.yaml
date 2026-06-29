@@ -1,4 +1,4 @@
-# Default configuration for sk-loganalyzer
+# Default configuration for modular-log-analysis-toolkit
 log_paths:
   - /var/log/syslog
   - /var/log/auth.log

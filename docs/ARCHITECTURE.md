@@ -1,6 +1,6 @@
 # Architecture Overview
 
-sk-loganalyzer follows a modular pipeline architecture for log processing.
+modular-log-analysis-toolkit follows a modular pipeline architecture for log processing.
 
 ## Processing Pipeline
 

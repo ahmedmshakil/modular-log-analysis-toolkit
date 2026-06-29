@@ -1,11 +1,11 @@
-# Contributing to sk-loganalyzer
+# Contributing to modular-log-analysis-toolkit
 
-Thank you for your interest in contributing to sk-loganalyzer!
+Thank you for your interest in contributing to modular-log-analysis-toolkit!
 
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/<your-username>/sk-loganalyzer.git`
+2. Clone your fork: `git clone https://github.com/<your-username>/modular-log-analysis-toolkit.git`
 3. Create a branch: `git checkout -b feature/my-feature`
 4. Make your changes
 5. Run tests: `pytest tests/`

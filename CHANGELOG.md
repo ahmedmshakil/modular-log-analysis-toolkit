@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to sk-loganalyzer will be documented in this file.
+All notable changes to modular-log-analysis-toolkit will be documented in this file.
 
 ## [1.2.0] - 2026-06-29
 

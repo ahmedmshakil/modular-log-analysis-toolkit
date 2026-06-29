@@ -1,1 +1,1 @@
-# Test package for sk-loganalyzer
+# Test package for modular-log-analysis-toolkit

@@ -1,4 +1,4 @@
-"""Command-line interface for sk-loganalyzer."""
+"""Command-line interface for modular-log-analysis-toolkitalysis-toolkit."""
 
 import argparse
 import sys
@@ -16,7 +16,7 @@ from .models import LogLevel
 def build_parser() -> argparse.ArgumentParser:
     """Build the CLI argument parser."""
     p = argparse.ArgumentParser(
-        prog="sk-loganalyzer",
+        prog="modular-log-analysis-toolkit",
         description="Analyze, filter, and export log files with powerful pattern matching.",
     )
     p.add_argument("input", nargs="+", help="Log file(s) to analyze")
