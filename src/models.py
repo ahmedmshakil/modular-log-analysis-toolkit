@@ -5,6 +5,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional, List, Dict, Any
 
+__all__ = ["LogLevel", "LogEntry", "AnalysisResult"]
+
 
 class LogLevel(Enum):
     """Supported log severity levels."""
