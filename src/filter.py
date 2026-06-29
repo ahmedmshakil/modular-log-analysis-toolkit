@@ -1,5 +1,6 @@
 """Log filtering and query engine."""
 
+import re
 from datetime import datetime
 from typing import List, Optional, Callable
 
@@ -52,7 +53,6 @@ class LogFilter:
 
     def by_regex(self, pattern: str) -> "LogFilter":
         """Filter by regex pattern match on message."""
-        import re
         compiled = re.compile(pattern)
         def _filter(entry: LogEntry) -> bool:
             return bool(compiled.search(entry.message))
