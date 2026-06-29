@@ -14,6 +14,9 @@ class LogFilter:
         self.entries = entries
         self._filters: List[Callable[[LogEntry], bool]] = []
 
+    def __repr__(self) -> str:
+        return f"LogFilter(entries={len(self.entries)}, filters={len(self._filters)})"
+
     @property
     def is_empty(self) -> bool:
         """Check if there are no entries to filter."""
