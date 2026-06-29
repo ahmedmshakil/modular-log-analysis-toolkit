@@ -95,6 +95,9 @@ class QueryCache:
         self._cache = LRUCache(max_size=max_size, ttl=600)
         self._popular_queries: Dict[str, int] = {}
 
+    def __repr__(self) -> str:
+        return f"QueryCache(queries_cached={self._cache.stats['size']})"
+
     def get_results(self, query: str) -> Optional[list]:
         """Get cached search results."""
         self._popular_queries[query] = self._popular_queries.get(query, 0) + 1
