@@ -55,6 +55,7 @@ class LRUCache:
 
     @property
     def stats(self) -> Dict[str, int]:
+        """Return cache performance statistics."""
         total = self._hits + self._misses
         return {
             "size": len(self._cache),
