@@ -53,8 +53,6 @@ class LogAggregator:
         if not self.entries:
             return 0.0
         total = len(self.entries)
-        if total == 0:
-            return 0.0
         errors = sum(1 for e in self.entries if e.level in (LogLevel.ERROR, LogLevel.CRITICAL))
         return (errors / total) * 100
 
