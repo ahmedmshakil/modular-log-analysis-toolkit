@@ -51,3 +51,10 @@ class AnalysisResult:
     top_errors: List[str] = field(default_factory=list)
     sources: List[str] = field(default_factory=list)
     duration_seconds: float = 0.0
+
+    def __str__(self) -> str:
+        return (
+            f"AnalysisResult(entries={self.total_entries}, "
+            f"errors={self.level_counts.get('ERROR', 0)}, "
+            f"sources={len(self.sources)})"
+        )
