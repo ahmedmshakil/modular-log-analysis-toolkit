@@ -28,6 +28,8 @@ class LogDeduplicator:
 
     def deduplicate(self, entries: List[LogEntry]) -> Tuple[List[LogEntry], Dict[str, int]]:
         """Remove duplicates, return unique entries and counts."""
+        if not entries:
+            return [], {}
         unique = []
         counts: Dict[str, int] = defaultdict(int)
 
