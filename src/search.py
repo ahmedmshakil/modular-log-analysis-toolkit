@@ -82,10 +82,12 @@ class LogSearchIndex:
 
     def _tokenize(self, text: str) -> List[str]:
         """Tokenize text into searchable words."""
+        if not text:
+            return []
         text = re.sub(r"[^\w\s]", " ", text.lower())
         words = text.split()
         # Remove common stop words
-        stop_words = {"the", "a", "an", "is", "in", "at", "of", "to", "for"}
+        stop_words = {"the", "a", "an", "is", "in", "at", "of", "to", "for", "and", "or", "but"}
         return [w for w in words if w not in stop_words and len(w) > 1]
 
     @property
