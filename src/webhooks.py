@@ -49,7 +49,12 @@ class WebhookSender:
 
     def _post(self, payload: Dict) -> bool:
         """POST JSON payload to webhook URL."""
-        data = json.dumps(payload, default=str).encode("utf-8")
+        try:
+            data = json.dumps(payload, default=str).encode("utf-8")
+        except (TypeError, ValueError):
+            self._error_count += 1
+            return False
+
         req = urllib.request.Request(self.url, data=data, headers=self.headers, method="POST")
 
         try:
