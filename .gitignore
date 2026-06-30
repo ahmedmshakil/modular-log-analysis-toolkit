@@ -28,9 +28,6 @@ logs/
 data/
 *.db
 
-# Changelog (internal use)
-changelog.txt
-
 # OS files
 .DS_Store
 Thumbs.db
