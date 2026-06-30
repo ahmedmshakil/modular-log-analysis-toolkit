@@ -79,6 +79,7 @@ class LogStream:
     def stop(self):
         """Stop streaming."""
         self._stopped = True
+        self._paused = False
 
     @property
     def stats(self) -> dict:
