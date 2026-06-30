@@ -22,6 +22,12 @@ class RetentionPolicy:
     def __post_init__(self):
         if self.patterns is None:
             self.patterns = ["*.log"]
+        if self.max_age_days < 0:
+            raise ValueError("max_age_days must be non-negative")
+        if self.compress_after_days < 0:
+            raise ValueError("compress_after_days must be non-negative")
+        if self.delete_after_days < 0:
+            raise ValueError("delete_after_days must be non-negative")
 
 
 class RetentionManager:
