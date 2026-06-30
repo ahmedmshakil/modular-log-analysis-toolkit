@@ -15,9 +15,11 @@ class WebhookSender:
     def __init__(self, url: str, headers: Optional[Dict[str, str]] = None, timeout: int = 10):
         if not url.startswith(("http://", "https://")):
             raise ValueError("Webhook URL must start with http:// or https://")
+        if not isinstance(timeout, (int, float)):
+            raise TypeError("Timeout must be a number")
         self.url = url
         self.headers = headers or {"Content-Type": "application/json"}
-        self.timeout = max(1, min(timeout, 120))
+        self.timeout = max(1, min(int(timeout), 120))
         self._sent_count = 0
         self._error_count = 0
 
