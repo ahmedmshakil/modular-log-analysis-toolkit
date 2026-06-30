@@ -112,6 +112,7 @@ class GeoLookup:
 
     @property
     def stats(self) -> Dict[str, int]:
+        """Get lookup statistics."""
         return {
             "lookups": self._lookup_count,
             "cache_hits": self._cache_hits,
