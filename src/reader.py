@@ -47,6 +47,10 @@ def detect_encoding(file_path: str) -> str:
             sample = f.read(4096)
         if sample.startswith(b"\xef\xbb\xbf"):
             return "utf-8-sig"
+        if sample.startswith(b"\xff\xfe"):
+            return "utf-16-le"
+        if sample.startswith(b"\xfe\xff"):
+            return "utf-16-be"
         return "utf-8"
     except Exception:
         return "utf-8"
