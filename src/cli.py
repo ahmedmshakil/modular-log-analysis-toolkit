@@ -46,14 +46,24 @@ def main(argv: Optional[List[str]] = None):
     log_parser = LogParser(pattern_name=args.pattern)
 
     for file_path in args.input:
-        if file_path.endswith(".gz"):
-            lines = list(read_compressed_log(file_path))
-        else:
-            lines = list(read_log_lines(file_path))
-        entries.extend(log_parser.parse_lines(lines))
+        try:
+            if file_path.endswith(".gz"):
+                lines = list(read_compressed_log(file_path))
+            else:
+                lines = list(read_log_lines(file_path))
+            entries.extend(log_parser.parse_lines(lines))
+        except FileNotFoundError:
+            print(f"Error: File not found: {file_path}", file=sys.stderr)
+            sys.exit(1)
+        except PermissionError:
+            print(f"Error: Permission denied: {file_path}", file=sys.stderr)
+            sys.exit(1)
+        except Exception as e:
+            print(f"Error reading {file_path}: {e}", file=sys.stderr)
+            sys.exit(1)
 
     if not entries:
-        print("No log entries found.", file=sys.stderr)
+        print("No log entries found in the specified file(s).", file=sys.stderr)
         sys.exit(1)
 
     # Apply filters
