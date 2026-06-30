@@ -23,11 +23,11 @@ class LogExporter:
         return str(path)
 
     @staticmethod
-    def to_csv(entries: List[LogEntry], output_path: str) -> str:
+    def to_csv(entries: List[LogEntry], output_path: str, encoding: str = "utf-8") -> str:
         """Export entries to CSV format."""
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, "w", newline="") as f:
+        with open(path, "w", newline="", encoding=encoding) as f:
             writer = csv.writer(f)
             writer.writerow(["timestamp", "level", "source", "message", "line_number"])
             for entry in entries:
