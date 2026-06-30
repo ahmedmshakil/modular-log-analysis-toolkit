@@ -55,7 +55,14 @@ class LRUCache:
 
     def clear(self):
         """Clear all cached items."""
-        self._cache.clear()
+        with self._lock:
+            self._cache.clear()
+
+    def reset_stats(self):
+        """Reset hit/miss statistics."""
+        with self._lock:
+            self._hits = 0
+            self._misses = 0
 
     @property
     def stats(self) -> Dict[str, int]:
