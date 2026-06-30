@@ -17,6 +17,8 @@ class TagRule:
 
     def matches(self, entry_dict: Dict) -> bool:
         """Check if an entry matches this rule."""
+        if not self.conditions:
+            return False
         for field_name, pattern in self.conditions.items():
             value = str(entry_dict.get(field_name, ""))
             if pattern.lower() not in value.lower():
