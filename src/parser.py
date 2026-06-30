@@ -42,6 +42,8 @@ class LogParser:
 
     def parse_line(self, line: str, line_number: int = 0) -> Optional[LogEntry]:
         """Parse a single log line."""
+        if not line or not isinstance(line, str):
+            return None
         match = self.pattern.match(line.strip())
         if not match:
             return None
