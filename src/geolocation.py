@@ -94,7 +94,9 @@ class GeoLookup:
                         org=data.get("org", ""),
                         timezone=data.get("timezone", ""),
                     )
-        except Exception:
+        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
+            pass
+        except (json.JSONDecodeError, KeyError) as e:
             pass
         return None
 
