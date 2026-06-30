@@ -3,6 +3,7 @@
 import time
 import hashlib
 import json
+import threading
 from collections import OrderedDict
 from typing import Any, Optional, Callable, Dict
 from functools import wraps
@@ -17,27 +18,30 @@ class LRUCache:
         self._ttl = ttl  # Time to live in seconds
         self._hits = 0
         self._misses = 0
+        self._lock = threading.Lock()
 
     def get(self, key: str) -> Optional[Any]:
         """Get item from cache."""
-        if key in self._cache:
-            entry = self._cache[key]
-            if time.time() - entry["time"] < self._ttl:
-                self._cache.move_to_end(key)
-                self._hits += 1
-                return entry["value"]
-            else:
-                del self._cache[key]
-        self._misses += 1
-        return None
+        with self._lock:
+            if key in self._cache:
+                entry = self._cache[key]
+                if time.time() - entry["time"] < self._ttl:
+                    self._cache.move_to_end(key)
+                    self._hits += 1
+                    return entry["value"]
+                else:
+                    del self._cache[key]
+            self._misses += 1
+            return None
 
     def put(self, key: str, value: Any):
         """Put item in cache."""
-        if key in self._cache:
-            self._cache.move_to_end(key)
-        self._cache[key] = {"value": value, "time": time.time()}
-        if len(self._cache) > self._max_size:
-            self._cache.popitem(last=False)
+        with self._lock:
+            if key in self._cache:
+                self._cache.move_to_end(key)
+            self._cache[key] = {"value": value, "time": time.time()}
+            if len(self._cache) > self._max_size:
+                self._cache.popitem(last=False)
 
     def invalidate(self, key: str):
         """Remove item from cache."""
