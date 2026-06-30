@@ -32,7 +32,7 @@ class Alert:
     def __repr__(self) -> str:
         return f"Alert(severity={self.severity.value}, metric={self.metric_name}, value={self.current_value})"
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "severity": self.severity.value,
             "message": self.message,
