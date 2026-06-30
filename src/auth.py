@@ -60,6 +60,12 @@ class AuthManager:
 
     def create_user(self, username: str, password: str, role: str = "viewer") -> bool:
         """Create a new user."""
+        if not username or not isinstance(username, str):
+            return False
+        if not password or not isinstance(password, str):
+            return False
+        if len(password) < 8:
+            return False
         if username in self._users:
             return False
         if role not in self.ROLES:
