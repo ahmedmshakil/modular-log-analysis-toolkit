@@ -37,6 +37,7 @@ class LogEntry:
         return f"[{self.level.value}] {self.timestamp} - {self.message[:100]}"
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert log entry to dictionary."""
         return {
             "timestamp": self.timestamp.isoformat(),
             "level": self.level.value,
