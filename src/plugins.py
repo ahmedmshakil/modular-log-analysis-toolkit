@@ -87,6 +87,16 @@ class PluginManager:
                 result = plugin.process(result)
         return result
 
+    @property
+    def stats(self) -> Dict[str, int]:
+        """Get plugin manager statistics."""
+        enabled_count = sum(1 for v in self._enabled.values() if v)
+        return {
+            "total": len(self._plugins),
+            "enabled": enabled_count,
+            "disabled": len(self._plugins) - enabled_count,
+        }
+
     def load_from_directory(self, directory: str):
         """Load plugins from a directory."""
         plugin_dir = Path(directory)
