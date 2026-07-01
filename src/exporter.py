@@ -41,11 +41,11 @@ class LogExporter:
         return str(path)
 
     @staticmethod
-    def to_text(entries: List[LogEntry], output_path: str) -> str:
+    def to_text(entries: List[LogEntry], output_path: str, encoding: str = "utf-8") -> str:
         """Export entries to plain text format."""
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, "w") as f:
+        with open(path, "w", encoding=encoding) as f:
             for entry in entries:
                 f.write(f"[{entry.level.value}] {entry.timestamp} - {entry.message}\n")
         return str(path)
