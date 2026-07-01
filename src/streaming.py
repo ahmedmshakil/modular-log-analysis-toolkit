@@ -90,3 +90,8 @@ class LogStream:
             "paused": self._paused,
             "stopped": self._stopped,
         }
+
+    def reset_stats(self):
+        """Reset streaming statistics."""
+        self._processed = 0
+        self._errors = 0
