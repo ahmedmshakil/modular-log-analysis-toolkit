@@ -36,6 +36,8 @@ def count_lines(file_path: str) -> int:
     path = Path(file_path)
     if not path.exists():
         raise FileNotFoundError(f"File not found: {file_path}")
+    if not path.is_file():
+        raise ValueError(f"Not a regular file: {file_path}")
     with open(path, "rb") as f:
         return sum(1 for _ in f)
 
