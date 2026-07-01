@@ -98,6 +98,8 @@ class AuthManager:
 
     def validate_session(self, token: str) -> Optional[str]:
         """Validate session token and return username."""
+        if not token:
+            return None
         session = self._sessions.get(token)
         if not session:
             return None
