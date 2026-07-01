@@ -32,7 +32,10 @@ class LogParser:
 
     def __init__(self, pattern_name: str = "standard", custom_pattern: Optional[str] = None):
         if custom_pattern:
-            self.pattern: Pattern = re.compile(custom_pattern)
+            try:
+                self.pattern: Pattern = re.compile(custom_pattern)
+            except re.error as e:
+                raise ValueError(f"Invalid custom pattern: {e}")
         elif pattern_name in PATTERNS:
             self.pattern = PATTERNS[pattern_name]
         else:
