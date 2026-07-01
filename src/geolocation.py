@@ -58,6 +58,8 @@ class GeoLookup:
 
     def lookup(self, ip: str) -> Optional[GeoLocation]:
         """Look up geolocation for a single IP."""
+        if not ip:
+            return None
         if ip in self._cache:
             self._cache_hits += 1
             return self._cache[ip]
