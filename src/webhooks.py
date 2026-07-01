@@ -67,6 +67,7 @@ class WebhookSender:
 
     @property
     def stats(self) -> Dict[str, int]:
+        """Get webhook send statistics."""
         return {"sent": self._sent_count, "errors": self._error_count}
 
 
