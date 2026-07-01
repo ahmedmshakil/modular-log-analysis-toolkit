@@ -13,9 +13,13 @@ class LogDeduplicator:
     def __init__(self, ignore_timestamp: bool = True):
         self.ignore_timestamp = ignore_timestamp
         self._seen: Dict[str, int] = {}
+        self._hash_cache: Dict[int, str] = {}
 
     def _hash_entry(self, entry: LogEntry) -> str:
         """Generate hash for a log entry."""
+        entry_id = id(entry)
+        if entry_id in self._hash_cache:
+            return self._hash_cache[entry_id]
         parts = [
             entry.level.value,
             entry.message,
@@ -24,7 +28,9 @@ class LogDeduplicator:
         if not self.ignore_timestamp:
             parts.append(entry.timestamp.isoformat())
         content = "|".join(parts)
-        return hashlib.md5(content.encode()).hexdigest()
+        hash_val = hashlib.md5(content.encode()).hexdigest()
+        self._hash_cache[entry_id] = hash_val
+        return hash_val
 
     def deduplicate(self, entries: List[LogEntry]) -> Tuple[List[LogEntry], Dict[str, int]]:
         """Remove duplicates, return unique entries and counts."""
@@ -55,3 +61,4 @@ class LogDeduplicator:
     def reset(self):
         """Clear deduplication state."""
         self._seen.clear()
+        self._hash_cache.clear()
