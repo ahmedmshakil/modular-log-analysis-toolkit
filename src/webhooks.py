@@ -77,11 +77,11 @@ class WebhookRouter:
     def __init__(self):
         self._senders: Dict[str, WebhookSender] = {}
 
-    def add_endpoint(self, name: str, url: str, **kwargs):
+    def add_endpoint(self, name: str, url: str, **kwargs) -> None:
         """Register a webhook endpoint."""
         self._senders[name] = WebhookSender(url, **kwargs)
 
-    def remove_endpoint(self, name: str):
+    def remove_endpoint(self, name: str) -> None:
         """Remove a webhook endpoint."""
         self._senders.pop(name, None)
 
