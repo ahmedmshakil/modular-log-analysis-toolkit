@@ -77,6 +77,8 @@ class LogSearchIndex:
 
     def suggest(self, prefix: str, limit: int = 10) -> List[str]:
         """Suggest completions for a search prefix."""
+        if not prefix:
+            return []
         prefix = prefix.lower()
         return sorted([word for word in self._index if word.startswith(prefix)])[:limit]
 
