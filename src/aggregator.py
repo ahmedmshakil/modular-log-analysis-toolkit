@@ -60,6 +60,8 @@ class LogAggregator:
 
     def top_sources(self, limit: int = 10) -> List[Tuple[str, int]]:
         """Get top log sources by count."""
+        if limit < 1:
+            return []
         counts = Counter(e.source for e in self.entries if e.source)
         return counts.most_common(limit)
 
