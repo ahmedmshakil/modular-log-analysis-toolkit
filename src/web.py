@@ -31,6 +31,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         html = """<!DOCTYPE html>
 <html>
 <head><title>modular-log-analysis-toolkit Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body { font-family: monospace; background: #1e1e1e; color: #d4d4d4; padding: 20px; }
 h1 { color: #569cd6; }
