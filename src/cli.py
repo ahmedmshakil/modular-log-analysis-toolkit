@@ -41,6 +41,11 @@ def main(argv: Optional[List[str]] = None):
     parser = build_parser()
     args = parser.parse_args(argv)
 
+    # Validate mutually exclusive options
+    if args.verbose and args.quiet:
+        print("Error: --verbose and --quiet are mutually exclusive", file=sys.stderr)
+        sys.exit(1)
+
     # Read log files
     entries = []
     log_parser = LogParser(pattern_name=args.pattern)
