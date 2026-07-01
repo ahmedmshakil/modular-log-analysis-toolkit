@@ -2,6 +2,7 @@
 
 import json
 import time
+import threading
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
@@ -53,6 +54,7 @@ class AlertManager:
         self.thresholds: Dict[str, Dict] = {}
         self.alerts: List[Alert] = []
         self.callbacks: List[Callable[[Alert], None]] = []
+        self._lock = threading.Lock()
 
     def set_threshold(self, metric: str, value: float, severity: AlertSeverity = AlertSeverity.MEDIUM):
         """Set an alert threshold."""
