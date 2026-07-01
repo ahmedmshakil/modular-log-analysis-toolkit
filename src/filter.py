@@ -56,7 +56,10 @@ class LogFilter:
 
     def by_regex(self, pattern: str) -> "LogFilter":
         """Filter by regex pattern match on message."""
-        compiled = re.compile(pattern)
+        try:
+            compiled = re.compile(pattern)
+        except re.error as e:
+            raise ValueError(f"Invalid regex pattern: {e}")
         def _filter(entry: LogEntry) -> bool:
             return bool(compiled.search(entry.message))
         self._filters.append(_filter)
