@@ -59,6 +59,12 @@ class LRUCache:
         with self._lock:
             self._cache.clear()
 
+    def invalidate_keys(self, keys: list):
+        """Remove multiple items from cache by key."""
+        with self._lock:
+            for key in keys:
+                self._cache.pop(key, None)
+
     def reset_stats(self):
         """Reset hit/miss statistics."""
         with self._lock:
