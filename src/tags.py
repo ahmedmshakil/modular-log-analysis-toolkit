@@ -99,7 +99,10 @@ class TagManager:
 
     def import_rules(self, path: str):
         """Import rules from JSON file."""
-        with open(path) as f:
-            data = json.load(f)
+        try:
+            with open(path) as f:
+                data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            raise ValueError(f"Failed to import rules: {e}")
         for item in data:
             self.add_rule(TagRule(**item))
