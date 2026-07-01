@@ -36,6 +36,8 @@ class TagManager:
 
     def add_rule(self, rule: TagRule):
         """Add an automatic tagging rule."""
+        if not rule.name or not rule.tag:
+            raise ValueError("Rule must have a name and tag")
         self._rules.append(rule)
         self._rules.sort(key=lambda r: r.priority, reverse=True)
         self._tag_colors[rule.tag] = rule.color
