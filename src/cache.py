@@ -123,3 +123,8 @@ class QueryCache:
         """Get most popular queries."""
         sorted_queries = sorted(self._popular_queries.items(), key=lambda x: x[1], reverse=True)
         return sorted_queries[:limit]
+
+    def clear(self):
+        """Clear all cached queries and statistics."""
+        self._cache.clear()
+        self._popular_queries.clear()
