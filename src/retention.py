@@ -116,3 +116,11 @@ class RetentionManager:
     def get_actions_log(self) -> List[Dict]:
         """Get history of retention actions."""
         return self._actions_log
+
+    @property
+    def stats(self) -> Dict[str, int]:
+        """Get retention manager statistics."""
+        return {
+            "policies": len(self.policies),
+            "actions_taken": len(self._actions_log),
+        }
