@@ -32,6 +32,9 @@ class Alert:
     def __repr__(self) -> str:
         return f"Alert(severity={self.severity.value}, metric={self.metric_name}, value={self.current_value})"
 
+    def __str__(self) -> str:
+        return f"[{self.severity.value.upper()}] {self.metric_name}: {self.current_value} > {self.threshold}"
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "severity": self.severity.value,
