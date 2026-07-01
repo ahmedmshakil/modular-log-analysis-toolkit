@@ -74,13 +74,14 @@ class LRUCache:
     @property
     def stats(self) -> Dict[str, int]:
         """Return cache performance statistics."""
-        total = self._hits + self._misses
-        return {
-            "size": len(self._cache),
-            "hits": self._hits,
-            "misses": self._misses,
-            "hit_rate": round(self._hits / total * 100, 2) if total > 0 else 0,
-        }
+        with self._lock:
+            total = self._hits + self._misses
+            return {
+                "size": len(self._cache),
+                "hits": self._hits,
+                "misses": self._misses,
+                "hit_rate": round(self._hits / total * 100, 2) if total > 0 else 0,
+            }
 
 
 # Global cache instance
