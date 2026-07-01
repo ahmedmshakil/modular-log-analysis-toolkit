@@ -28,6 +28,8 @@ class RetentionPolicy:
             raise ValueError("compress_after_days must be non-negative")
         if self.delete_after_days < 0:
             raise ValueError("delete_after_days must be non-negative")
+        if self.max_size_mb < 0:
+            raise ValueError("max_size_mb must be non-negative")
 
 
 class RetentionManager:
