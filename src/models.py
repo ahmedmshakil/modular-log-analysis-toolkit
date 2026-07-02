@@ -64,3 +64,14 @@ class AnalysisResult:
             f"errors={self.level_counts.get('ERROR', 0)}, "
             f"sources={len(self.sources)})"
         )
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert analysis result to dictionary."""
+        return {
+            "total_entries": self.total_entries,
+            "level_counts": self.level_counts,
+            "time_range": [t.isoformat() for t in self.time_range] if self.time_range else None,
+            "top_errors": self.top_errors,
+            "sources": self.sources,
+            "duration_seconds": self.duration_seconds,
+        }
