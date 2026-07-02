@@ -17,6 +17,9 @@ class LogFilter:
     def __repr__(self) -> str:
         return f"LogFilter(entries={len(self.entries)}, filters={len(self._filters)})"
 
+    def __len__(self) -> int:
+        return len(self.entries)
+
     @property
     def is_empty(self) -> bool:
         """Check if there are no entries to filter."""
