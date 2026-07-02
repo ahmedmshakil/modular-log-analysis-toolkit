@@ -2,6 +2,7 @@
 
 import re
 import json
+import urllib.error
 import urllib.request
 from typing import Dict, Optional, List
 from dataclasses import dataclass, field
