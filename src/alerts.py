@@ -6,7 +6,7 @@ import threading
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import List, Dict, Optional, Callable
+from typing import Any, List, Dict, Optional, Callable
 from pathlib import Path
 
 
