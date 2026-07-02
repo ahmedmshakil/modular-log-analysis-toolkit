@@ -1,4 +1,4 @@
-"""Command-line interface for modular-log-analysis-toolkitalysis-toolkit."""
+"""Command-line interface for modular-log-analysis-toolkit."""
 
 import argparse
 import sys
