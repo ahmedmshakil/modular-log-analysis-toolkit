@@ -86,6 +86,12 @@ class TagManager:
         """Get color for a tag."""
         return self._tag_colors.get(tag, "#808080")
 
+    def reset(self):
+        """Clear all rules, manual tags, and color mappings."""
+        self._rules.clear()
+        self._manual_tags.clear()
+        self._tag_colors.clear()
+
     def export_rules(self, path: str):
         """Export rules to JSON file."""
         data = [
