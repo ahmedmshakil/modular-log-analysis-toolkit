@@ -40,6 +40,8 @@ class LogStream:
 
     def stream_batch(self, callback: Callable[[List[LogEntry]], None], batch_size: int = 100):
         """Stream entries in batches."""
+        if batch_size < 1:
+            raise ValueError("batch_size must be at least 1")
         batch = []
         for line in read_log_lines(str(self.file_path)):
             if self._stopped:
