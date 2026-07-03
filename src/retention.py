@@ -31,6 +31,18 @@ class RetentionPolicy:
         if self.max_size_mb < 0:
             raise ValueError("max_size_mb must be non-negative")
 
+    def __str__(self) -> str:
+        parts = [f"RetentionPolicy('{self.name}'"]
+        if self.max_age_days:
+            parts.append(f"max_age={self.max_age_days}d")
+        if self.compress_after_days:
+            parts.append(f"compress_after={self.compress_after_days}d")
+        if self.delete_after_days:
+            parts.append(f"delete_after={self.delete_after_days}d")
+        if self.max_size_mb:
+            parts.append(f"max_size={self.max_size_mb}MB")
+        return ", ".join(parts) + ")"
+
 
 class RetentionManager:
     """Manage log file retention and cleanup."""
