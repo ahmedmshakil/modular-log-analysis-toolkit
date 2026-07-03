@@ -89,3 +89,14 @@ class LogFilter:
             level = entry.level.value
             counts[level] = counts.get(level, 0) + 1
         return counts
+
+    def merge(self, other: "LogFilter") -> "LogFilter":
+        """Merge entries from another LogFilter, removing duplicates."""
+        seen = set()
+        merged = []
+        for entry in self.entries + other.entries:
+            key = (entry.timestamp, entry.level, entry.message, entry.source)
+            if key not in seen:
+                seen.add(key)
+                merged.append(entry)
+        return LogFilter(merged)
