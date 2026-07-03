@@ -30,6 +30,16 @@ class LogEntry:
     tags: Dict[str, str] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, LogEntry):
+            return NotImplemented
+        return (
+            self.timestamp == other.timestamp
+            and self.level == other.level
+            and self.message == other.message
+            and self.source == other.source
+        )
+
     def __repr__(self) -> str:
         return f"LogEntry(level={self.level.value}, timestamp={self.timestamp}, message={self.message[:50]!r})"
 
