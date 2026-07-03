@@ -43,7 +43,7 @@ def main(argv: Optional[List[str]] = None):
 
     # Validate mutually exclusive options
     if args.verbose and args.quiet:
-        print("Error: --verbose and --quiet are mutually exclusive", file=sys.stderr)
+        print("Error: verbose and quiet flags are mutually exclusive", file=sys.stderr)
         sys.exit(1)
 
     # Read log files
@@ -58,13 +58,13 @@ def main(argv: Optional[List[str]] = None):
                 lines = list(read_log_lines(file_path))
             entries.extend(log_parser.parse_lines(lines))
         except FileNotFoundError:
-            print(f"Error: File not found: {file_path}", file=sys.stderr)
+            print(f"Error: file not found: {file_path}", file=sys.stderr)
             sys.exit(1)
         except PermissionError:
-            print(f"Error: Permission denied: {file_path}", file=sys.stderr)
+            print(f"Error: permission denied: {file_path}", file=sys.stderr)
             sys.exit(1)
         except Exception as e:
-            print(f"Error reading {file_path}: {e}", file=sys.stderr)
+            print(f"Error: failed to read {file_path}: {e}", file=sys.stderr)
             sys.exit(1)
 
     if not entries:
