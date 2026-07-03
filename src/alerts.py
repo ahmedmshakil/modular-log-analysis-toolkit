@@ -107,3 +107,8 @@ class AlertManager:
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w") as f:
             json.dump([a.to_dict() for a in self.alerts], f, indent=2)
+
+    def clear_alerts(self):
+        """Remove all alerts from the manager."""
+        with self._lock:
+            self.alerts.clear()
