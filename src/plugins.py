@@ -72,6 +72,15 @@ class PluginManager:
         """Get a plugin by name."""
         return self._plugins.get(name)
 
+    def has_plugin(self, name: str) -> bool:
+        """Check if a plugin is registered."""
+        return name in self._plugins
+
+    def get_version(self, name: str) -> Optional[str]:
+        """Get version string for a registered plugin."""
+        plugin = self._plugins.get(name)
+        return plugin.version if plugin else None
+
     def list_plugins(self) -> List[Dict[str, str]]:
         """List all registered plugins."""
         return [
