@@ -13,6 +13,14 @@ class LogAggregator:
     def __init__(self, entries: List[LogEntry]):
         self.entries = entries
 
+    @classmethod
+    def from_entries(cls, *entry_lists: List[LogEntry]) -> "LogAggregator":
+        """Create an aggregator from multiple entry lists."""
+        merged = []
+        for lst in entry_lists:
+            merged.extend(lst)
+        return cls(merged)
+
     def summary(self) -> AnalysisResult:
         """Generate summary statistics."""
         if not self.entries:
