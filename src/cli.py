@@ -18,6 +18,14 @@ def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="modular-log-analysis-toolkit",
         description="Analyze, filter, and export log files with powerful pattern matching.",
+        epilog=(
+            "examples:\n"
+            "  %(prog)s app.log --summary\n"
+            "  %(prog)s app.log -l ERROR -l CRITICAL -f json -o errors.json\n"
+            "  %(prog)s app.log -k timeout --since '2024-01-01 00:00:00'\n"
+            "  %(prog)s app.log.gz -p syslog -f csv -o output.csv\n"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     p.add_argument("input", nargs="+", help="Log file(s) to analyze")
     p.add_argument("-o", "--output", help="Output file path")
