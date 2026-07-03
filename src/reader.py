@@ -42,6 +42,17 @@ def count_lines(file_path: str) -> int:
         return sum(1 for _ in f)
 
 
+def format_size(size_bytes: int) -> str:
+    """Format byte size into human-readable string."""
+    if size_bytes < 0:
+        raise ValueError("Size must be non-negative")
+    for unit in ("B", "KB", "MB", "GB", "TB"):
+        if size_bytes < 1024:
+            return f"{size_bytes:.1f} {unit}" if unit != "B" else f"{size_bytes} {unit}"
+        size_bytes /= 1024
+    return f"{size_bytes:.1f} PB"
+
+
 def detect_encoding(file_path: str) -> str:
     """Auto-detect file encoding."""
     try:
