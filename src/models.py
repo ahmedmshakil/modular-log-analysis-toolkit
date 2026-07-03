@@ -57,6 +57,34 @@ class LogEntry:
             "tags": self.tags,
         }
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "LogEntry":
+        """Create a LogEntry from a dictionary."""
+        ts = data.get("timestamp")
+        if isinstance(ts, str):
+            try:
+                ts = datetime.fromisoformat(ts)
+            except ValueError:
+                ts = datetime.now()
+        elif not isinstance(ts, datetime):
+            ts = datetime.now()
+
+        level_str = data.get("level", "INFO")
+        try:
+            level = LogLevel(level_str)
+        except ValueError:
+            level = LogLevel.INFO
+
+        return cls(
+            timestamp=ts,
+            level=level,
+            message=data.get("message", ""),
+            source=data.get("source"),
+            line_number=data.get("line_number", 0),
+            tags=data.get("tags", {}),
+            metadata=data.get("metadata", {}),
+        )
+
 
 @dataclass
 class AnalysisResult:
