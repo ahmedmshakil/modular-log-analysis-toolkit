@@ -65,3 +65,14 @@ class LogExporter:
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
         return str(path)
+
+    @staticmethod
+    def export_all(entries: List[LogEntry], output_dir: str, prefix: str = "logs") -> Dict[str, str]:
+        """Export entries in all supported formats at once."""
+        out = Path(output_dir)
+        out.mkdir(parents=True, exist_ok=True)
+        results = {}
+        results["json"] = LogExporter.to_json(entries, str(out / f"{prefix}.json"))
+        results["csv"] = LogExporter.to_csv(entries, str(out / f"{prefix}.csv"))
+        results["text"] = LogExporter.to_text(entries, str(out / f"{prefix}.txt"))
+        return results
