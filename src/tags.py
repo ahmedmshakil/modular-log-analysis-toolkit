@@ -42,6 +42,17 @@ class TagManager:
         self._rules.sort(key=lambda r: r.priority, reverse=True)
         self._tag_colors[rule.tag] = rule.color
 
+    def bulk_add(self, rules: List[TagRule]) -> int:
+        """Add multiple rules at once. Returns count of rules added."""
+        added = 0
+        for rule in rules:
+            try:
+                self.add_rule(rule)
+                added += 1
+            except ValueError:
+                continue
+        return added
+
     def remove_rule(self, name: str):
         """Remove a tagging rule by name."""
         self._rules = [r for r in self._rules if r.name != name]
