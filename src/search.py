@@ -89,7 +89,13 @@ class LogSearchIndex:
         text = re.sub(r"[^\w\s]", " ", text.lower())
         words = text.split()
         # Remove common stop words
-        stop_words = {"the", "a", "an", "is", "in", "at", "of", "to", "for", "and", "or", "but"}
+        stop_words = {
+            "the", "a", "an", "is", "in", "at", "of", "to", "for", "and", "or", "but",
+            "it", "its", "be", "was", "were", "been", "are", "have", "has", "had", "do",
+            "does", "did", "will", "would", "could", "should", "may", "might", "can",
+            "this", "that", "these", "those", "not", "no", "nor", "so", "if", "then",
+            "than", "too", "very", "just", "about", "above", "after", "before", "between",
+        }
         return [w for w in words if w not in stop_words and len(w) > 1]
 
     @property
