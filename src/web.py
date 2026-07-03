@@ -33,16 +33,19 @@ class DashboardHandler(BaseHTTPRequestHandler):
 <head><title>modular-log-analysis-toolkit Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body { font-family: monospace; background: #1e1e1e; color: #d4d4d4; padding: 20px; }
-h1 { color: #569cd6; }
-.stats { display: flex; gap: 20px; margin: 20px 0; }
-.stat { background: #2d2d2d; padding: 15px; border-radius: 8px; }
-.stat h3 { color: #4ec9b0; margin: 0; }
-.stat p { font-size: 24px; margin: 5px 0; }
-table { width: 100%; border-collapse: collapse; }
-th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #333; }
-th { background: #2d2d2d; }
-.error { color: #f44747; } .warn { color: #cca700; } .info { color: #4fc1ff; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', monospace; background: #1a1a2e; color: #e0e0e0; padding: 24px; line-height: 1.5; }
+h1 { color: #64b5f6; margin-bottom: 16px; font-size: 1.8rem; }
+h2 { color: #90caf9; margin: 20px 0 12px; font-size: 1.2rem; }
+.stats { display: flex; gap: 16px; margin: 20px 0; flex-wrap: wrap; }
+.stat { background: #16213e; padding: 16px 20px; border-radius: 10px; min-width: 140px; border: 1px solid #1a3a5c; }
+.stat h3 { color: #4ec9b0; margin: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+.stat p { font-size: 28px; margin: 6px 0 0; font-weight: bold; }
+table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #1a3a5c; }
+th { background: #16213e; color: #90caf9; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+tr:hover { background: #1a2744; }
+.error { color: #ef5350; font-weight: bold; } .warn { color: #ffa726; } .info { color: #42a5f5; } .critical { color: #ff1744; font-weight: bold; }
 </style></head>
 <body>
 <h1>modular-log-analysis-toolkit Dashboard</h1>
