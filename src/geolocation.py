@@ -121,3 +121,9 @@ class GeoLookup:
             "cache_hits": self._cache_hits,
             "cached": len(self._cache),
         }
+
+    def clear_cache(self):
+        """Clear the geolocation cache."""
+        self._cache.clear()
+        self._lookup_count = 0
+        self._cache_hits = 0
