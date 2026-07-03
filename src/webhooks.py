@@ -70,6 +70,11 @@ class WebhookSender:
         """Get webhook send statistics."""
         return {"sent": self._sent_count, "errors": self._error_count}
 
+    def reset_stats(self):
+        """Reset send statistics."""
+        self._sent_count = 0
+        self._error_count = 0
+
 
 class WebhookRouter:
     """Route webhooks to multiple endpoints."""
