@@ -122,6 +122,14 @@ class AuthManager:
         """Invalidate a session."""
         self._sessions.pop(token, None)
 
+    def expire_sessions(self) -> int:
+        """Remove all expired sessions. Returns count of removed sessions."""
+        now = datetime.now()
+        expired = [t for t, s in self._sessions.items() if now > s["expires"]]
+        for token in expired:
+            del self._sessions[token]
+        return len(expired)
+
     def list_users(self) -> List[Dict]:
         """List all users (admin only)."""
         return [u.to_dict() for u in self._users.values()]
