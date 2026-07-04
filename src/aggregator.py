@@ -83,3 +83,7 @@ class LogAggregator:
         if level is None:
             return len(self.entries)
         return sum(1 for e in self.entries if e.level == level)
+
+    def clear(self):
+        """Clear all entries from the aggregator."""
+        self.entries.clear()
