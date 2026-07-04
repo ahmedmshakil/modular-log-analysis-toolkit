@@ -46,6 +46,8 @@ def format_size(size_bytes: int) -> str:
     """Format byte size into human-readable string."""
     if size_bytes < 0:
         raise ValueError("Size must be non-negative")
+    if size_bytes == 0:
+        return "0 B"
     for unit in ("B", "KB", "MB", "GB", "TB"):
         if size_bytes < 1024:
             return f"{size_bytes:.1f} {unit}" if unit != "B" else f"{size_bytes} {unit}"
