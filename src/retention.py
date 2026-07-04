@@ -31,6 +31,12 @@ class RetentionPolicy:
         if self.max_size_mb < 0:
             raise ValueError("max_size_mb must be non-negative")
 
+    def __repr__(self) -> str:
+        return (
+            f"RetentionPolicy(name={self.name!r}, max_age_days={self.max_age_days}, "
+            f"compress_after_days={self.compress_after_days}, delete_after_days={self.delete_after_days})"
+        )
+
     def __str__(self) -> str:
         parts = [f"RetentionPolicy('{self.name}'"]
         if self.max_age_days:
