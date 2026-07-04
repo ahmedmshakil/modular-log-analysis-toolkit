@@ -108,6 +108,13 @@ class AnalysisResult:
             f"sources={len(self.sources)})"
         )
 
+    def __repr__(self) -> str:
+        return (
+            f"AnalysisResult(total_entries={self.total_entries}, "
+            f"level_counts={self.level_counts}, "
+            f"duration={self.duration_seconds:.2f}s)"
+        )
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert analysis result to dictionary."""
         return {
