@@ -15,6 +15,9 @@ class TagRule:
     color: str = "#808080"
     priority: int = 0
 
+    def __repr__(self) -> str:
+        return f"TagRule(name={self.name!r}, tag={self.tag!r}, priority={self.priority})"
+
     def matches(self, entry_dict: Dict) -> bool:
         """Check if an entry matches this rule."""
         if not self.conditions:
