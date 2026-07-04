@@ -89,8 +89,10 @@ class WebhookRouter:
 
     def add_endpoint(self, name: str, url: str, **kwargs) -> None:
         """Register a webhook endpoint."""
-        if not name:
-            raise ValueError("Endpoint name cannot be empty")
+        if not name or not isinstance(name, str):
+            raise ValueError("Endpoint name must be a non-empty string")
+        if not url or not isinstance(url, str):
+            raise ValueError("URL must be a non-empty string")
         self._senders[name] = WebhookSender(url, **kwargs)
 
     def remove_endpoint(self, name: str) -> None:
