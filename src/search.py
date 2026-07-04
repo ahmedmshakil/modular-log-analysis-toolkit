@@ -82,6 +82,19 @@ class LogSearchIndex:
         prefix = prefix.lower()
         return sorted([word for word in self._index if word.startswith(prefix)])[:limit]
 
+    def search_count(self, query: str) -> int:
+        """Count matching entries without returning them."""
+        words = self._tokenize(query)
+        if not words:
+            return 0
+        matching_sets = [self._index.get(w, set()) for w in words]
+        if not all(matching_sets):
+            return 0
+        matching_indices = matching_sets[0]
+        for s in matching_sets[1:]:
+            matching_indices = matching_indices.intersection(s)
+        return len(matching_indices)
+
     def _tokenize(self, text: str) -> List[str]:
         """Tokenize text into searchable words."""
         if not text:
