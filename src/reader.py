@@ -74,3 +74,8 @@ def detect_encoding(file_path: str) -> str:
             return "latin-1"
     except Exception:
         return "utf-8"
+
+
+def file_exists(file_path: str) -> bool:
+    """Check if a file exists and is accessible."""
+    return Path(file_path).is_file()
