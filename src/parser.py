@@ -74,15 +74,18 @@ class LogParser:
                 entries.append(entry)
         return entries
 
+    TIMESTAMP_FORMATS = [
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%dT%H:%M:%S",
+        "%d/%b/%Y:%H:%M:%S",
+        "%b %d %H:%M:%S",
+        "%Y/%m/%d %H:%M:%S",
+        "%m/%d/%Y %H:%M:%S",
+    ]
+
     def _parse_timestamp(self, ts_str: str) -> datetime:
         """Try multiple timestamp formats."""
-        formats = [
-            "%Y-%m-%d %H:%M:%S",
-            "%Y-%m-%dT%H:%M:%S",
-            "%d/%b/%Y:%H:%M:%S",
-            "%b %d %H:%M:%S",
-        ]
-        for fmt in formats:
+        for fmt in self.TIMESTAMP_FORMATS:
             try:
                 return datetime.strptime(ts_str, fmt)
             except ValueError:
