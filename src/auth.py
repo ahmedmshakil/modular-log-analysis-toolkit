@@ -20,6 +20,9 @@ class User:
     last_login: Optional[datetime] = None
     active: bool = True
 
+    def __repr__(self) -> str:
+        return f"User(username={self.username!r}, role={self.role!r}, active={self.active})"
+
     def to_dict(self) -> Dict:
         return {
             "username": self.username,
