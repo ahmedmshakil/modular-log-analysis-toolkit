@@ -40,6 +40,8 @@ class LogSearchIndex:
 
     def search(self, query: str, limit: int = 100) -> List[LogEntry]:
         """Full-text search across indexed entries."""
+        if not query or not query.strip():
+            return []
         words = self._tokenize(query)
         if not words:
             return []
