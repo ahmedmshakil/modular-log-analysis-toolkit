@@ -51,6 +51,8 @@ class LogFilter:
 
     def by_source(self, source: str) -> "LogFilter":
         """Filter by log source."""
+        if not source:
+            raise ValueError("Source filter cannot be empty")
         def _filter(entry: LogEntry) -> bool:
             if not entry.source:
                 return False
