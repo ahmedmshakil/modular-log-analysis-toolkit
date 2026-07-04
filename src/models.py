@@ -46,6 +46,11 @@ class LogEntry:
     def __str__(self) -> str:
         return f"[{self.level.value}] {self.timestamp} - {self.message[:100]}"
 
+    @property
+    def is_error(self) -> bool:
+        """Check if entry is an error or critical level."""
+        return self.level in (LogLevel.ERROR, LogLevel.CRITICAL)
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert log entry to dictionary."""
         return {
