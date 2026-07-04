@@ -74,7 +74,8 @@ class AlertManager:
                 current_value=current_value,
                 threshold=threshold["value"],
             )
-            self.alerts.append(alert)
+            with self._lock:
+                self.alerts.append(alert)
             self._notify(alert)
             return alert
         return None
