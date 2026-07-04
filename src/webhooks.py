@@ -75,6 +75,11 @@ class WebhookSender:
         self._sent_count = 0
         self._error_count = 0
 
+    def reset(self):
+        """Reset all sender state including stats."""
+        self.reset_stats()
+        self.headers = {"Content-Type": "application/json"}
+
 
 class WebhookRouter:
     """Route webhooks to multiple endpoints."""
