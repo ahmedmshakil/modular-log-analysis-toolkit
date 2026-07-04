@@ -122,6 +122,13 @@ class AuthManager:
         """Invalidate a session."""
         self._sessions.pop(token, None)
 
+    def has_permission(self, username: str, permission: str) -> bool:
+        """Check if a user has a specific permission by username."""
+        user = self._users.get(username)
+        if not user or not user.active:
+            return False
+        return permission in self.ROLES.get(user.role, [])
+
     def expire_sessions(self) -> int:
         """Remove all expired sessions. Returns count of removed sessions."""
         now = datetime.now()
