@@ -46,6 +46,11 @@ class Alert:
             "timestamp": self.timestamp.isoformat(),
         }
 
+    def to_json(self, indent: int = 2) -> str:
+        """Convert alert to JSON string."""
+        import json
+        return json.dumps(self.to_dict(), indent=indent)
+
 
 class AlertManager:
     """Manage alert thresholds and notifications."""
