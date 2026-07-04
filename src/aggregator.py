@@ -75,3 +75,9 @@ class LogAggregator:
         """Find busiest hours of the day."""
         hour_counts = Counter(e.timestamp.hour for e in self.entries)
         return sorted(hour_counts.items(), key=lambda x: x[1], reverse=True)[:limit]
+
+    def count_entries(self, level: Optional[LogLevel] = None) -> int:
+        """Count entries, optionally filtered by level."""
+        if level is None:
+            return len(self.entries)
+        return sum(1 for e in self.entries if e.level == level)
