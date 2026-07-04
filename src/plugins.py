@@ -58,6 +58,15 @@ class PluginManager:
             del self._plugins[name]
             del self._enabled[name]
 
+    def remove_batch(self, names: List[str]) -> int:
+        """Remove multiple plugins at once. Returns count of removed plugins."""
+        removed = 0
+        for name in names:
+            if name in self._plugins:
+                self.unregister(name)
+                removed += 1
+        return removed
+
     def enable(self, name: str):
         """Enable a plugin."""
         if name in self._enabled:
