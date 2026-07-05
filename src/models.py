@@ -44,7 +44,8 @@ class LogEntry:
         return f"LogEntry(level={self.level.value}, timestamp={self.timestamp}, message={self.message[:50]!r})"
 
     def __str__(self) -> str:
-        return f"[{self.level.value}] {self.timestamp} - {self.message[:100]}"
+        msg = self.message[:100] if self.message else ""
+        return f"[{self.level.value}] {self.timestamp} - {msg}"
 
     @property
     def is_error(self) -> bool:
