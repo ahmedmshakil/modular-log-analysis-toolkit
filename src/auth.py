@@ -46,6 +46,7 @@ class AuthManager:
         "analyst": ["read", "search", "export"],
         "admin": ["read", "search", "export", "manage", "configure"],
     }
+    SESSION_DURATION_HOURS = 24
 
     def __init__(self, data_dir: str = "./data"):
         self.data_dir = Path(data_dir)
@@ -98,7 +99,7 @@ class AuthManager:
         token = secrets.token_hex(32)
         self._sessions[token] = {
             "username": username,
-            "expires": datetime.now() + timedelta(hours=24),
+            "expires": datetime.now() + timedelta(hours=self.SESSION_DURATION_HOURS),
         }
         user.last_login = datetime.now()
         self._save_users()
