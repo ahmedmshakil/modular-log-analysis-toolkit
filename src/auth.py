@@ -23,6 +23,11 @@ class User:
     def __repr__(self) -> str:
         return f"User(username={self.username!r}, role={self.role!r}, active={self.active})"
 
+    @property
+    def is_active(self) -> bool:
+        """Check if user account is active."""
+        return self.active
+
     def to_dict(self) -> Dict:
         return {
             "username": self.username,
