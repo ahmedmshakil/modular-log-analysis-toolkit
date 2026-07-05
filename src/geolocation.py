@@ -45,7 +45,7 @@ class GeoLocation:
 class GeoLookup:
     """Look up geolocation data for IP addresses found in logs."""
 
-    IP_PATTERN = re.compile(r"\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b")
+    IP_PATTERN = re.compile(r"\b((?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.(?:25[0-5]|2[0-4]\d|[01]?\d\d?))\b")
 
     def __init__(self, cache_size: int = 1000):
         self._cache: Dict[str, GeoLocation] = {}
