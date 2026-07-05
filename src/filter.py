@@ -71,6 +71,8 @@ class LogFilter:
 
     def by_regex(self, pattern: str) -> "LogFilter":
         """Filter by regex pattern match on message."""
+        if not pattern or not isinstance(pattern, str):
+            raise ValueError("Pattern must be a non-empty string")
         try:
             compiled = re.compile(pattern)
         except re.error as e:
