@@ -72,6 +72,13 @@ class LRUCache:
             self._misses = 0
 
     @property
+    def hit_rate(self) -> float:
+        """Get cache hit rate as percentage."""
+        with self._lock:
+            total = self._hits + self._misses
+            return round(self._hits / total * 100, 2) if total > 0 else 0.0
+
+    @property
     def stats(self) -> Dict[str, int]:
         """Return cache performance statistics."""
         with self._lock:
