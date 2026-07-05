@@ -292,3 +292,32 @@ def start_dashboard(host: str = "0.0.0.0", port: int = 8080, entries: List[LogEn
     server = HTTPServer((host, port), DashboardHandler)
     print(f"Dashboard running at http://{host}:{port}")
     server.serve_forever()
+
+
+if __name__ == "__main__":
+    from .parser import LogParser
+    from .reader import read_log_lines
+    import sys
+
+    # Default test data if no file provided
+    if len(sys.argv) > 1:
+        log_file = sys.argv[1]
+    else:
+        # Create sample log file
+        sample = """2024-01-15 10:30:45 [ERROR] Database connection timeout
+2024-01-15 10:31:00 [INFO] Application started successfully
+2024-01-15 10:31:15 [WARN] High memory usage detected: 85%
+2024-01-15 10:31:30 [ERROR] Failed to process request
+2024-01-15 10:31:45 [INFO] User login: admin@example.com
+2024-01-15 10:32:00 [CRITICAL] System out of memory
+2024-01-15 10:32:15 [INFO] Cleanup initiated
+2024-01-15 10:32:30 [INFO] System recovered"""
+        log_file = "sample.log"
+        with open(log_file, "w") as f:
+            f.write(sample)
+        print(f"Created sample log file: {log_file}")
+
+    parser = LogParser()
+    entries = parser.parse_lines(list(read_log_lines(log_file)))
+    print(f"Loaded {len(entries)} entries from {log_file}")
+    start_dashboard(port=8080, entries=entries)
