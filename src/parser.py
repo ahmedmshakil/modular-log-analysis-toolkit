@@ -30,6 +30,15 @@ PATTERNS = {
 class LogParser:
     """Parse log lines into structured LogEntry objects."""
 
+    DEFAULT_TIMESTAMP_FORMATS = [
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%dT%H:%M:%S",
+        "%d/%b/%Y:%H:%M:%S",
+        "%b %d %H:%M:%S",
+        "%Y/%m/%d %H:%M:%S",
+        "%m/%d/%Y %H:%M:%S",
+    ]
+
     def __init__(self, pattern_name: str = "standard", custom_pattern: Optional[str] = None):
         if custom_pattern:
             try:
@@ -74,18 +83,9 @@ class LogParser:
                 entries.append(entry)
         return entries
 
-    TIMESTAMP_FORMATS = [
-        "%Y-%m-%d %H:%M:%S",
-        "%Y-%m-%dT%H:%M:%S",
-        "%d/%b/%Y:%H:%M:%S",
-        "%b %d %H:%M:%S",
-        "%Y/%m/%d %H:%M:%S",
-        "%m/%d/%Y %H:%M:%S",
-    ]
-
     def _parse_timestamp(self, ts_str: str) -> datetime:
         """Try multiple timestamp formats."""
-        for fmt in self.TIMESTAMP_FORMATS:
+        for fmt in self.DEFAULT_TIMESTAMP_FORMATS:
             try:
                 return datetime.strptime(ts_str, fmt)
             except ValueError:
