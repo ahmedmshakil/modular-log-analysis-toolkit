@@ -120,3 +120,8 @@ class AlertManager:
         """Remove all alerts from the manager."""
         with self._lock:
             self.alerts.clear()
+
+    @property
+    def alert_count(self) -> int:
+        """Get total number of alerts."""
+        return len(self.alerts)
