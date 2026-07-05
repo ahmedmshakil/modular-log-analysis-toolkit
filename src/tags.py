@@ -64,6 +64,8 @@ class TagManager:
 
     def apply_rules(self, entries: List[Dict]) -> List[Dict]:
         """Apply tagging rules to entries."""
+        if not entries:
+            return []
         for entry in entries:
             line_num = entry.get("line_number", 0)
             tags = set(entry.get("tags", []))
