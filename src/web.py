@@ -33,37 +33,192 @@ def get_docs_structure():
 
 
 def read_markdown(file_path):
-    """Read and convert markdown to simple HTML."""
+    """Read and convert markdown to HTML."""
+    import re
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # Simple markdown to HTML conversion
-        html = content
-        # Headers
-        html = html.replace("# ", "<h1>").replace("\n<h1>", "\n</h1>\n<h1>")
-        html = html.replace("## ", "<h2>").replace("\n<h2>", "\n</h2>\n<h2>")
-        html = html.replace("### ", "<h3>").replace("\n<h3>", "\n</h3>\n<h3>")
+        # Remove YAML frontmatter
+        content = re.sub(r'^---\n.*?\n---\n', '', content, flags=re.DOTALL)
+
+        # Store code blocks to prevent processing inside them
+        code_blocks = []
+        def save_code_block(match):
+            lang = match.group(1) or ''
+            code = match.group(2)
+            # Escape HTML in code
+            code = code.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+            placeholder = f"CODE_BLOCK_{len(code_blocks)}"
+            code_blocks.append(f'<pre><code class="language-{lang}">{code}</code></pre>')
+            return placeholder
+
+        content = re.sub(r'```(\w*)\n(.*?)```', save_code_block, content, flags=re.DOTALL)
+
+        # Store inline code
+        inline_codes = []
+        def save_inline_code(match):
+            code = match.group(1)
+            code = code.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+            placeholder = f"INLINE_CODE_{len(inline_codes)}"
+            inline_codes.append(f'<code>{code}</code>')
+            return placeholder
+
+        content = re.sub(r'`([^`]+)`', save_inline_code, content)
+
+        # Process line by line
+        lines = content.split('\n')
+        html_lines = []
+        in_list = False
+        in_table = False
+        table_rows = []
+
+        for line in lines:
+            # Check for code block placeholder
+            if line.strip().startswith('CODE_BLOCK_'):
+                if in_list:
+                    html_lines.append('</ul>')
+                    in_list = False
+                if in_table:
+                    html_lines.append(build_table(table_rows))
+                    table_rows = []
+                    in_table = False
+                html_lines.append(line.strip())
+                continue
+
+            # Headers
+            if line.startswith('#### '):
+                if in_list:
+                    html_lines.append('</ul>')
+                    in_list = False
+                html_lines.append(f'<h4>{line[5:]}</h4>')
+            elif line.startswith('### '):
+                if in_list:
+                    html_lines.append('</ul>')
+                    in_list = False
+                html_lines.append(f'<h3>{line[4:]}</h3>')
+            elif line.startswith('## '):
+                if in_list:
+                    html_lines.append('</ul>')
+                    in_list = False
+                html_lines.append(f'<h2>{line[3:]}</h2>')
+            elif line.startswith('# '):
+                if in_list:
+                    html_lines.append('</ul>')
+                    in_list = False
+                html_lines.append(f'<h1>{line[2:]}</h1>')
+            # Horizontal rule
+            elif line.strip() in ('---', '***', '___'):
+                if in_list:
+                    html_lines.append('</ul>')
+                    in_list = False
+                html_lines.append('<hr>')
+            # Table rows
+            elif '|' in line and line.strip().startswith('|'):
+                if in_list:
+                    html_lines.append('</ul>')
+                    in_list = False
+                # Skip separator rows
+                if re.match(r'^\|[\s\-:|]+\|$', line.strip()):
+                    continue
+                cells = [c.strip() for c in line.split('|')[1:-1]]
+                if not in_table:
+                    in_table = True
+                    table_rows = []
+                table_rows.append(cells)
+            # List items
+            elif line.strip().startswith('- ') or line.strip().startswith('* '):
+                if in_table:
+                    html_lines.append(build_table(table_rows))
+                    table_rows = []
+                    in_table = False
+                if not in_list:
+                    html_lines.append('<ul>')
+                    in_list = True
+                item = line.strip()[2:]
+                html_lines.append(f'<li>{item}</li>')
+            # Numbered list
+            elif re.match(r'^\d+\.\s', line.strip()):
+                if in_table:
+                    html_lines.append(build_table(table_rows))
+                    table_rows = []
+                    in_table = False
+                if not in_list:
+                    html_lines.append('<ol>')
+                    in_list = True
+                item = re.sub(r'^\d+\.\s', '', line.strip())
+                html_lines.append(f'<li>{item}</li>')
+            # Empty line
+            elif line.strip() == '':
+                if in_list:
+                    html_lines.append('</ul>')
+                    in_list = False
+                if in_table:
+                    html_lines.append(build_table(table_rows))
+                    table_rows = []
+                    in_table = False
+                html_lines.append('')
+            # Regular paragraph
+            else:
+                if in_list:
+                    html_lines.append('</ul>')
+                    in_list = False
+                if in_table:
+                    html_lines.append(build_table(table_rows))
+                    table_rows = []
+                    in_table = False
+                html_lines.append(f'<p>{line}</p>')
+
+        # Close any open tags
+        if in_list:
+            html_lines.append('</ul>')
+        if in_table:
+            html_lines.append(build_table(table_rows))
+
+        html = '\n'.join(html_lines)
+
+        # Process inline formatting
         # Bold
-        import re
         html = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', html)
         # Italic
         html = re.sub(r'\*(.*?)\*', r'<em>\1</em>', html)
-        # Code blocks
-        html = re.sub(r'```(\w*)\n(.*?)```', r'<pre><code>\2</code></pre>', html, flags=re.DOTALL)
-        # Inline code
-        html = re.sub(r'`([^`]+)`', r'<code>\1</code>', html)
-        # Links
-        html = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="/docs/\2">\1</a>', html)
-        # Lists
-        html = re.sub(r'^- (.*)$', r'<li>\1</li>', html, flags=re.MULTILINE)
-        # Paragraphs
-        html = re.sub(r'\n\n', '</p><p>', html)
-        html = f"<p>{html}</p>"
+        # Links - handle relative docs links
+        html = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', lambda m: f'<a href="/docs/{m.group(2)}">{m.group(1)}</a>' if not m.group(2).startswith('http') else f'<a href="{m.group(2)}" target="_blank">{m.group(1)}</a>', html)
+
+        # Restore code blocks
+        for i, block in enumerate(code_blocks):
+            html = html.replace(f'CODE_BLOCK_{i}', block)
+
+        # Restore inline code
+        for i, code in enumerate(inline_codes):
+            html = html.replace(f'INLINE_CODE_{i}', code)
 
         return html
     except Exception as e:
-        return f"<p>Error reading file: {e}</p>"
+        return f'<p style="color: red;">Error reading file: {e}</p>'
+
+
+def build_table(rows):
+    """Build HTML table from rows."""
+    if not rows:
+        return ''
+    html = '<table>'
+    # First row is header
+    html += '<thead><tr>'
+    for cell in rows[0]:
+        html += f'<th>{cell}</th>'
+    html += '</tr></thead>'
+    # Rest are body
+    if len(rows) > 1:
+        html += '<tbody>'
+        for row in rows[1:]:
+            html += '<tr>'
+            for cell in row:
+                html += f'<td>{cell}</td>'
+            html += '</tr>'
+        html += '</tbody>'
+    html += '</table>'
+    return html
 
 
 class DashboardHandler(BaseHTTPRequestHandler):
