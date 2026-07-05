@@ -76,6 +76,8 @@ class LogEntry:
             ts = datetime.now()
 
         level_str = data.get("level", "INFO")
+        if not isinstance(level_str, str):
+            level_str = "INFO"
         try:
             level = LogLevel(level_str)
         except ValueError:
