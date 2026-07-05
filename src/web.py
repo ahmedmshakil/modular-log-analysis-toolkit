@@ -247,41 +247,45 @@ def get_theme_css():
     """Return CSS with both light and dark themes."""
     return '''
     :root {
-        --bg-primary: #ffffff;
-        --bg-secondary: #f5f5f5;
-        --bg-tertiary: #e3f2fd;
-        --text-primary: #333333;
-        --text-secondary: #616161;
-        --text-muted: #9e9e9e;
-        --accent-primary: #1565c0;
-        --accent-secondary: #1976d2;
-        --accent-green: #2e7d32;
-        --border-color: #e0e0e0;
-        --hover-bg: #f0f7ff;
-        --code-bg: #e8f5e9;
-        --code-text: #2e7d32;
-        --pre-bg: #f5f5f5;
-        --shadow: 0 2px 8px rgba(0,0,0,0.1);
-        --card-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        --bg-primary: #F4F3EE;
+        --bg-secondary: #EBE9E3;
+        --bg-tertiary: #E2DFD7;
+        --text-primary: #2D2926;
+        --text-secondary: #5C5650;
+        --text-muted: #B1ADA1;
+        --accent-primary: #C15F3C;
+        --accent-secondary: #D4764E;
+        --accent-green: #5A7A5A;
+        --border-color: #B1ADA1;
+        --hover-bg: #E8E5DD;
+        --code-bg: #EBE9E3;
+        --code-text: #C15F3C;
+        --pre-bg: #EBE9E3;
+        --shadow: 0 2px 8px rgba(0,0,0,0.08);
+        --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        --active-bg: #C15F3C;
+        --active-text: #F4F3EE;
     }
 
     [data-theme="dark"] {
-        --bg-primary: #1a1a2e;
-        --bg-secondary: #16213e;
-        --bg-tertiary: #1a3a5c;
-        --text-primary: #e0e0e0;
-        --text-secondary: #b0b0b0;
-        --text-muted: #808080;
-        --accent-primary: #64b5f6;
-        --accent-secondary: #90caf9;
-        --accent-green: #4ec9b0;
-        --border-color: #2a3a4e;
-        --hover-bg: #1a2744;
-        --code-bg: #0d1b2a;
-        --code-text: #4ec9b0;
-        --pre-bg: #0d1b2a;
+        --bg-primary: #1E1E1E;
+        --bg-secondary: #252525;
+        --bg-tertiary: #2D2D2D;
+        --text-primary: #E0DCD5;
+        --text-secondary: #B1ADA1;
+        --text-muted: #7A7668;
+        --accent-primary: #C15F3C;
+        --accent-secondary: #D4764E;
+        --accent-green: #7FAF7F;
+        --border-color: #3A3A3A;
+        --hover-bg: #2D2D2D;
+        --code-bg: #252525;
+        --code-text: #D4764E;
+        --pre-bg: #252525;
         --shadow: 0 2px 8px rgba(0,0,0,0.3);
         --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        --active-bg: #C15F3C;
+        --active-text: #F4F3EE;
     }
 
     .theme-toggle {
@@ -303,9 +307,10 @@ def get_theme_css():
     }
 
     .theme-toggle:hover {
-        background: var(--bg-tertiary);
+        background: var(--accent-primary);
+        color: var(--active-text);
         transform: rotate(30deg);
-        box-shadow: var(--shadow);
+        box-shadow: var(--card-shadow);
     }
     '''
 
@@ -383,7 +388,7 @@ tr:hover {{ background: var(--hover-bg); }}
 .nav {{ display: flex; gap: 12px; margin-bottom: 20px; }}
 .nav a, .nav button {{ background: var(--bg-secondary); color: var(--accent-primary); padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 8px; text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }}
 .nav a:hover, .nav button:hover {{ background: var(--bg-tertiary); color: var(--accent-primary); }}
-.nav .active {{ background: var(--bg-tertiary); color: var(--accent-primary); border-color: var(--accent-primary); }}
+.nav .active {{ background: var(--active-bg); color: var(--active-text); border-color: var(--active-bg); }}
 </style></head>
 <body>
 {get_theme_toggle()}
@@ -463,10 +468,10 @@ body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color
 .sidebar h3 {{ color: var(--accent-green); font-size: 0.9rem; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }}
 .sidebar a {{ display: block; padding: 8px 12px; color: var(--text-primary); text-decoration: none; border-radius: 6px; margin: 2px 0; font-size: 0.9rem; transition: all 0.2s; }}
 .sidebar a:hover {{ background: var(--bg-tertiary); color: var(--accent-primary); }}
-.sidebar a.active {{ background: var(--accent-primary); color: #ffffff; }}
+.sidebar a.active {{ background: var(--active-bg); color: var(--active-text); }}
 .nav-top {{ margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); }}
 .nav-top a {{ display: inline-block; padding: 6px 12px; background: var(--bg-tertiary); color: var(--accent-primary); border-radius: 6px; text-decoration: none; font-size: 0.85rem; margin-right: 8px; }}
-.nav-top a:hover {{ background: var(--accent-primary); color: #ffffff; }}
+.nav-top a:hover {{ background: var(--active-bg); color: var(--active-text); }}
 .content {{ flex: 1; overflow-y: auto; padding: 32px; background: var(--bg-primary); position: relative; }}
 .content h1 {{ color: var(--accent-primary); margin-bottom: 24px; font-size: 1.8rem; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }}
 .welcome {{ text-align: center; padding: 60px 20px; }}
@@ -547,10 +552,10 @@ body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color
 .sidebar h3 {{ color: var(--accent-green); font-size: 0.9rem; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }}
 .sidebar a {{ display: block; padding: 8px 12px; color: var(--text-primary); text-decoration: none; border-radius: 6px; margin: 2px 0; font-size: 0.9rem; transition: all 0.2s; }}
 .sidebar a:hover {{ background: var(--bg-tertiary); color: var(--accent-primary); }}
-.sidebar a.active {{ background: var(--accent-primary); color: #ffffff; }}
+.sidebar a.active {{ background: var(--active-bg); color: var(--active-text); }}
 .nav-top {{ margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); }}
 .nav-top a {{ display: inline-block; padding: 6px 12px; background: var(--bg-tertiary); color: var(--accent-primary); border-radius: 6px; text-decoration: none; font-size: 0.85rem; margin-right: 8px; }}
-.nav-top a:hover {{ background: var(--accent-primary); color: #ffffff; }}
+.nav-top a:hover {{ background: var(--active-bg); color: var(--active-text); }}
 .content {{ flex: 1; overflow-y: auto; padding: 32px 48px; background: var(--bg-primary); position: relative; }}
 .content h1 {{ color: var(--accent-primary); margin-bottom: 20px; font-size: 1.8rem; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }}
 .content h2 {{ color: var(--accent-secondary); margin: 28px 0 12px; font-size: 1.4rem; }}
@@ -570,7 +575,7 @@ body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color
 .content th, .content td {{ border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }}
 .content th {{ background: var(--bg-tertiary); color: var(--accent-primary); font-weight: 600; }}
 .content tr:hover {{ background: var(--hover-bg); }}
-.content blockquote {{ border-left: 4px solid var(--accent-primary); padding: 12px 16px; margin: 16px 0; background: var(--bg-secondary); border-radius: 0 8px 8px 0; }}
+.content blockquote {{ border-left: 4px solid var(--accent-primary); padding: 12px 16px; margin: 16px 0; background: var(--bg-secondary); border-radius: 0 8px 8px 0; font-style: italic; }}
 .content hr {{ border: none; border-top: 2px solid var(--border-color); margin: 24px 0; }}
 .error {{ color: #ef5350; font-weight: bold; }}
 .warn {{ color: #ffa726; }}
