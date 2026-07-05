@@ -268,24 +268,27 @@ def get_theme_css():
     }
 
     [data-theme="dark"] {
-        --bg-primary: #1E1E1E;
-        --bg-secondary: #252525;
-        --bg-tertiary: #2D2D2D;
-        --text-primary: #E0DCD5;
+        --bg-primary: #121212;
+        --bg-secondary: #1A1A1A;
+        --bg-tertiary: #222222;
+        --text-primary: #E8E4DE;
         --text-secondary: #B1ADA1;
         --text-muted: #7A7668;
         --accent-primary: #C15F3C;
         --accent-secondary: #D4764E;
         --accent-green: #7FAF7F;
-        --border-color: #3A3A3A;
-        --hover-bg: #2D2D2D;
-        --code-bg: #252525;
+        --accent-blue: #5B9BD5;
+        --border-color: #2A2A2A;
+        --hover-bg: #1F1F1F;
+        --code-bg: #1A1A1A;
         --code-text: #D4764E;
-        --pre-bg: #252525;
-        --shadow: 0 2px 8px rgba(0,0,0,0.3);
-        --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        --pre-bg: #1A1A1A;
+        --shadow: 0 2px 8px rgba(0,0,0,0.4);
+        --card-shadow: 0 4px 12px rgba(0,0,0,0.4);
         --active-bg: #C15F3C;
         --active-text: #F4F3EE;
+        --bubble-user: #5B9BD5;
+        --bubble-assistant: #C15F3C;
     }
 
     .theme-toggle {
@@ -312,6 +315,42 @@ def get_theme_css():
         transform: rotate(30deg);
         box-shadow: var(--card-shadow);
     }
+
+    /* Dark theme specific enhancements */
+    [data-theme="dark"] .stat:hover {
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 12px rgba(193, 95, 60, 0.2);
+    }
+
+    [data-theme="dark"] tr:hover {
+        background: rgba(91, 155, 213, 0.08);
+    }
+
+    [data-theme="dark"] .sidebar a:hover {
+        background: rgba(193, 95, 60, 0.15);
+    }
+
+    [data-theme="dark"] .content a {
+        color: var(--accent-blue);
+    }
+
+    [data-theme="dark"] .content a:hover {
+        color: #7AB5E8;
+    }
+
+    [data-theme="dark"] .content th {
+        background: var(--bg-tertiary);
+        color: var(--accent-blue);
+    }
+
+    [data-theme="dark"] .nav a:hover {
+        border-color: var(--accent-primary);
+    }
+
+    [data-theme="dark"] .error { color: #FF6B6B; }
+    [data-theme="dark"] .warn { color: #FFB347; }
+    [data-theme="dark"] .info { color: #5B9BD5; }
+    [data-theme="dark"] .critical { color: #FF4757; font-weight: bold; }
     '''
 
 
