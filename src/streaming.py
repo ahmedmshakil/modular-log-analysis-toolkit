@@ -20,6 +20,9 @@ class LogStream:
         self._processed = 0
         self._errors = 0
 
+    def __repr__(self) -> str:
+        return f"LogStream(file={self.file_path.name}, processed={self._processed})"
+
     def stream(self, callback: Callable[[LogEntry], None], batch_size: int = 1):
         """Stream entries through a callback function."""
         for line in read_log_lines(str(self.file_path)):
