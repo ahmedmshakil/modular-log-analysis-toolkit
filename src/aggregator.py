@@ -48,6 +48,8 @@ class LogAggregator:
         """Group entries by time windows."""
         if window_minutes < 1:
             raise ValueError("window_minutes must be at least 1")
+        if not self.entries:
+            return {}
         windows: Dict[str, List[LogEntry]] = defaultdict(list)
         for entry in self.entries:
             window_start = entry.timestamp.replace(
