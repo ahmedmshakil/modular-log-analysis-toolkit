@@ -117,3 +117,8 @@ class WebhookRouter:
     def list_endpoints(self) -> list:
         """List registered endpoints."""
         return list(self._senders.keys())
+
+    @property
+    def endpoint_count(self) -> int:
+        """Get number of registered endpoints."""
+        return len(self._senders)
