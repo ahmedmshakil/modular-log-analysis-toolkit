@@ -221,6 +221,124 @@ def build_table(rows):
     return html
 
 
+def get_theme_toggle():
+    """Return theme toggle button HTML."""
+    return '''
+    <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Theme">
+        <svg id="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </div>
+    '''
+
+
+def get_theme_css():
+    """Return CSS with both light and dark themes."""
+    return '''
+    :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f5f5f5;
+        --bg-tertiary: #e3f2fd;
+        --text-primary: #333333;
+        --text-secondary: #616161;
+        --text-muted: #9e9e9e;
+        --accent-primary: #1565c0;
+        --accent-secondary: #1976d2;
+        --accent-green: #2e7d32;
+        --border-color: #e0e0e0;
+        --hover-bg: #f0f7ff;
+        --code-bg: #e8f5e9;
+        --code-text: #2e7d32;
+        --pre-bg: #f5f5f5;
+        --shadow: 0 2px 8px rgba(0,0,0,0.1);
+        --card-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    [data-theme="dark"] {
+        --bg-primary: #1a1a2e;
+        --bg-secondary: #16213e;
+        --bg-tertiary: #1a3a5c;
+        --text-primary: #e0e0e0;
+        --text-secondary: #b0b0b0;
+        --text-muted: #808080;
+        --accent-primary: #64b5f6;
+        --accent-secondary: #90caf9;
+        --accent-green: #4ec9b0;
+        --border-color: #2a3a4e;
+        --hover-bg: #1a2744;
+        --code-bg: #0d1b2a;
+        --code-text: #4ec9b0;
+        --pre-bg: #0d1b2a;
+        --shadow: 0 2px 8px rgba(0,0,0,0.3);
+        --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .theme-toggle {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1000;
+        transition: all 0.3s ease;
+        color: var(--accent-primary);
+    }
+
+    .theme-toggle:hover {
+        background: var(--bg-tertiary);
+        transform: rotate(30deg);
+        box-shadow: var(--shadow);
+    }
+    '''
+
+
+def get_theme_js():
+    """Return JavaScript for theme toggling."""
+    return '''
+    function toggleTheme() {
+        const body = document.body;
+        const isDark = body.getAttribute('data-theme') === 'dark';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        updateIcons(!isDark);
+    }
+
+    function updateIcons(isDark) {
+        const sun = document.getElementById('sun-icon');
+        const moon = document.getElementById('moon-icon');
+        if (sun && moon) {
+            sun.style.display = isDark ? 'none' : 'block';
+            moon.style.display = isDark ? 'block' : 'none';
+        }
+    }
+
+    // Load saved theme
+    (function() {
+        const saved = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', saved);
+        updateIcons(saved === 'dark');
+    })();
+    '''
+
+
 class DashboardHandler(BaseHTTPRequestHandler):
     """HTTP handler for the log dashboard."""
 
@@ -243,30 +361,32 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.send_error(404)
 
     def _serve_dashboard(self):
-        html = """<!DOCTYPE html>
+        html = f"""<!DOCTYPE html>
 <html>
 <head><title>modular-log-analysis-toolkit Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; padding: 24px; line-height: 1.5; }
-h1 { color: #1565c0; margin-bottom: 16px; font-size: 1.8rem; }
-h2 { color: #1976d2; margin: 20px 0 12px; font-size: 1.2rem; }
-.stats { display: flex; gap: 16px; margin: 20px 0; flex-wrap: wrap; }
-.stat { background: #f5f5f5; padding: 16px 20px; border-radius: 10px; min-width: 140px; border: 1px solid #e0e0e0; }
-.stat h3 { color: #2e7d32; margin: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-.stat p { font-size: 28px; margin: 6px 0 0; font-weight: bold; color: #212121; }
-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #e0e0e0; }
-th { background: #f5f5f5; color: #1565c0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
-tr:hover { background: #f0f7ff; }
-.error { color: #ef5350; font-weight: bold; } .warn { color: #ffa726; } .info { color: #42a5f5; } .critical { color: #ff1744; font-weight: bold; }
-.nav { display: flex; gap: 12px; margin-bottom: 20px; }
-.nav a, .nav button { background: #f5f5f5; color: #1565c0; padding: 10px 20px; border: 1px solid #e0e0e0; border-radius: 8px; text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
-.nav a:hover, .nav button:hover { background: #e3f2fd; color: #0d47a1; }
-.nav .active { background: #e3f2fd; color: #1565c0; border-color: #1565c0; }
+{get_theme_css()}
+* {{ box-sizing: border-box; margin: 0; padding: 0; }}
+body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color: var(--text-primary); padding: 24px; line-height: 1.5; }}
+h1 {{ color: var(--accent-primary); margin-bottom: 16px; font-size: 1.8rem; }}
+h2 {{ color: var(--accent-secondary); margin: 20px 0 12px; font-size: 1.2rem; }}
+.stats {{ display: flex; gap: 16px; margin: 20px 0; flex-wrap: wrap; }}
+.stat {{ background: var(--bg-secondary); padding: 16px 20px; border-radius: 10px; min-width: 140px; border: 1px solid var(--border-color); }}
+.stat h3 {{ color: var(--accent-green); margin: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }}
+.stat p {{ font-size: 28px; margin: 6px 0 0; font-weight: bold; color: var(--text-primary); }}
+table {{ width: 100%; border-collapse: collapse; margin-top: 8px; }}
+th, td {{ padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border-color); }}
+th {{ background: var(--bg-secondary); color: var(--accent-primary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }}
+tr:hover {{ background: var(--hover-bg); }}
+.error {{ color: #ef5350; font-weight: bold; }} .warn {{ color: #ffa726; }} .info {{ color: #42a5f5; }} .critical {{ color: #ff1744; font-weight: bold; }}
+.nav {{ display: flex; gap: 12px; margin-bottom: 20px; }}
+.nav a, .nav button {{ background: var(--bg-secondary); color: var(--accent-primary); padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 8px; text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }}
+.nav a:hover, .nav button:hover {{ background: var(--bg-tertiary); color: var(--accent-primary); }}
+.nav .active {{ background: var(--bg-tertiary); color: var(--accent-primary); border-color: var(--accent-primary); }}
 </style></head>
 <body>
+{get_theme_toggle()}
 <h1>modular-log-analysis-toolkit Dashboard</h1>
 <div class="nav">
 <a href="/" class="active">Dashboard</a>
@@ -281,19 +401,20 @@ tr:hover { background: #f0f7ff; }
 <table><thead><tr><th>Time</th><th>Level</th><th>Source</th><th>Message</th></tr></thead>
 <tbody id="entries"></tbody></table>
 <script>
-async function refresh() {
+{get_theme_js()}
+async function refresh() {{
   const r = await fetch('/api/stats'); const d = await r.json();
   document.getElementById('total').textContent = d.total;
   document.getElementById('errors').textContent = d.errors;
   document.getElementById('rate').textContent = d.error_rate + '%';
   const er = await fetch('/api/entries'); const ed = await er.json();
   const tb = document.getElementById('entries'); tb.innerHTML = '';
-  ed.forEach(e => {
+  ed.forEach(e => {{
     const tr = document.createElement('tr');
     tr.innerHTML = '<td>'+e.timestamp+'</td><td class="'+e.level.toLowerCase()+'">'+e.level+'</td><td>'+(e.source||'')+'</td><td>'+e.message+'</td>';
     tb.appendChild(tr);
-  });
-}
+  }});
+}}
 refresh(); setInterval(refresh, 5000);
 </script></body></html>"""
         self.send_response(200)
@@ -329,28 +450,29 @@ refresh(); setInterval(refresh, 5000);
 
     def _serve_docs_index(self):
         """Serve documentation index page with sidebar."""
-        html = """<!DOCTYPE html>
+        html = f"""<!DOCTYPE html>
 <html>
 <head><title>Documentation - modular-log-analysis-toolkit</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; display: flex; height: 100vh; }
-.sidebar { width: 280px; background: #f5f5f5; border-right: 1px solid #e0e0e0; overflow-y: auto; padding: 16px; flex-shrink: 0; }
-.sidebar h2 { color: #1565c0; font-size: 1.2rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #1565c0; }
-.sidebar h3 { color: #2e7d32; font-size: 0.9rem; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }
-.sidebar a { display: block; padding: 8px 12px; color: #333333; text-decoration: none; border-radius: 6px; margin: 2px 0; font-size: 0.9rem; transition: all 0.2s; }
-.sidebar a:hover { background: #e3f2fd; color: #1565c0; }
-.sidebar a.active { background: #1565c0; color: #ffffff; }
-.nav-top { margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0; }
-.nav-top a { display: inline-block; padding: 6px 12px; background: #e3f2fd; color: #1565c0; border-radius: 6px; text-decoration: none; font-size: 0.85rem; margin-right: 8px; }
-.nav-top a:hover { background: #1565c0; color: #ffffff; }
-.content { flex: 1; overflow-y: auto; padding: 32px; background: #ffffff; }
-.content h1 { color: #1565c0; margin-bottom: 24px; font-size: 1.8rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 12px; }
-.welcome { text-align: center; padding: 60px 20px; }
-.welcome h1 { border: none; }
-.welcome p { color: #616161; font-size: 1.1rem; margin-top: 16px; }
-.welcome .hint { color: #9e9e9e; margin-top: 24px; font-size: 0.9rem; }
+{get_theme_css()}
+* {{ box-sizing: border-box; margin: 0; padding: 0; }}
+body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color: var(--text-primary); display: flex; height: 100vh; }}
+.sidebar {{ width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border-color); overflow-y: auto; padding: 16px; flex-shrink: 0; }}
+.sidebar h2 {{ color: var(--accent-primary); font-size: 1.2rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--accent-primary); }}
+.sidebar h3 {{ color: var(--accent-green); font-size: 0.9rem; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }}
+.sidebar a {{ display: block; padding: 8px 12px; color: var(--text-primary); text-decoration: none; border-radius: 6px; margin: 2px 0; font-size: 0.9rem; transition: all 0.2s; }}
+.sidebar a:hover {{ background: var(--bg-tertiary); color: var(--accent-primary); }}
+.sidebar a.active {{ background: var(--accent-primary); color: #ffffff; }}
+.nav-top {{ margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); }}
+.nav-top a {{ display: inline-block; padding: 6px 12px; background: var(--bg-tertiary); color: var(--accent-primary); border-radius: 6px; text-decoration: none; font-size: 0.85rem; margin-right: 8px; }}
+.nav-top a:hover {{ background: var(--accent-primary); color: #ffffff; }}
+.content {{ flex: 1; overflow-y: auto; padding: 32px; background: var(--bg-primary); position: relative; }}
+.content h1 {{ color: var(--accent-primary); margin-bottom: 24px; font-size: 1.8rem; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }}
+.welcome {{ text-align: center; padding: 60px 20px; }}
+.welcome h1 {{ border: none; }}
+.welcome p {{ color: var(--text-secondary); font-size: 1.1rem; margin-top: 16px; }}
+.welcome .hint {{ color: var(--text-muted); margin-top: 24px; font-size: 0.9rem; }}
 </style></head>
 <body>
 <div class="sidebar">
@@ -383,12 +505,14 @@ body { font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; 
 <a href="/docs/modules/cache.md">Cache</a>
 </div>
 <div class="content">
+{get_theme_toggle()}
 <div class="welcome">
 <h1>modular-log-analysis-toolkit</h1>
 <p>Welcome to the documentation. Select a topic from the sidebar to start reading.</p>
 <p class="hint">Click any link on the left to view the documentation</p>
 </div>
 </div>
+<script>{get_theme_js()}</script>
 </body></html>"""
         self.send_response(200)
         self.send_header("Content-Type", "text/html")
@@ -415,38 +539,39 @@ body { font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; 
 <head><title>{filename} - Documentation</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+{get_theme_css()}
 * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-body {{ font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; display: flex; height: 100vh; }}
-.sidebar {{ width: 280px; background: #f5f5f5; border-right: 1px solid #e0e0e0; overflow-y: auto; padding: 16px; flex-shrink: 0; }}
-.sidebar h2 {{ color: #1565c0; font-size: 1.2rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #1565c0; }}
-.sidebar h3 {{ color: #2e7d32; font-size: 0.9rem; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }}
-.sidebar a {{ display: block; padding: 8px 12px; color: #333333; text-decoration: none; border-radius: 6px; margin: 2px 0; font-size: 0.9rem; transition: all 0.2s; }}
-.sidebar a:hover {{ background: #e3f2fd; color: #1565c0; }}
-.sidebar a.active {{ background: #1565c0; color: #ffffff; }}
-.nav-top {{ margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0; }}
-.nav-top a {{ display: inline-block; padding: 6px 12px; background: #e3f2fd; color: #1565c0; border-radius: 6px; text-decoration: none; font-size: 0.85rem; margin-right: 8px; }}
-.nav-top a:hover {{ background: #1565c0; color: #ffffff; }}
-.content {{ flex: 1; overflow-y: auto; padding: 32px 48px; background: #ffffff; }}
-.content h1 {{ color: #1565c0; margin-bottom: 20px; font-size: 1.8rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 12px; }}
-.content h2 {{ color: #1976d2; margin: 28px 0 12px; font-size: 1.4rem; }}
-.content h3 {{ color: #2e7d32; margin: 20px 0 8px; font-size: 1.15rem; }}
-.content h4 {{ color: #1565c0; margin: 16px 0 8px; font-size: 1rem; }}
+body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color: var(--text-primary); display: flex; height: 100vh; }}
+.sidebar {{ width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border-color); overflow-y: auto; padding: 16px; flex-shrink: 0; }}
+.sidebar h2 {{ color: var(--accent-primary); font-size: 1.2rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--accent-primary); }}
+.sidebar h3 {{ color: var(--accent-green); font-size: 0.9rem; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }}
+.sidebar a {{ display: block; padding: 8px 12px; color: var(--text-primary); text-decoration: none; border-radius: 6px; margin: 2px 0; font-size: 0.9rem; transition: all 0.2s; }}
+.sidebar a:hover {{ background: var(--bg-tertiary); color: var(--accent-primary); }}
+.sidebar a.active {{ background: var(--accent-primary); color: #ffffff; }}
+.nav-top {{ margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); }}
+.nav-top a {{ display: inline-block; padding: 6px 12px; background: var(--bg-tertiary); color: var(--accent-primary); border-radius: 6px; text-decoration: none; font-size: 0.85rem; margin-right: 8px; }}
+.nav-top a:hover {{ background: var(--accent-primary); color: #ffffff; }}
+.content {{ flex: 1; overflow-y: auto; padding: 32px 48px; background: var(--bg-primary); position: relative; }}
+.content h1 {{ color: var(--accent-primary); margin-bottom: 20px; font-size: 1.8rem; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }}
+.content h2 {{ color: var(--accent-secondary); margin: 28px 0 12px; font-size: 1.4rem; }}
+.content h3 {{ color: var(--accent-green); margin: 20px 0 8px; font-size: 1.15rem; }}
+.content h4 {{ color: var(--accent-primary); margin: 16px 0 8px; font-size: 1rem; }}
 .content p {{ margin: 10px 0; line-height: 1.7; }}
-.content code {{ background: #e8f5e9; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; color: #2e7d32; }}
-.content pre {{ background: #f5f5f5; padding: 16px; border-radius: 8px; overflow-x: auto; margin: 16px 0; border: 1px solid #e0e0e0; }}
-.content pre code {{ background: none; padding: 0; color: #333333; }}
-.content a {{ color: #1565c0; text-decoration: none; }}
-.content a:hover {{ color: #0d47a1; text-decoration: underline; }}
+.content code {{ background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; color: var(--code-text); }}
+.content pre {{ background: var(--pre-bg); padding: 16px; border-radius: 8px; overflow-x: auto; margin: 16px 0; border: 1px solid var(--border-color); }}
+.content pre code {{ background: none; padding: 0; color: var(--text-primary); }}
+.content a {{ color: var(--accent-primary); text-decoration: none; }}
+.content a:hover {{ text-decoration: underline; }}
 .content ul, .content ol {{ margin: 10px 0 10px 24px; }}
 .content li {{ margin: 6px 0; line-height: 1.6; }}
-.content strong {{ color: #1565c0; }}
-.content em {{ color: #616161; }}
+.content strong {{ color: var(--accent-primary); }}
+.content em {{ color: var(--text-secondary); }}
 .content table {{ border-collapse: collapse; width: 100%; margin: 16px 0; }}
-.content th, .content td {{ border: 1px solid #e0e0e0; padding: 10px 14px; text-align: left; }}
-.content th {{ background: #e3f2fd; color: #1565c0; font-weight: 600; }}
-.content tr:hover {{ background: #f0f7ff; }}
-.content blockquote {{ border-left: 4px solid #1565c0; padding: 12px 16px; margin: 16px 0; background: #f5f5f5; border-radius: 0 8px 8px 0; }}
-.content hr {{ border: none; border-top: 2px solid #e0e0e0; margin: 24px 0; }}
+.content th, .content td {{ border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; }}
+.content th {{ background: var(--bg-tertiary); color: var(--accent-primary); font-weight: 600; }}
+.content tr:hover {{ background: var(--hover-bg); }}
+.content blockquote {{ border-left: 4px solid var(--accent-primary); padding: 12px 16px; margin: 16px 0; background: var(--bg-secondary); border-radius: 0 8px 8px 0; }}
+.content hr {{ border: none; border-top: 2px solid var(--border-color); margin: 24px 0; }}
 .error {{ color: #ef5350; font-weight: bold; }}
 .warn {{ color: #ffa726; }}
 .info {{ color: #42a5f5; }}
@@ -483,8 +608,10 @@ body {{ font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333;
 <a href="/docs/modules/cache.md"{make_active(filename, 'modules/cache.md')}>Cache</a>
 </div>
 <div class="content">
+{get_theme_toggle()}
 {content}
 </div>
+<script>{get_theme_js()}</script>
 </body></html>"""
 
         self.send_response(200)
