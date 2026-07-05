@@ -291,7 +291,12 @@ def start_dashboard(host: str = "0.0.0.0", port: int = 8080, entries: List[LogEn
     DashboardHandler.entries = entries or []
     server = HTTPServer((host, port), DashboardHandler)
     print(f"Dashboard running at http://{host}:{port}")
-    server.serve_forever()
+    print("Press Ctrl+C to stop")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nDashboard stopped.")
+        server.shutdown()
 
 
 if __name__ == "__main__":
