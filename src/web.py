@@ -173,60 +173,66 @@ refresh(); setInterval(refresh, 5000);
         self.wfile.write(json.dumps(data, default=str).encode())
 
     def _serve_docs_index(self):
-        """Serve documentation index page."""
-        docs = get_docs_structure()
+        """Serve documentation index page with sidebar."""
         html = """<!DOCTYPE html>
 <html>
 <head><title>Documentation - modular-log-analysis-toolkit</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; padding: 24px; line-height: 1.6; }
-h1 { color: #1565c0; margin-bottom: 24px; font-size: 1.8rem; }
-.nav { display: flex; gap: 12px; margin-bottom: 24px; }
-.nav a { background: #f5f5f5; color: #1565c0; padding: 10px 20px; border: 1px solid #e0e0e0; border-radius: 8px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
-.nav a:hover { background: #e3f2fd; color: #0d47a1; }
-.nav .active { background: #e3f2fd; color: #1565c0; border-color: #1565c0; }
-.docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.doc-card { background: #f5f5f5; padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; transition: all 0.2s; }
-.doc-card:hover { border-color: #1565c0; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-.doc-card a { color: #1565c0; text-decoration: none; font-size: 1.1rem; display: block; }
-.doc-card a:hover { color: #0d47a1; }
-.doc-card p { color: #616161; margin-top: 8px; font-size: 0.85rem; }
-.section-title { color: #2e7d32; margin: 24px 0 12px; font-size: 1.2rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
+body { font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; display: flex; height: 100vh; }
+.sidebar { width: 280px; background: #f5f5f5; border-right: 1px solid #e0e0e0; overflow-y: auto; padding: 16px; flex-shrink: 0; }
+.sidebar h2 { color: #1565c0; font-size: 1.2rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #1565c0; }
+.sidebar h3 { color: #2e7d32; font-size: 0.9rem; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }
+.sidebar a { display: block; padding: 8px 12px; color: #333333; text-decoration: none; border-radius: 6px; margin: 2px 0; font-size: 0.9rem; transition: all 0.2s; }
+.sidebar a:hover { background: #e3f2fd; color: #1565c0; }
+.sidebar a.active { background: #1565c0; color: #ffffff; }
+.nav-top { margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0; }
+.nav-top a { display: inline-block; padding: 6px 12px; background: #e3f2fd; color: #1565c0; border-radius: 6px; text-decoration: none; font-size: 0.85rem; margin-right: 8px; }
+.nav-top a:hover { background: #1565c0; color: #ffffff; }
+.content { flex: 1; overflow-y: auto; padding: 32px; background: #ffffff; }
+.content h1 { color: #1565c0; margin-bottom: 24px; font-size: 1.8rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 12px; }
+.welcome { text-align: center; padding: 60px 20px; }
+.welcome h1 { border: none; }
+.welcome p { color: #616161; font-size: 1.1rem; margin-top: 16px; }
+.welcome .hint { color: #9e9e9e; margin-top: 24px; font-size: 0.9rem; }
 </style></head>
 <body>
-<h1>Documentation</h1>
-<div class="nav">
+<div class="sidebar">
+<div class="nav-top">
 <a href="/">Dashboard</a>
-<a href="/docs" class="active">Documentation</a>
 </div>
-<h2 class="section-title">Getting Started</h2>
-<div class="docs-grid">
-<div class="doc-card"><a href="/docs/README.md">Documentation Index</a><p>Main documentation index and overview</p></div>
-<div class="doc-card"><a href="/docs/installation.md">Installation Guide</a><p>How to install and setup the toolkit</p></div>
-<div class="doc-card"><a href="/docs/quickstart.md">Quick Start</a><p>Get started in 5 minutes</p></div>
-<div class="doc-card"><a href="/docs/cli-usage.md">CLI Usage</a><p>Command-line interface guide</p></div>
-<div class="doc-card"><a href="/docs/python-api.md">Python API</a><p>Python API reference</p></div>
+<h2>Documentation</h2>
+<h3>Getting Started</h3>
+<a href="/docs/README.md">Documentation Index</a>
+<a href="/docs/installation.md">Installation Guide</a>
+<a href="/docs/quickstart.md">Quick Start</a>
+<a href="/docs/cli-usage.md">CLI Usage</a>
+<a href="/docs/python-api.md">Python API</a>
+<h3>Modules</h3>
+<a href="/docs/modules/models.md">Models</a>
+<a href="/docs/modules/parser.md">Parser</a>
+<a href="/docs/modules/filter.md">Filter</a>
+<a href="/docs/modules/aggregator.md">Aggregator</a>
+<a href="/docs/modules/search.md">Search</a>
+<a href="/docs/modules/exporter.md">Exporter</a>
+<a href="/docs/modules/dedup.md">Deduplication</a>
+<a href="/docs/modules/streaming.md">Streaming</a>
+<a href="/docs/modules/alerts.md">Alerts</a>
+<a href="/docs/modules/webhooks.md">Webhooks</a>
+<a href="/docs/modules/tags.md">Tags</a>
+<a href="/docs/modules/plugins.md">Plugins</a>
+<a href="/docs/modules/retention.md">Retention</a>
+<a href="/docs/modules/geolocation.md">Geolocation</a>
+<a href="/docs/modules/auth.md">Authentication</a>
+<a href="/docs/modules/cache.md">Cache</a>
 </div>
-<h2 class="section-title">Module Documentation</h2>
-<div class="docs-grid">
-<div class="doc-card"><a href="/docs/modules/models.md">Models</a><p>LogEntry, LogLevel, AnalysisResult</p></div>
-<div class="doc-card"><a href="/docs/modules/parser.md">Parser</a><p>Log parsing engine</p></div>
-<div class="doc-card"><a href="/docs/modules/filter.md">Filter</a><p>Filtering and query engine</p></div>
-<div class="doc-card"><a href="/docs/modules/aggregator.md">Aggregator</a><p>Statistics and aggregation</p></div>
-<div class="doc-card"><a href="/docs/modules/search.md">Search</a><p>Full-text search indexing</p></div>
-<div class="doc-card"><a href="/docs/modules/exporter.md">Exporter</a><p>Data export formats</p></div>
-<div class="doc-card"><a href="/docs/modules/dedup.md">Deduplication</a><p>Remove duplicate entries</p></div>
-<div class="doc-card"><a href="/docs/modules/streaming.md">Streaming</a><p>Large file processing</p></div>
-<div class="doc-card"><a href="/docs/modules/alerts.md">Alerts</a><p>Alert system and thresholds</p></div>
-<div class="doc-card"><a href="/docs/modules/webhooks.md">Webhooks</a><p>Webhook notifications</p></div>
-<div class="doc-card"><a href="/docs/modules/tags.md">Tags</a><p>Tagging and labeling system</p></div>
-<div class="doc-card"><a href="/docs/modules/plugins.md">Plugins</a><p>Plugin development</p></div>
-<div class="doc-card"><a href="/docs/modules/retention.md">Retention</a><p>Log retention policies</p></div>
-<div class="doc-card"><a href="/docs/modules/geolocation.md">Geolocation</a><p>IP geolocation lookup</p></div>
-<div class="doc-card"><a href="/docs/modules/auth.md">Authentication</a><p>User auth and authorization</p></div>
-<div class="doc-card"><a href="/docs/modules/cache.md">Cache</a><p>Caching system</p></div>
+<div class="content">
+<div class="welcome">
+<h1>modular-log-analysis-toolkit</h1>
+<p>Welcome to the documentation. Select a topic from the sidebar to start reading.</p>
+<p class="hint">Click any link on the left to view the documentation</p>
+</div>
 </div>
 </body></html>"""
         self.send_response(200)
@@ -235,7 +241,7 @@ h1 { color: #1565c0; margin-bottom: 24px; font-size: 1.8rem; }
         self.wfile.write(html.encode())
 
     def _serve_docs_file(self, filename):
-        """Serve a documentation file."""
+        """Serve a documentation file with sidebar."""
         docs_dir = Path(__file__).parent.parent / "docs"
         file_path = docs_dir / filename
 
@@ -244,41 +250,82 @@ h1 { color: #1565c0; margin-bottom: 24px; font-size: 1.8rem; }
             return
 
         content = read_markdown(file_path)
+
+        # Highlight current file in sidebar
+        def make_active(current, check):
+            return ' class="active"' if current == check else ''
+
         html = f"""<!DOCTYPE html>
 <html>
 <head><title>{filename} - Documentation</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-body {{ font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; padding: 24px; line-height: 1.6; }}
-.nav {{ display: flex; gap: 12px; margin-bottom: 24px; }}
-.nav a {{ background: #f5f5f5; color: #1565c0; padding: 10px 20px; border: 1px solid #e0e0e0; border-radius: 8px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }}
-.nav a:hover {{ background: #e3f2fd; color: #0d47a1; }}
-.content {{ background: #f5f5f5; padding: 24px; border-radius: 10px; border: 1px solid #e0e0e0; }}
-h1 {{ color: #1565c0; margin-bottom: 16px; font-size: 1.8rem; }}
-h2 {{ color: #1976d2; margin: 20px 0 12px; font-size: 1.3rem; }}
-h3 {{ color: #2e7d32; margin: 16px 0 8px; font-size: 1.1rem; }}
-p {{ margin: 8px 0; }}
-code {{ background: #e8f5e9; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; color: #2e7d32; }}
-pre {{ background: #f5f5f5; padding: 16px; border-radius: 8px; overflow-x: auto; margin: 12px 0; border: 1px solid #e0e0e0; }}
-pre code {{ background: none; padding: 0; }}
-a {{ color: #1565c0; text-decoration: none; }}
-a:hover {{ color: #0d47a1; }}
-li {{ margin: 4px 0 4px 20px; }}
-strong {{ color: #1565c0; }}
-table {{ border-collapse: collapse; width: 100%; margin: 12px 0; }}
-th, td {{ border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; }}
-th {{ background: #e3f2fd; color: #1565c0; }}
-tr:hover {{ background: #f0f7ff; }}
+body {{ font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; display: flex; height: 100vh; }}
+.sidebar {{ width: 280px; background: #f5f5f5; border-right: 1px solid #e0e0e0; overflow-y: auto; padding: 16px; flex-shrink: 0; }}
+.sidebar h2 {{ color: #1565c0; font-size: 1.2rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #1565c0; }}
+.sidebar h3 {{ color: #2e7d32; font-size: 0.9rem; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }}
+.sidebar a {{ display: block; padding: 8px 12px; color: #333333; text-decoration: none; border-radius: 6px; margin: 2px 0; font-size: 0.9rem; transition: all 0.2s; }}
+.sidebar a:hover {{ background: #e3f2fd; color: #1565c0; }}
+.sidebar a.active {{ background: #1565c0; color: #ffffff; }}
+.nav-top {{ margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0; }}
+.nav-top a {{ display: inline-block; padding: 6px 12px; background: #e3f2fd; color: #1565c0; border-radius: 6px; text-decoration: none; font-size: 0.85rem; margin-right: 8px; }}
+.nav-top a:hover {{ background: #1565c0; color: #ffffff; }}
+.content {{ flex: 1; overflow-y: auto; padding: 32px 48px; background: #ffffff; }}
+.content h1 {{ color: #1565c0; margin-bottom: 20px; font-size: 1.8rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 12px; }}
+.content h2 {{ color: #1976d2; margin: 28px 0 12px; font-size: 1.4rem; }}
+.content h3 {{ color: #2e7d32; margin: 20px 0 8px; font-size: 1.15rem; }}
+.content h4 {{ color: #1565c0; margin: 16px 0 8px; font-size: 1rem; }}
+.content p {{ margin: 10px 0; line-height: 1.7; }}
+.content code {{ background: #e8f5e9; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; color: #2e7d32; }}
+.content pre {{ background: #f5f5f5; padding: 16px; border-radius: 8px; overflow-x: auto; margin: 16px 0; border: 1px solid #e0e0e0; }}
+.content pre code {{ background: none; padding: 0; color: #333333; }}
+.content a {{ color: #1565c0; text-decoration: none; }}
+.content a:hover {{ color: #0d47a1; text-decoration: underline; }}
+.content ul, .content ol {{ margin: 10px 0 10px 24px; }}
+.content li {{ margin: 6px 0; line-height: 1.6; }}
+.content strong {{ color: #1565c0; }}
+.content em {{ color: #616161; }}
+.content table {{ border-collapse: collapse; width: 100%; margin: 16px 0; }}
+.content th, .content td {{ border: 1px solid #e0e0e0; padding: 10px 14px; text-align: left; }}
+.content th {{ background: #e3f2fd; color: #1565c0; font-weight: 600; }}
+.content tr:hover {{ background: #f0f7ff; }}
+.content blockquote {{ border-left: 4px solid #1565c0; padding: 12px 16px; margin: 16px 0; background: #f5f5f5; border-radius: 0 8px 8px 0; }}
+.content hr {{ border: none; border-top: 2px solid #e0e0e0; margin: 24px 0; }}
 .error {{ color: #ef5350; font-weight: bold; }}
 .warn {{ color: #ffa726; }}
 .info {{ color: #42a5f5; }}
 .critical {{ color: #ff1744; font-weight: bold; }}
 </style></head>
 <body>
-<div class="nav">
+<div class="sidebar">
+<div class="nav-top">
 <a href="/">Dashboard</a>
-<a href="/docs">Documentation</a>
+</div>
+<h2>Documentation</h2>
+<h3>Getting Started</h3>
+<a href="/docs/README.md"{make_active(filename, 'README.md')}>Documentation Index</a>
+<a href="/docs/installation.md"{make_active(filename, 'installation.md')}>Installation Guide</a>
+<a href="/docs/quickstart.md"{make_active(filename, 'quickstart.md')}>Quick Start</a>
+<a href="/docs/cli-usage.md"{make_active(filename, 'cli-usage.md')}>CLI Usage</a>
+<a href="/docs/python-api.md"{make_active(filename, 'python-api.md')}>Python API</a>
+<h3>Modules</h3>
+<a href="/docs/modules/models.md"{make_active(filename, 'modules/models.md')}>Models</a>
+<a href="/docs/modules/parser.md"{make_active(filename, 'modules/parser.md')}>Parser</a>
+<a href="/docs/modules/filter.md"{make_active(filename, 'modules/filter.md')}>Filter</a>
+<a href="/docs/modules/aggregator.md"{make_active(filename, 'modules/aggregator.md')}>Aggregator</a>
+<a href="/docs/modules/search.md"{make_active(filename, 'modules/search.md')}>Search</a>
+<a href="/docs/modules/exporter.md"{make_active(filename, 'modules/exporter.md')}>Exporter</a>
+<a href="/docs/modules/dedup.md"{make_active(filename, 'modules/dedup.md')}>Deduplication</a>
+<a href="/docs/modules/streaming.md"{make_active(filename, 'modules/streaming.md')}>Streaming</a>
+<a href="/docs/modules/alerts.md"{make_active(filename, 'modules/alerts.md')}>Alerts</a>
+<a href="/docs/modules/webhooks.md"{make_active(filename, 'modules/webhooks.md')}>Webhooks</a>
+<a href="/docs/modules/tags.md"{make_active(filename, 'modules/tags.md')}>Tags</a>
+<a href="/docs/modules/plugins.md"{make_active(filename, 'modules/plugins.md')}>Plugins</a>
+<a href="/docs/modules/retention.md"{make_active(filename, 'modules/retention.md')}>Retention</a>
+<a href="/docs/modules/geolocation.md"{make_active(filename, 'modules/geolocation.md')}>Geolocation</a>
+<a href="/docs/modules/auth.md"{make_active(filename, 'modules/auth.md')}>Authentication</a>
+<a href="/docs/modules/cache.md"{make_active(filename, 'modules/cache.md')}>Cache</a>
 </div>
 <div class="content">
 {content}
