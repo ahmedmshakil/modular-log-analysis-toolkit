@@ -58,6 +58,9 @@ class RetentionManager:
         self.policies: List[RetentionPolicy] = []
         self._actions_log: List[Dict] = []
 
+    def __repr__(self) -> str:
+        return f"RetentionManager(dir={self.log_directory}, policies={len(self.policies)})"
+
     def add_policy(self, policy: RetentionPolicy):
         """Add a retention policy."""
         self.policies.append(policy)
