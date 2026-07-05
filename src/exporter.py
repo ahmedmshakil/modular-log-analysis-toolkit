@@ -12,6 +12,9 @@ from .models import LogEntry, AnalysisResult
 class LogExporter:
     """Export log entries and analysis results."""
 
+    def __repr__(self) -> str:
+        return "LogExporter()"
+
     @staticmethod
     def to_json(entries: List[LogEntry], output_path: str, indent: int = 2, encoding: str = "utf-8") -> str:
         """Export entries to JSON format."""
