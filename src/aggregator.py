@@ -89,3 +89,7 @@ class LogAggregator:
     def clear(self):
         """Clear all entries from the aggregator."""
         self.entries.clear()
+
+    def has_entries(self) -> bool:
+        """Check if aggregator has any entries."""
+        return len(self.entries) > 0
