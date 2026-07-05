@@ -36,6 +36,8 @@ class LogDeduplicator:
         """Remove duplicates, return unique entries and counts."""
         if not entries:
             return [], {}
+        if not isinstance(entries, list):
+            raise TypeError("entries must be a list")
         unique = []
         counts: Dict[str, int] = defaultdict(int)
 
