@@ -79,3 +79,8 @@ def detect_encoding(file_path: str) -> str:
 def file_exists(file_path: str) -> bool:
     """Check if a file exists and is accessible."""
     return Path(file_path).is_file()
+
+
+def is_compressed(file_path: str) -> bool:
+    """Check if a file is gzip compressed."""
+    return file_path.endswith(".gz")
