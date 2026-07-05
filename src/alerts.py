@@ -102,7 +102,9 @@ class AlertManager:
         return [a for a in self.alerts if not a.acknowledged]
 
     def acknowledge(self, index: int):
-        """Acknowledge an alert."""
+        """Acknowledge an alert by index."""
+        if not isinstance(index, int):
+            raise TypeError("index must be an integer")
         if 0 <= index < len(self.alerts):
             self.alerts[index].acknowledged = True
             self.alerts[index].acknowledged_at = datetime.now()
