@@ -68,15 +68,18 @@ class RetentionManager:
         for policy in self.policies:
             for pattern in policy.patterns:
                 for file_path in self.log_directory.glob(pattern):
-                    stat = file_path.stat()
-                    age_days = (datetime.now() - datetime.fromtimestamp(stat.st_mtime)).days
-                    files.append({
-                        "path": str(file_path),
-                        "size_mb": stat.st_size / (1024 * 1024),
-                        "age_days": age_days,
-                        "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
-                        "policy": policy.name,
-                    })
+                    try:
+                        stat = file_path.stat()
+                        age_days = (datetime.now() - datetime.fromtimestamp(stat.st_mtime)).days
+                        files.append({
+                            "path": str(file_path),
+                            "size_mb": stat.st_size / (1024 * 1024),
+                            "age_days": age_days,
+                            "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                            "policy": policy.name,
+                        })
+                    except (OSError, PermissionError):
+                        continue
         return files
 
     def enforce(self, dry_run: bool = False) -> List[Dict]:
