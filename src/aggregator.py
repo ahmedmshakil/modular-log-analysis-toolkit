@@ -13,6 +13,9 @@ class LogAggregator:
     def __init__(self, entries: List[LogEntry]):
         self.entries = entries
 
+    def __repr__(self) -> str:
+        return f"LogAggregator(entries={len(self.entries)})"
+
     @classmethod
     def from_entries(cls, *entry_lists: List[LogEntry]) -> "LogAggregator":
         """Create an aggregator from multiple entry lists."""
