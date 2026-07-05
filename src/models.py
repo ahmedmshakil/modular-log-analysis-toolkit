@@ -41,7 +41,8 @@ class LogEntry:
         )
 
     def __repr__(self) -> str:
-        return f"LogEntry(level={self.level.value}, timestamp={self.timestamp}, message={self.message[:50]!r})"
+        msg_preview = self.message[:50] if self.message else ""
+        return f"LogEntry(level={self.level.value}, timestamp={self.timestamp}, message={msg_preview!r})"
 
     def __str__(self) -> str:
         msg = self.message[:100] if self.message else ""
