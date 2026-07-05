@@ -10,6 +10,14 @@ from .models import LogEntry
 class LogSearchIndex:
     """In-memory full-text search index for log entries."""
 
+    STOP_WORDS = {
+        "the", "a", "an", "is", "in", "at", "of", "to", "for", "and", "or", "but",
+        "it", "its", "be", "was", "were", "been", "are", "have", "has", "had", "do",
+        "does", "did", "will", "would", "could", "should", "may", "might", "can",
+        "this", "that", "these", "those", "not", "no", "nor", "so", "if", "then",
+        "than", "too", "very", "just", "about", "above", "after", "before", "between",
+    }
+
     def __init__(self):
         self._index: Dict[str, Set[int]] = defaultdict(set)
         self._entries: List[LogEntry] = []
@@ -106,15 +114,7 @@ class LogSearchIndex:
             return []
         text = re.sub(r"[^\w\s]", " ", text.lower())
         words = text.split()
-        # Remove common stop words
-        stop_words = {
-            "the", "a", "an", "is", "in", "at", "of", "to", "for", "and", "or", "but",
-            "it", "its", "be", "was", "were", "been", "are", "have", "has", "had", "do",
-            "does", "did", "will", "would", "could", "should", "may", "might", "can",
-            "this", "that", "these", "those", "not", "no", "nor", "so", "if", "then",
-            "than", "too", "very", "just", "about", "above", "after", "before", "between",
-        }
-        return [w for w in words if w not in stop_words and len(w) > 1]
+        return [w for w in words if w not in self.STOP_WORDS and len(w) > 1]
 
     @property
     def stats(self) -> Dict[str, int]:
