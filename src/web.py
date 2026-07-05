@@ -94,22 +94,22 @@ class DashboardHandler(BaseHTTPRequestHandler):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', monospace; background: #1a1a2e; color: #e0e0e0; padding: 24px; line-height: 1.5; }
-h1 { color: #64b5f6; margin-bottom: 16px; font-size: 1.8rem; }
-h2 { color: #90caf9; margin: 20px 0 12px; font-size: 1.2rem; }
+body { font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; padding: 24px; line-height: 1.5; }
+h1 { color: #1565c0; margin-bottom: 16px; font-size: 1.8rem; }
+h2 { color: #1976d2; margin: 20px 0 12px; font-size: 1.2rem; }
 .stats { display: flex; gap: 16px; margin: 20px 0; flex-wrap: wrap; }
-.stat { background: #16213e; padding: 16px 20px; border-radius: 10px; min-width: 140px; border: 1px solid #1a3a5c; }
-.stat h3 { color: #4ec9b0; margin: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-.stat p { font-size: 28px; margin: 6px 0 0; font-weight: bold; }
+.stat { background: #f5f5f5; padding: 16px 20px; border-radius: 10px; min-width: 140px; border: 1px solid #e0e0e0; }
+.stat h3 { color: #2e7d32; margin: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+.stat p { font-size: 28px; margin: 6px 0 0; font-weight: bold; color: #212121; }
 table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #1a3a5c; }
-th { background: #16213e; color: #90caf9; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
-tr:hover { background: #1a2744; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+th { background: #f5f5f5; color: #1565c0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+tr:hover { background: #f0f7ff; }
 .error { color: #ef5350; font-weight: bold; } .warn { color: #ffa726; } .info { color: #42a5f5; } .critical { color: #ff1744; font-weight: bold; }
 .nav { display: flex; gap: 12px; margin-bottom: 20px; }
-.nav a, .nav button { background: #16213e; color: #64b5f6; padding: 10px 20px; border: 1px solid #1a3a5c; border-radius: 8px; text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
-.nav a:hover, .nav button:hover { background: #1a3a5c; color: #90caf9; }
-.nav .active { background: #1a3a5c; color: #4ec9b0; border-color: #4ec9b0; }
+.nav a, .nav button { background: #f5f5f5; color: #1565c0; padding: 10px 20px; border: 1px solid #e0e0e0; border-radius: 8px; text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+.nav a:hover, .nav button:hover { background: #e3f2fd; color: #0d47a1; }
+.nav .active { background: #e3f2fd; color: #1565c0; border-color: #1565c0; }
 </style></head>
 <body>
 <h1>modular-log-analysis-toolkit Dashboard</h1>
@@ -181,19 +181,19 @@ refresh(); setInterval(refresh, 5000);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', monospace; background: #1a1a2e; color: #e0e0e0; padding: 24px; line-height: 1.6; }
-h1 { color: #64b5f6; margin-bottom: 24px; font-size: 1.8rem; }
+body { font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; padding: 24px; line-height: 1.6; }
+h1 { color: #1565c0; margin-bottom: 24px; font-size: 1.8rem; }
 .nav { display: flex; gap: 12px; margin-bottom: 24px; }
-.nav a { background: #16213e; color: #64b5f6; padding: 10px 20px; border: 1px solid #1a3a5c; border-radius: 8px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
-.nav a:hover { background: #1a3a5c; color: #90caf9; }
-.nav .active { background: #1a3a5c; color: #4ec9b0; border-color: #4ec9b0; }
+.nav a { background: #f5f5f5; color: #1565c0; padding: 10px 20px; border: 1px solid #e0e0e0; border-radius: 8px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+.nav a:hover { background: #e3f2fd; color: #0d47a1; }
+.nav .active { background: #e3f2fd; color: #1565c0; border-color: #1565c0; }
 .docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.doc-card { background: #16213e; padding: 20px; border-radius: 10px; border: 1px solid #1a3a5c; transition: all 0.2s; }
-.doc-card:hover { border-color: #4ec9b0; transform: translateY(-2px); }
-.doc-card a { color: #90caf9; text-decoration: none; font-size: 1.1rem; display: block; }
-.doc-card a:hover { color: #4ec9b0; }
-.doc-card p { color: #7a8a9a; margin-top: 8px; font-size: 0.85rem; }
-.section-title { color: #4ec9b0; margin: 24px 0 12px; font-size: 1.2rem; border-bottom: 1px solid #1a3a5c; padding-bottom: 8px; }
+.doc-card { background: #f5f5f5; padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; transition: all 0.2s; }
+.doc-card:hover { border-color: #1565c0; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.doc-card a { color: #1565c0; text-decoration: none; font-size: 1.1rem; display: block; }
+.doc-card a:hover { color: #0d47a1; }
+.doc-card p { color: #616161; margin-top: 8px; font-size: 0.85rem; }
+.section-title { color: #2e7d32; margin: 24px 0 12px; font-size: 1.2rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
 </style></head>
 <body>
 <h1>Documentation</h1>
@@ -250,22 +250,30 @@ h1 { color: #64b5f6; margin-bottom: 24px; font-size: 1.8rem; }
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-body {{ font-family: 'Segoe UI', monospace; background: #1a1a2e; color: #e0e0e0; padding: 24px; line-height: 1.6; }}
+body {{ font-family: 'Segoe UI', monospace; background: #ffffff; color: #333333; padding: 24px; line-height: 1.6; }}
 .nav {{ display: flex; gap: 12px; margin-bottom: 24px; }}
-.nav a {{ background: #16213e; color: #64b5f6; padding: 10px 20px; border: 1px solid #1a3a5c; border-radius: 8px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }}
-.nav a:hover {{ background: #1a3a5c; color: #90caf9; }}
-.content {{ background: #16213e; padding: 24px; border-radius: 10px; border: 1px solid #1a3a5c; }}
-h1 {{ color: #64b5f6; margin-bottom: 16px; font-size: 1.8rem; }}
-h2 {{ color: #90caf9; margin: 20px 0 12px; font-size: 1.3rem; }}
-h3 {{ color: #4ec9b0; margin: 16px 0 8px; font-size: 1.1rem; }}
+.nav a {{ background: #f5f5f5; color: #1565c0; padding: 10px 20px; border: 1px solid #e0e0e0; border-radius: 8px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }}
+.nav a:hover {{ background: #e3f2fd; color: #0d47a1; }}
+.content {{ background: #f5f5f5; padding: 24px; border-radius: 10px; border: 1px solid #e0e0e0; }}
+h1 {{ color: #1565c0; margin-bottom: 16px; font-size: 1.8rem; }}
+h2 {{ color: #1976d2; margin: 20px 0 12px; font-size: 1.3rem; }}
+h3 {{ color: #2e7d32; margin: 16px 0 8px; font-size: 1.1rem; }}
 p {{ margin: 8px 0; }}
-code {{ background: #0d1b2a; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; color: #4ec9b0; }}
-pre {{ background: #0d1b2a; padding: 16px; border-radius: 8px; overflow-x: auto; margin: 12px 0; }}
+code {{ background: #e8f5e9; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; color: #2e7d32; }}
+pre {{ background: #f5f5f5; padding: 16px; border-radius: 8px; overflow-x: auto; margin: 12px 0; border: 1px solid #e0e0e0; }}
 pre code {{ background: none; padding: 0; }}
-a {{ color: #64b5f6; text-decoration: none; }}
-a:hover {{ color: #4ec9b0; }}
+a {{ color: #1565c0; text-decoration: none; }}
+a:hover {{ color: #0d47a1; }}
 li {{ margin: 4px 0 4px 20px; }}
-strong {{ color: #90caf9; }}
+strong {{ color: #1565c0; }}
+table {{ border-collapse: collapse; width: 100%; margin: 12px 0; }}
+th, td {{ border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; }}
+th {{ background: #e3f2fd; color: #1565c0; }}
+tr:hover {{ background: #f0f7ff; }}
+.error {{ color: #ef5350; font-weight: bold; }}
+.warn {{ color: #ffa726; }}
+.info {{ color: #42a5f5; }}
+.critical {{ color: #ff1744; font-weight: bold; }}
 </style></head>
 <body>
 <div class="nav">
