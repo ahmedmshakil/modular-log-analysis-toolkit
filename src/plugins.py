@@ -97,6 +97,10 @@ class PluginManager:
             for p in self._plugins.values()
         ]
 
+    def get_plugin_names(self) -> List[str]:
+        """Get list of all registered plugin names."""
+        return list(self._plugins.keys())
+
     def process_all(self, entries: List[LogEntry]) -> List[LogEntry]:
         """Run all enabled plugins on entries."""
         result = entries
