@@ -125,3 +125,7 @@ class LogSearchIndex:
             "unique_words": len(self._index),
             "total_word_occurrences": total_words,
         }
+
+    def entry_exists(self, entry: LogEntry) -> bool:
+        """Check if an entry is already indexed."""
+        return entry in self._entries
