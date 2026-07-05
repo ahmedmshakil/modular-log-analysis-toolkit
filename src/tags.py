@@ -62,6 +62,10 @@ class TagManager:
         """Remove a tagging rule by name."""
         self._rules = [r for r in self._rules if r.name != name]
 
+    def has_rule(self, name: str) -> bool:
+        """Check if a rule with the given name exists."""
+        return any(r.name == name for r in self._rules)
+
     def apply_rules(self, entries: List[Dict]) -> List[Dict]:
         """Apply tagging rules to entries."""
         if not entries:
