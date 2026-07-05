@@ -15,6 +15,9 @@ class LogDeduplicator:
         self._seen: Dict[str, int] = {}
         self._hash_cache: Dict[int, str] = {}
 
+    def __repr__(self) -> str:
+        return f"LogDeduplicator(seen={len(self._seen)}, ignore_timestamp={self.ignore_timestamp})"
+
     def _hash_entry(self, entry: LogEntry) -> str:
         """Generate hash for a log entry."""
         entry_id = id(entry)
