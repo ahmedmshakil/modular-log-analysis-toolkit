@@ -66,12 +66,18 @@ class RetentionManager:
         self.policies.append(policy)
 
     def scan_files(self) -> List[Dict]:
-        """Scan log files and their metadata."""
+        """Scan log files and their metadata.
+
+        Returns:
+            List of file metadata dictionaries.
+        """
         files = []
         for policy in self.policies:
             for pattern in policy.patterns:
                 for file_path in self.log_directory.glob(pattern):
                     try:
+                        if not file_path.is_file():
+                            continue
                         stat = file_path.stat()
                         age_days = (datetime.now() - datetime.fromtimestamp(stat.st_mtime)).days
                         files.append({
