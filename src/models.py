@@ -40,6 +40,10 @@ class LogEntry:
             and self.source == other.source
         )
 
+    def __hash__(self) -> int:
+        """Make LogEntry hashable for use in sets and dicts."""
+        return hash((self.timestamp, self.level, self.message, self.source))
+
     def __repr__(self) -> str:
         msg_preview = self.message[:50] if self.message else ""
         return f"LogEntry(level={self.level.value}, timestamp={self.timestamp}, message={msg_preview!r})"
