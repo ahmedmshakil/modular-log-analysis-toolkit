@@ -66,8 +66,23 @@ class LogFilter:
         return self
 
     def by_keyword(self, keyword: str, case_sensitive: bool = False) -> "LogFilter":
-        """Filter by keyword in message."""
+        """Filter by keyword in message.
+
+        Args:
+            keyword: The keyword to search for.
+            case_sensitive: Whether the search is case-sensitive.
+
+        Returns:
+            Self for method chaining.
+
+        Raises:
+            ValueError: If keyword is empty.
+        """
+        if not keyword or not isinstance(keyword, str):
+            raise ValueError("Keyword must be a non-empty string")
         def _filter(entry: LogEntry) -> bool:
+            if not entry.message:
+                return False
             msg = entry.message if case_sensitive else entry.message.lower()
             kw = keyword if case_sensitive else keyword.lower()
             return kw in msg
