@@ -36,7 +36,17 @@ class LogDeduplicator:
         return hash_val
 
     def deduplicate(self, entries: List[LogEntry]) -> Tuple[List[LogEntry], Dict[str, int]]:
-        """Remove duplicates, return unique entries and counts."""
+        """Remove duplicates, return unique entries and counts.
+
+        Args:
+            entries: List of log entries to deduplicate.
+
+        Returns:
+            Tuple of (unique entries, duplicate counts by hash).
+
+        Raises:
+            TypeError: If entries is not a list.
+        """
         if not entries:
             return [], {}
         if not isinstance(entries, list):
@@ -45,6 +55,8 @@ class LogDeduplicator:
         counts: Dict[str, int] = defaultdict(int)
 
         for entry in entries:
+            if not isinstance(entry, LogEntry):
+                continue
             h = self._hash_entry(entry)
             counts[h] += 1
             if h not in self._seen:
