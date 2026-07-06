@@ -58,7 +58,11 @@ class LogEntry:
         return self.level in (LogLevel.ERROR, LogLevel.CRITICAL)
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert log entry to dictionary."""
+        """Convert log entry to dictionary.
+
+        Returns:
+            Dictionary representation of the log entry.
+        """
         return {
             "timestamp": self.timestamp.isoformat(),
             "level": self.level.value,
@@ -66,6 +70,7 @@ class LogEntry:
             "source": self.source,
             "line_number": self.line_number,
             "tags": self.tags,
+            "metadata": self.metadata,
         }
 
     @classmethod
