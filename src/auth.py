@@ -119,8 +119,15 @@ class AuthManager:
         return token
 
     def validate_session(self, token: str) -> Optional[str]:
-        """Validate session token and return username."""
-        if not token:
+        """Validate session token and return username.
+
+        Args:
+            token: Session token to validate.
+
+        Returns:
+            Username if session is valid, None otherwise.
+        """
+        if not token or not isinstance(token, str):
             return None
         session = self._sessions.get(token)
         if not session:
