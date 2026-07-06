@@ -90,7 +90,17 @@ class LogFilter:
         return self
 
     def by_regex(self, pattern: str) -> "LogFilter":
-        """Filter by regex pattern match on message."""
+        """Filter by regex pattern match on message.
+
+        Args:
+            pattern: Regular expression pattern to match.
+
+        Returns:
+            Self for method chaining.
+
+        Raises:
+            ValueError: If pattern is empty or invalid.
+        """
         if not pattern or not isinstance(pattern, str):
             raise ValueError("Pattern must be a non-empty string")
         try:
@@ -98,6 +108,8 @@ class LogFilter:
         except re.error as e:
             raise ValueError(f"Invalid regex pattern: {e}")
         def _filter(entry: LogEntry) -> bool:
+            if not entry.message:
+                return False
             return bool(compiled.search(entry.message))
         self._filters.append(_filter)
         return self
