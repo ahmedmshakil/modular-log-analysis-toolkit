@@ -39,7 +39,18 @@ class LogExporter:
 
     @staticmethod
     def to_csv(entries: List[LogEntry], output_path: str, encoding: str = "utf-8") -> str:
-        """Export entries to CSV format."""
+        """Export entries to CSV format.
+
+        Args:
+            entries: List of log entries to export.
+            output_path: Path to write the CSV file.
+            encoding: File encoding.
+
+        Returns:
+            Path to the exported file.
+        """
+        if not entries:
+            return output_path
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w", newline="", encoding=encoding) as f:
