@@ -49,7 +49,18 @@ class LogStream:
                 self._errors += 1
 
     def stream_batch(self, callback: Callable[[List[LogEntry]], None], batch_size: int = 100):
-        """Stream entries in batches."""
+        """Stream entries in batches.
+
+        Args:
+            callback: Function to call for each batch of entries.
+            batch_size: Number of entries per batch.
+
+        Raises:
+            ValueError: If batch_size is not a positive integer.
+            TypeError: If callback is not callable.
+        """
+        if not callable(callback):
+            raise TypeError("callback must be callable")
         if not isinstance(batch_size, int) or batch_size < 1:
             raise ValueError("batch_size must be a positive integer")
         batch = []
