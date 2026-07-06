@@ -29,7 +29,17 @@ class WebhookSender:
         return f"WebhookSender(url={self.url!r}, sent={self._sent_count})"
 
     def send_alert(self, entry: LogEntry, extra: Optional[Dict[str, Any]] = None) -> bool:
-        """Send a webhook alert for a log entry."""
+        """Send a webhook alert for a log entry.
+
+        Args:
+            entry: The log entry to send as an alert.
+            extra: Additional data to include in the payload.
+
+        Returns:
+            True if the webhook was sent successfully.
+        """
+        if not entry:
+            return False
         payload = {
             "timestamp": entry.timestamp.isoformat(),
             "level": entry.level.value,
