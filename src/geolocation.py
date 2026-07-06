@@ -61,8 +61,17 @@ class GeoLookup:
         return self.IP_PATTERN.findall(text)
 
     def lookup(self, ip: str) -> Optional[GeoLocation]:
-        """Look up geolocation for a single IP."""
+        """Look up geolocation for a single IP.
+
+        Args:
+            ip: IP address to look up.
+
+        Returns:
+            GeoLocation if found, None otherwise.
+        """
         if not ip or not isinstance(ip, str):
+            return None
+        if not self.IP_PATTERN.match(ip):
             return None
         if ip in self._cache:
             self._cache_hits += 1
