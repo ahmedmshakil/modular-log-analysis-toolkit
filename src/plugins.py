@@ -46,7 +46,18 @@ class PluginManager:
         self._enabled: Dict[str, bool] = {}
 
     def register(self, plugin: LogPlugin):
-        """Register a plugin."""
+        """Register a plugin.
+
+        Args:
+            plugin: The plugin instance to register.
+
+        Raises:
+            TypeError: If plugin is not a LogPlugin instance.
+        """
+        if not isinstance(plugin, LogPlugin):
+            raise TypeError("plugin must be an instance of LogPlugin")
+        if not plugin.name:
+            raise ValueError("plugin must have a name")
         self._plugins[plugin.name] = plugin
         self._enabled[plugin.name] = True
         plugin.on_startup()
