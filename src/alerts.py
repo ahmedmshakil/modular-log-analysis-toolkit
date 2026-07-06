@@ -114,12 +114,21 @@ class AlertManager:
         return [a for a in self.alerts if not a.acknowledged]
 
     def acknowledge(self, index: int):
-        """Acknowledge an alert by index."""
+        """Acknowledge an alert by index.
+
+        Args:
+            index: Index of the alert to acknowledge.
+
+        Raises:
+            TypeError: If index is not an integer.
+            IndexError: If index is out of range.
+        """
         if not isinstance(index, int):
             raise TypeError("index must be an integer")
-        if 0 <= index < len(self.alerts):
-            self.alerts[index].acknowledged = True
-            self.alerts[index].acknowledged_at = datetime.now()
+        if index < 0 or index >= len(self.alerts):
+            raise IndexError(f"Alert index {index} out of range")
+        self.alerts[index].acknowledged = True
+        self.alerts[index].acknowledged_at = datetime.now()
 
     def export_alerts(self, output_path: str):
         """Export alerts to JSON file."""
