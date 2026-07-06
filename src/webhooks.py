@@ -103,11 +103,21 @@ class WebhookRouter:
         self._senders: Dict[str, WebhookSender] = {}
 
     def add_endpoint(self, name: str, url: str, **kwargs) -> None:
-        """Register a webhook endpoint."""
+        """Register a webhook endpoint.
+
+        Args:
+            name: Unique name for the endpoint.
+            url: Webhook URL.
+
+        Raises:
+            ValueError: If name or url is empty.
+        """
         if not name or not isinstance(name, str):
             raise ValueError("Endpoint name must be a non-empty string")
         if not url or not isinstance(url, str):
             raise ValueError("URL must be a non-empty string")
+        if name in self._senders:
+            raise ValueError(f"Endpoint '{name}' already exists")
         self._senders[name] = WebhookSender(url, **kwargs)
 
     def remove_endpoint(self, name: str) -> None:
