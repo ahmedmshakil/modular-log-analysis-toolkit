@@ -66,8 +66,20 @@ class AlertManager:
         self.thresholds[metric] = {"value": value, "severity": severity}
 
     def check(self, metric: str, current_value: float) -> Optional[Alert]:
-        """Check if a metric exceeds its threshold."""
+        """Check if a metric exceeds its threshold.
+
+        Args:
+            metric: Name of the metric to check.
+            current_value: Current value of the metric.
+
+        Returns:
+            Alert if threshold exceeded, None otherwise.
+        """
+        if not metric or not isinstance(metric, str):
+            return None
         if metric not in self.thresholds:
+            return None
+        if not isinstance(current_value, (int, float)):
             return None
 
         threshold = self.thresholds[metric]
