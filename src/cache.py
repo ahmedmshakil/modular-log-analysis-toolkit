@@ -35,7 +35,14 @@ class LRUCache:
             return None
 
     def put(self, key: str, value: Any):
-        """Put item in cache."""
+        """Put item in cache.
+
+        Args:
+            key: Cache key.
+            value: Value to cache.
+        """
+        if not key:
+            return
         with self._lock:
             if key in self._cache:
                 self._cache.move_to_end(key)
