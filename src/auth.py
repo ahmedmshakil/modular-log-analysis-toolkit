@@ -68,16 +68,29 @@ class AuthManager:
         return self._hash_password(password, salt) == stored
 
     def create_user(self, username: str, password: str, role: str = "viewer") -> bool:
-        """Create a new user."""
+        """Create a new user.
+
+        Args:
+            username: Username for the new account.
+            password: Password for the new account.
+            role: User role (viewer, analyst, admin).
+
+        Returns:
+            True if user was created successfully.
+        """
         if not username or not isinstance(username, str):
             return False
         if not password or not isinstance(password, str):
             return False
         if len(password) < 8:
             return False
+        if len(username) < 3:
+            return False
         if username in self._users:
             return False
         if role not in self.ROLES:
+            return False
+        if not username.isalnum():
             return False
 
         self._users[username] = User(
