@@ -19,8 +19,17 @@ class TagRule:
         return f"TagRule(name={self.name!r}, tag={self.tag!r}, priority={self.priority})"
 
     def matches(self, entry_dict: Dict) -> bool:
-        """Check if an entry matches this rule."""
+        """Check if an entry matches this rule.
+
+        Args:
+            entry_dict: Dictionary representation of a log entry.
+
+        Returns:
+            True if the entry matches all conditions.
+        """
         if not self.conditions or not entry_dict:
+            return False
+        if not isinstance(entry_dict, dict):
             return False
         for field_name, pattern in self.conditions.items():
             value = entry_dict.get(field_name)
