@@ -132,12 +132,28 @@ class QueryCache:
         return f"QueryCache(queries_cached={self._cache.stats['size']})"
 
     def get_results(self, query: str) -> Optional[list]:
-        """Get cached search results."""
+        """Get cached search results.
+
+        Args:
+            query: The search query string.
+
+        Returns:
+            Cached results if available, None otherwise.
+        """
+        if not query or not isinstance(query, str):
+            return None
         self._popular_queries[query] = self._popular_queries.get(query, 0) + 1
         return self._cache.get(query)
 
     def store_results(self, query: str, results: list):
-        """Cache search results."""
+        """Cache search results.
+
+        Args:
+            query: The search query string.
+            results: Results to cache.
+        """
+        if not query or not isinstance(query, str):
+            return
         self._cache.put(query, results)
 
     def popular_queries(self, limit: int = 10) -> list:
