@@ -116,7 +116,16 @@ class GeoLookup:
         return None
 
     def enrich_entry(self, message: str) -> List[Dict]:
-        """Extract and look up all IPs in a message."""
+        """Extract and look up all IPs in a message.
+
+        Args:
+            message: Log message to extract IPs from.
+
+        Returns:
+            List of geolocation dictionaries for found IPs.
+        """
+        if not message or not isinstance(message, str):
+            return []
         ips = self.extract_ips(message)
         results = []
         for ip in ips:
