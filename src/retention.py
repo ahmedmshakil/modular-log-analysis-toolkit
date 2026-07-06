@@ -86,7 +86,14 @@ class RetentionManager:
         return files
 
     def enforce(self, dry_run: bool = False) -> List[Dict]:
-        """Enforce retention policies. Returns list of actions taken."""
+        """Enforce retention policies.
+
+        Args:
+            dry_run: If True, only report actions without executing them.
+
+        Returns:
+            List of actions taken or planned.
+        """
         actions = []
         files = self.scan_files()
 
