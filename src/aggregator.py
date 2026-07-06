@@ -25,7 +25,11 @@ class LogAggregator:
         return cls(merged)
 
     def summary(self) -> AnalysisResult:
-        """Generate summary statistics."""
+        """Generate summary statistics.
+
+        Returns:
+            AnalysisResult with aggregated statistics.
+        """
         if not self.entries:
             return AnalysisResult()
 
@@ -45,6 +49,7 @@ class LogAggregator:
             time_range=(min(timestamps), max(timestamps)),
             top_errors=top_errors,
             sources=sources,
+            duration_seconds=(max(timestamps) - min(timestamps)).total_seconds(),
         )
 
     def by_time_window(self, window_minutes: int = 60) -> Dict[str, List[LogEntry]]:
