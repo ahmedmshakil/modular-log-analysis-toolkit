@@ -81,7 +81,11 @@ class LogDeduplicator:
         self._hash_cache.clear()
 
     def get_summary(self) -> Dict[str, int]:
-        """Get a summary of deduplication statistics."""
+        """Get a summary of deduplication statistics.
+
+        Returns:
+            Dictionary with deduplication statistics.
+        """
         total = sum(self._seen.values())
         unique = len(self._seen)
         duplicates = total - unique
@@ -91,3 +95,13 @@ class LogDeduplicator:
             "duplicates_found": duplicates,
             "dedup_rate": round(duplicates / total * 100, 2) if total > 0 else 0,
         }
+
+    @property
+    def unique_count(self) -> int:
+        """Get the number of unique entries seen."""
+        return len(self._seen)
+
+    @property
+    def total_count(self) -> int:
+        """Get the total number of entries processed."""
+        return sum(self._seen.values())
