@@ -24,7 +24,14 @@ class LogStream:
         return f"LogStream(file={self.file_path.name}, processed={self._processed})"
 
     def stream(self, callback: Callable[[LogEntry], None], batch_size: int = 1):
-        """Stream entries through a callback function."""
+        """Stream entries through a callback function.
+
+        Args:
+            callback: Function to call for each log entry.
+            batch_size: Unused, kept for API compatibility.
+        """
+        if not callable(callback):
+            raise TypeError("callback must be callable")
         for line in read_log_lines(str(self.file_path)):
             if self._stopped:
                 break
