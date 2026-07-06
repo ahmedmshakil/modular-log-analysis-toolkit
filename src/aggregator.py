@@ -53,7 +53,17 @@ class LogAggregator:
         )
 
     def by_time_window(self, window_minutes: int = 60) -> Dict[str, List[LogEntry]]:
-        """Group entries by time windows."""
+        """Group entries by time windows.
+
+        Args:
+            window_minutes: Size of each time window in minutes.
+
+        Returns:
+            Dictionary mapping ISO timestamps to lists of entries.
+
+        Raises:
+            ValueError: If window_minutes is less than 1.
+        """
         if window_minutes < 1:
             raise ValueError("window_minutes must be at least 1")
         if not self.entries:
