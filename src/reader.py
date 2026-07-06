@@ -7,10 +7,24 @@ from typing import Iterator, Optional
 
 
 def read_log_lines(file_path: str, encoding: str = "utf-8") -> Iterator[str]:
-    """Read log file line by line with memory efficiency."""
+    """Read log file line by line with memory efficiency.
+
+    Args:
+        file_path: Path to the log file.
+        encoding: File encoding (default: utf-8).
+
+    Yields:
+        Lines from the log file with trailing newlines removed.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+        PermissionError: If the file cannot be read.
+    """
     path = Path(file_path)
     if not path.exists():
         raise FileNotFoundError(f"Log file not found: {file_path}")
+    if not path.is_file():
+        raise ValueError(f"Not a regular file: {file_path}")
     with open(path, "r", encoding=encoding) as f:
         for line in f:
             yield line.rstrip("\n")
