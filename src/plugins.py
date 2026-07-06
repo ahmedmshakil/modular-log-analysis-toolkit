@@ -113,11 +113,23 @@ class PluginManager:
         return list(self._plugins.keys())
 
     def process_all(self, entries: List[LogEntry]) -> List[LogEntry]:
-        """Run all enabled plugins on entries."""
+        """Run all enabled plugins on entries.
+
+        Args:
+            entries: List of log entries to process.
+
+        Returns:
+            Processed list of log entries.
+        """
+        if not entries:
+            return []
         result = entries
         for name, plugin in self._plugins.items():
             if self._enabled.get(name, False):
-                result = plugin.process(result)
+                try:
+                    result = plugin.process(result)
+                except Exception:
+                    continue
         return result
 
     @property
