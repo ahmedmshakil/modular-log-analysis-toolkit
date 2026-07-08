@@ -143,6 +143,23 @@ class GeoLookup:
             "cached": len(self._cache),
         }
 
+    @property
+    def cache_hit_rate(self) -> float:
+        """Get cache hit rate as percentage.
+
+        Returns:
+            Cache hit rate as a float between 0 and 100.
+        """
+        total = self._lookup_count + self._cache_hits
+        if total == 0:
+            return 0.0
+        return round(self._cache_hits / total * 100, 2)
+
+    def reset_stats(self):
+        """Reset lookup statistics."""
+        self._lookup_count = 0
+        self._cache_hits = 0
+
     def clear_cache(self):
         """Clear the geolocation cache."""
         self._cache.clear()
