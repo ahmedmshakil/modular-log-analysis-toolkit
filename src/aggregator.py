@@ -18,10 +18,18 @@ class LogAggregator:
 
     @classmethod
     def from_entries(cls, *entry_lists: List[LogEntry]) -> "LogAggregator":
-        """Create an aggregator from multiple entry lists."""
+        """Create an aggregator from multiple entry lists.
+
+        Args:
+            *entry_lists: Variable number of entry lists to merge.
+
+        Returns:
+            LogAggregator containing all merged entries.
+        """
         merged = []
         for lst in entry_lists:
-            merged.extend(lst)
+            if lst:
+                merged.extend(lst)
         return cls(merged)
 
     def summary(self) -> AnalysisResult:
