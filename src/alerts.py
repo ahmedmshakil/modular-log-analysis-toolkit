@@ -61,6 +61,16 @@ class AlertManager:
         self.callbacks: List[Callable[[Alert], None]] = []
         self._lock = threading.Lock()
 
+    def __repr__(self) -> str:
+        return (
+            f"AlertManager(thresholds={len(self.thresholds)}, "
+            f"alerts={len(self.alerts)}, callbacks={len(self.callbacks)})"
+        )
+
+    def __len__(self) -> int:
+        """Get total number of alerts."""
+        return len(self.alerts)
+
     def set_threshold(self, metric: str, value: float, severity: AlertSeverity = AlertSeverity.MEDIUM):
         """Set an alert threshold."""
         self.thresholds[metric] = {"value": value, "severity": severity}
@@ -146,3 +156,19 @@ class AlertManager:
     def alert_count(self) -> int:
         """Get total number of alerts."""
         return len(self.alerts)
+
+    @property
+    def has_active_alerts(self) -> bool:
+        """Check if there are any unacknowledged alerts."""
+        return any(not a.acknowledged for a in self.alerts)
+
+    def get_alerts_by_severity(self, severity: AlertSeverity) -> List[Alert]:
+        """Get alerts filtered by severity.
+
+        Args:
+            severity: AlertSeverity to filter by.
+
+        Returns:
+            List of matching alerts.
+        """
+        return [a for a in self.alerts if a.severity == severity]
