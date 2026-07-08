@@ -18,6 +18,17 @@ class LogDeduplicator:
     def __repr__(self) -> str:
         return f"LogDeduplicator(seen={len(self._seen)}, ignore_timestamp={self.ignore_timestamp})"
 
+    def __len__(self) -> int:
+        """Get number of unique entries seen."""
+        return len(self._seen)
+
+    def __contains__(self, entry: LogEntry) -> bool:
+        """Check if an entry has been seen before."""
+        if not isinstance(entry, LogEntry):
+            return False
+        h = self._hash_entry(entry)
+        return h in self._seen
+
     def _hash_entry(self, entry: LogEntry) -> str:
         """Generate hash for a log entry."""
         entry_id = id(entry)
