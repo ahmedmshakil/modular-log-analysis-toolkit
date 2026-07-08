@@ -76,7 +76,14 @@ class TagManager:
         return any(r.name == name for r in self._rules)
 
     def apply_rules(self, entries: List[Dict]) -> List[Dict]:
-        """Apply tagging rules to entries."""
+        """Apply tagging rules to entries.
+
+        Args:
+            entries: List of entry dictionaries to tag.
+
+        Returns:
+            The same list with tags applied to each entry.
+        """
         if not entries:
             return []
         for entry in entries:
@@ -122,6 +129,16 @@ class TagManager:
         self._rules.clear()
         self._manual_tags.clear()
         self._tag_colors.clear()
+
+    @property
+    def rule_count(self) -> int:
+        """Get number of registered rules."""
+        return len(self._rules)
+
+    @property
+    def tag_count(self) -> int:
+        """Get total number of manual tags applied."""
+        return sum(len(tags) for tags in self._manual_tags.values())
 
     def export_rules(self, path: str):
         """Export rules to JSON file."""
