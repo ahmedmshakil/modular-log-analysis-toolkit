@@ -62,7 +62,16 @@ class RetentionManager:
         return f"RetentionManager(dir={self.log_directory}, policies={len(self.policies)})"
 
     def add_policy(self, policy: RetentionPolicy):
-        """Add a retention policy."""
+        """Add a retention policy.
+
+        Args:
+            policy: RetentionPolicy to add.
+
+        Raises:
+            TypeError: If policy is not a RetentionPolicy instance.
+        """
+        if not isinstance(policy, RetentionPolicy):
+            raise TypeError("policy must be a RetentionPolicy instance")
         self.policies.append(policy)
 
     def scan_files(self) -> List[Dict]:
@@ -153,6 +162,30 @@ class RetentionManager:
     def get_actions_log(self) -> List[Dict]:
         """Get history of retention actions."""
         return self._actions_log
+
+    def remove_policy(self, name: str) -> bool:
+        """Remove a retention policy by name.
+
+        Args:
+            name: Name of the policy to remove.
+
+        Returns:
+            True if policy was found and removed, False otherwise.
+        """
+        before = len(self.policies)
+        self.policies = [p for p in self.policies if p.name != name]
+        return len(self.policies) < before
+
+    def has_policy(self, name: str) -> bool:
+        """Check if a policy with the given name exists.
+
+        Args:
+            name: Policy name to check.
+
+        Returns:
+            True if policy exists, False otherwise.
+        """
+        return any(p.name == name for p in self.policies)
 
     @property
     def stats(self) -> Dict[str, int]:
