@@ -194,3 +194,24 @@ class RetentionManager:
             "policies": len(self.policies),
             "actions_taken": len(self._actions_log),
         }
+
+    @property
+    def last_action(self) -> Optional[Dict]:
+        """Get the most recent retention action.
+
+        Returns:
+            Last action dict, or None if no actions taken.
+        """
+        return self._actions_log[-1] if self._actions_log else None
+
+    def clear_actions_log(self):
+        """Clear the actions history."""
+        self._actions_log.clear()
+
+    def get_policy_names(self) -> List[str]:
+        """Get list of policy names.
+
+        Returns:
+            List of policy names.
+        """
+        return [p.name for p in self.policies]
