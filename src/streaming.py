@@ -84,12 +84,24 @@ class LogStream:
 
     def stream_filtered(self, callback: Callable[[LogEntry], None],
                         level_filter: Optional[List[str]] = None):
-        """Stream with filtering applied."""
+        """Stream with filtering applied.
+
+        Args:
+            callback: Function to call for each matching entry.
+            level_filter: List of level strings to include.
+        """
         def _process(entry: LogEntry):
             if level_filter and entry.level.value not in level_filter:
                 return
             callback(entry)
         self.stream(_process)
+
+    def reset(self):
+        """Reset stream state for reuse."""
+        self._paused = False
+        self._stopped = False
+        self._processed = 0
+        self._errors = 0
 
     def pause(self):
         """Pause streaming."""
