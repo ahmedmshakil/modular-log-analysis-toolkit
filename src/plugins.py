@@ -45,6 +45,14 @@ class PluginManager:
         self._plugins: Dict[str, LogPlugin] = {}
         self._enabled: Dict[str, bool] = {}
 
+    def __len__(self) -> int:
+        """Get number of registered plugins."""
+        return len(self._plugins)
+
+    def __contains__(self, name: str) -> bool:
+        """Check if a plugin is registered."""
+        return name in self._plugins
+
     def register(self, plugin: LogPlugin):
         """Register a plugin.
 
