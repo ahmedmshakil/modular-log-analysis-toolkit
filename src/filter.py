@@ -41,7 +41,19 @@ class LogFilter:
         return len(self.entries)
 
     def by_level(self, *levels: LogLevel) -> "LogFilter":
-        """Filter by log level."""
+        """Filter by log level.
+
+        Args:
+            *levels: One or more LogLevel values to match.
+
+        Returns:
+            Self for method chaining.
+
+        Raises:
+            ValueError: If no levels provided.
+        """
+        if not levels:
+            raise ValueError("At least one level must be provided")
         def _filter(entry: LogEntry) -> bool:
             return entry.level in levels
         self._filters.append(_filter)
