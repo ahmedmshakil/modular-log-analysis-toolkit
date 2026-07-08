@@ -41,6 +41,8 @@ class LogParser:
 
     def __init__(self, pattern_name: str = "standard", custom_pattern: Optional[str] = None):
         if custom_pattern:
+            if not isinstance(custom_pattern, str):
+                raise TypeError("custom_pattern must be a string")
             try:
                 self.pattern: Pattern = re.compile(custom_pattern)
             except re.error as e:
@@ -126,3 +128,12 @@ class LogParser:
             "TRACE": LogLevel.TRACE,
         }
         return mapping.get(level_str.upper(), LogLevel.INFO)
+
+    @staticmethod
+    def available_patterns() -> List[str]:
+        """Get list of available pattern names.
+
+        Returns:
+            List of pattern names.
+        """
+        return list(PATTERNS.keys())
