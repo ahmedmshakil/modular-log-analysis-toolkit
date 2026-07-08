@@ -95,7 +95,16 @@ class LogParser:
         return entries
 
     def _parse_timestamp(self, ts_str: str) -> datetime:
-        """Try multiple timestamp formats."""
+        """Try multiple timestamp formats.
+
+        Args:
+            ts_str: Timestamp string to parse.
+
+        Returns:
+            Parsed datetime, or current time if no format matches.
+        """
+        if not ts_str:
+            return datetime.now()
         for fmt in self.DEFAULT_TIMESTAMP_FORMATS:
             try:
                 return datetime.strptime(ts_str, fmt)
