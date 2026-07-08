@@ -129,7 +129,12 @@ class AnalysisResult:
         )
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert analysis result to dictionary."""
+        """Convert analysis result to dictionary.
+
+        Returns:
+            Dictionary with total_entries, level_counts, time_range,
+            top_errors, sources, and duration_seconds.
+        """
         return {
             "total_entries": self.total_entries,
             "level_counts": self.level_counts,
@@ -138,3 +143,29 @@ class AnalysisResult:
             "sources": self.sources,
             "duration_seconds": self.duration_seconds,
         }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "AnalysisResult":
+        """Create an AnalysisResult from a dictionary.
+
+        Args:
+            data: Dictionary containing analysis result fields.
+
+        Returns:
+            AnalysisResult instance.
+        """
+        time_range = None
+        if data.get("time_range"):
+            try:
+                time_range = tuple(datetime.fromisoformat(t) for t in data["time_range"])
+            except (ValueError, TypeError):
+                time_range = None
+
+        return cls(
+            total_entries=data.get("total_entries", 0),
+            level_counts=data.get("level_counts", {}),
+            time_range=time_range,
+            top_errors=data.get("top_errors", []),
+            sources=data.get("sources", []),
+            duration_seconds=data.get("duration_seconds", 0.0),
+        )
