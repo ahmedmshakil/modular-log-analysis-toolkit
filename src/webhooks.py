@@ -149,3 +149,12 @@ class WebhookRouter:
     def endpoint_count(self) -> int:
         """Get number of registered endpoints."""
         return len(self._senders)
+
+    @property
+    def stats(self) -> Dict[str, Dict[str, int]]:
+        """Get statistics for all endpoints.
+
+        Returns:
+            Dictionary mapping endpoint names to their stats.
+        """
+        return {name: sender.stats for name, sender in self._senders.items()}
