@@ -41,7 +41,20 @@ def read_compressed_log(file_path: str, encoding: str = "utf-8") -> Iterator[str
 
 
 def get_file_size(file_path: str) -> int:
-    """Return file size in bytes."""
+    """Return file size in bytes.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        File size in bytes.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+    """
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
     return os.path.getsize(file_path)
 
 
@@ -91,10 +104,24 @@ def detect_encoding(file_path: str) -> str:
 
 
 def file_exists(file_path: str) -> bool:
-    """Check if a file exists and is accessible."""
+    """Check if a file exists and is accessible.
+
+    Args:
+        file_path: Path to check.
+
+    Returns:
+        True if file exists, False otherwise.
+    """
     return Path(file_path).is_file()
 
 
 def is_compressed(file_path: str) -> bool:
-    """Check if a file is gzip compressed."""
+    """Check if a file is gzip compressed.
+
+    Args:
+        file_path: Path to check.
+
+    Returns:
+        True if file has .gz extension, False otherwise.
+    """
     return file_path.endswith(".gz")
