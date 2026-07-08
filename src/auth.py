@@ -178,6 +178,25 @@ class AuthManager:
             return True
         return False
 
+    def get_user(self, username: str) -> Optional[User]:
+        """Get a user by username.
+
+        Args:
+            username: Username to look up.
+
+        Returns:
+            User if found, None otherwise.
+        """
+        return self._users.get(username)
+
+    def user_count(self) -> int:
+        """Get total number of registered users."""
+        return len(self._users)
+
+    def active_sessions(self) -> int:
+        """Get number of active sessions."""
+        return len(self._sessions)
+
     def _save_users(self):
         """Save users to file."""
         data = {}
