@@ -24,6 +24,7 @@ class WebhookSender:
         self.timeout = max(1, min(int(timeout), 120))
         self._sent_count = 0
         self._error_count = 0
+        self._last_error: Optional[str] = None
 
     def __repr__(self) -> str:
         return f"WebhookSender(url={self.url!r}, sent={self._sent_count})"
@@ -76,7 +77,10 @@ class WebhookSender:
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                 self._sent_count += 1
                 return resp.status == 200
-        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError):
+        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
+            self._error_count += 1
+            return False
+        except Exception:
             self._error_count += 1
             return False
 
