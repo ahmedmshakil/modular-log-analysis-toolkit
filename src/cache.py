@@ -79,6 +79,28 @@ class LRUCache:
             self._misses = 0
 
     @property
+    def size(self) -> int:
+        """Get current number of items in cache."""
+        with self._lock:
+            return len(self._cache)
+
+    @property
+    def is_full(self) -> bool:
+        """Check if cache has reached maximum size."""
+        with self._lock:
+            return len(self._cache) >= self._max_size
+
+    @property
+    def max_size(self) -> int:
+        """Get maximum cache size."""
+        return self._max_size
+
+    @property
+    def ttl(self) -> int:
+        """Get cache TTL in seconds."""
+        return self._ttl
+
+    @property
     def hit_rate(self) -> float:
         """Get cache hit rate as percentage."""
         with self._lock:
