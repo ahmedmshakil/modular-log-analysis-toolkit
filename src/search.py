@@ -155,3 +155,39 @@ class LogSearchIndex:
     def entry_exists(self, entry: LogEntry) -> bool:
         """Check if an entry is already indexed."""
         return entry in self._entries
+
+    @property
+    def entry_count(self) -> int:
+        """Get the number of indexed entries."""
+        return len(self._entries)
+
+    def remove(self, entry: LogEntry) -> bool:
+        """Remove an entry from the index.
+
+        Args:
+            entry: The entry to remove.
+
+        Returns:
+            True if entry was found and removed, False otherwise.
+        """
+        try:
+            idx = self._entries.index(entry)
+            self._entries.pop(idx)
+            # Rebuild index to maintain consistency
+            old_index = self._index
+            old_field_index = self._field_index
+            self._index = defaultdict(set)
+            self._field_index = {
+                "level": defaultdict(set),
+                "source": defaultdict(set),
+            }
+            for i, e in enumerate(self._entries):
+                words = self._tokenize(e.message)
+                for word in words:
+                    self._index[word].add(i)
+                self._field_index["level"][e.level.value].add(i)
+                if e.source:
+                    self._field_index["source"][e.source.lower()].add(i)
+            return True
+        except ValueError:
+            return False
