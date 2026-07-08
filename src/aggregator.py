@@ -119,3 +119,27 @@ class LogAggregator:
     def has_entries(self) -> bool:
         """Check if aggregator has any entries."""
         return len(self.entries) > 0
+
+    @property
+    def level_counts(self) -> Dict[str, int]:
+        """Get entry counts grouped by log level.
+
+        Returns:
+            Dictionary mapping level names to counts.
+        """
+        if not self.entries:
+            return {}
+        counts: Dict[str, int] = {}
+        for entry in self.entries:
+            level = entry.level.value
+            counts[level] = counts.get(level, 0) + 1
+        return counts
+
+    @property
+    def source_list(self) -> List[str]:
+        """Get unique list of sources in entries.
+
+        Returns:
+            List of unique source names.
+        """
+        return list(set(e.source for e in self.entries if e.source))
