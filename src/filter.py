@@ -148,3 +148,20 @@ class LogFilter:
                 seen.add(key)
                 merged.append(entry)
         return LogFilter(merged)
+
+    def reset(self) -> "LogFilter":
+        """Clear all pending filters without removing entries.
+
+        Returns:
+            Self for method chaining.
+        """
+        self._filters.clear()
+        return self
+
+    def get_entries(self) -> List[LogEntry]:
+        """Get a copy of the current entries list.
+
+        Returns:
+            Copy of the entries list.
+        """
+        return list(self.entries)
