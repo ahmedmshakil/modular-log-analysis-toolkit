@@ -94,7 +94,16 @@ class LogExporter:
 
     @staticmethod
     def export_all(entries: List[LogEntry], output_dir: str, prefix: str = "logs") -> Dict[str, str]:
-        """Export entries in all supported formats at once."""
+        """Export entries in all supported formats at once.
+
+        Args:
+            entries: List of log entries to export.
+            output_dir: Directory to write export files.
+            prefix: Filename prefix for exported files.
+
+        Returns:
+            Dictionary mapping format names to output file paths.
+        """
         out = Path(output_dir)
         out.mkdir(parents=True, exist_ok=True)
         results = {}
@@ -102,3 +111,12 @@ class LogExporter:
         results["csv"] = LogExporter.to_csv(entries, str(out / f"{prefix}.csv"))
         results["text"] = LogExporter.to_text(entries, str(out / f"{prefix}.txt"))
         return results
+
+    @staticmethod
+    def supported_formats() -> List[str]:
+        """Get list of supported export formats.
+
+        Returns:
+            List of format names.
+        """
+        return ["json", "csv", "text"]
