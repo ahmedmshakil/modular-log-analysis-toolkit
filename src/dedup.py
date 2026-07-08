@@ -107,6 +107,26 @@ class LogDeduplicator:
             "dedup_rate": round(duplicates / total * 100, 2) if total > 0 else 0,
         }
 
+    def has_duplicates(self) -> bool:
+        """Check if any duplicates were found.
+
+        Returns:
+            True if duplicates exist, False otherwise.
+        """
+        return any(count > 1 for count in self._seen.values())
+
+    def get_most_duplicated(self, limit: int = 10) -> List[Tuple[str, int]]:
+        """Get the most frequently duplicated entries.
+
+        Args:
+            limit: Maximum number of results.
+
+        Returns:
+            List of (hash, count) tuples sorted by count descending.
+        """
+        duplicates = [(h, count) for h, count in self._seen.items() if count > 1]
+        return sorted(duplicates, key=lambda x: x[1], reverse=True)[:limit]
+
     @property
     def unique_count(self) -> int:
         """Get the number of unique entries seen."""
