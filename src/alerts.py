@@ -67,6 +67,10 @@ class AlertManager:
             f"alerts={len(self.alerts)}, callbacks={len(self.callbacks)})"
         )
 
+    def __str__(self) -> str:
+        active = sum(1 for a in self.alerts if not a.acknowledged)
+        return f"AlertManager({active} active / {len(self.alerts)} total alerts)"
+
     def __len__(self) -> int:
         """Get total number of alerts."""
         return len(self.alerts)
