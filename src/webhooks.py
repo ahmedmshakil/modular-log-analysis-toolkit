@@ -163,3 +163,7 @@ class WebhookRouter:
             Dictionary mapping endpoint names to their stats.
         """
         return {name: sender.stats for name, sender in self._senders.items()}
+
+    def clear(self):
+        """Remove all registered endpoints."""
+        self._senders.clear()
