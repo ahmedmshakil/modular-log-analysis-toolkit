@@ -47,6 +47,8 @@ class RetentionPolicy:
             parts.append(f"delete_after={self.delete_after_days}d")
         if self.max_size_mb:
             parts.append(f"max_size={self.max_size_mb}MB")
+        if self.patterns and self.patterns != ["*.log"]:
+            parts.append(f"patterns={self.patterns}")
         return ", ".join(parts) + ")"
 
 
