@@ -18,6 +18,11 @@ class LogDeduplicator:
     def __repr__(self) -> str:
         return f"LogDeduplicator(seen={len(self._seen)}, ignore_timestamp={self.ignore_timestamp})"
 
+    def __str__(self) -> str:
+        total = sum(self._seen.values())
+        unique = len(self._seen)
+        return f"LogDeduplicator({unique} unique / {total} total entries)"
+
     def __len__(self) -> int:
         """Get number of unique entries seen."""
         return len(self._seen)
