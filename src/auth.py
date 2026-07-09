@@ -171,7 +171,19 @@ class AuthManager:
         return [u.to_dict() for u in self._users.values()]
 
     def delete_user(self, username: str) -> bool:
-        """Delete a user."""
+        """Delete a user.
+
+        Args:
+            username: Username to delete.
+
+        Returns:
+            True if user was deleted, False if not found.
+
+        Raises:
+            TypeError: If username is not a string.
+        """
+        if not isinstance(username, str):
+            raise TypeError("username must be a string")
         if username in self._users:
             del self._users[username]
             self._save_users()
