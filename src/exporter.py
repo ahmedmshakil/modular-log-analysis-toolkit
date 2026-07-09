@@ -27,9 +27,14 @@ class LogExporter:
 
         Returns:
             Path to the exported file.
+
+        Raises:
+            TypeError: If entries is not a list.
         """
         if not entries:
             return output_path
+        if not isinstance(entries, list):
+            raise TypeError("entries must be a list")
         data = [entry.to_dict() for entry in entries]
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
