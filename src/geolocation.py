@@ -4,7 +4,7 @@ import re
 import json
 import urllib.error
 import urllib.request
-from typing import Dict, Optional, List
+from typing import Any, Dict, Optional, List
 from dataclasses import dataclass, field
 from functools import lru_cache
 
@@ -135,12 +135,18 @@ class GeoLookup:
         return results
 
     @property
-    def stats(self) -> Dict[str, int]:
-        """Get lookup statistics."""
+    def stats(self) -> Dict[str, Any]:
+        """Get lookup statistics.
+
+        Returns:
+            Dictionary with lookup stats including hit rate.
+        """
+        total = self._lookup_count + self._cache_hits
         return {
             "lookups": self._lookup_count,
             "cache_hits": self._cache_hits,
             "cached": len(self._cache),
+            "hit_rate": round(self._cache_hits / total * 100, 2) if total > 0 else 0.0,
         }
 
     @property
