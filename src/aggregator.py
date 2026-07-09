@@ -25,11 +25,17 @@ class LogAggregator:
 
         Returns:
             LogAggregator containing all merged entries.
+
+        Raises:
+            TypeError: If any entry list is not a list.
         """
         merged = []
         for lst in entry_lists:
-            if lst:
-                merged.extend(lst)
+            if lst is None:
+                continue
+            if not isinstance(lst, list):
+                raise TypeError(f"Expected list, got {type(lst).__name__}")
+            merged.extend(lst)
         return cls(merged)
 
     def summary(self) -> AnalysisResult:
