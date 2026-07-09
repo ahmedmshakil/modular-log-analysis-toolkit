@@ -114,12 +114,14 @@ class WebhookRouter:
             url: Webhook URL.
 
         Raises:
-            ValueError: If name or url is empty.
+            ValueError: If name or url is empty, or URL format is invalid.
         """
         if not name or not isinstance(name, str):
             raise ValueError("Endpoint name must be a non-empty string")
         if not url or not isinstance(url, str):
             raise ValueError("URL must be a non-empty string")
+        if not url.startswith(("http://", "https://")):
+            raise ValueError("URL must start with http:// or https://")
         if name in self._senders:
             raise ValueError(f"Endpoint '{name}' already exists")
         self._senders[name] = WebhookSender(url, **kwargs)
