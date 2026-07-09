@@ -149,3 +149,12 @@ class LogAggregator:
             List of unique source names.
         """
         return list(set(e.source for e in self.entries if e.source))
+
+    @property
+    def entry_count(self) -> int:
+        """Get total number of entries in the aggregator.
+
+        Returns:
+            Number of entries.
+        """
+        return len(self.entries)
