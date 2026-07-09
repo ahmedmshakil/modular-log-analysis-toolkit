@@ -21,14 +21,18 @@ class LogFilter:
         return len(self.entries)
 
     def __contains__(self, entry: LogEntry) -> bool:
-        """Check if an entry exists in the filter."""
-        return any(
-            e.timestamp == entry.timestamp
-            and e.level == entry.level
-            and e.message == entry.message
-            and e.source == entry.source
-            for e in self.entries
-        )
+        """Check if an entry exists in the filter.
+
+        Args:
+            entry: LogEntry to check for.
+
+        Returns:
+            True if entry exists, False otherwise.
+        """
+        if not isinstance(entry, LogEntry):
+            return False
+        entry_set = {(e.timestamp, e.level, e.message, e.source) for e in self.entries}
+        return (entry.timestamp, entry.level, entry.message, entry.source) in entry_set
 
     @property
     def is_empty(self) -> bool:
