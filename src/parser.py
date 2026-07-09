@@ -54,6 +54,12 @@ class LogParser:
             raise ValueError(f"Unknown pattern: {pattern_name}. Available patterns: {available}")
         self.pattern_name = pattern_name
 
+    def __repr__(self) -> str:
+        return f"LogParser(pattern={self.pattern_name!r})"
+
+    def __str__(self) -> str:
+        return f"LogParser(pattern='{self.pattern_name}')"
+
     def parse_line(self, line: str, line_number: int = 0) -> Optional[LogEntry]:
         """Parse a single log line.
 
