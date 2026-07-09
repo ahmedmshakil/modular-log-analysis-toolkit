@@ -187,3 +187,12 @@ class QueryCache:
         """Clear all cached queries and statistics."""
         self._cache.clear()
         self._popular_queries.clear()
+
+    def clear_stats(self):
+        """Clear only the query popularity statistics."""
+        self._popular_queries.clear()
+
+    @property
+    def query_count(self) -> int:
+        """Get number of unique queries tracked."""
+        return len(self._popular_queries)
