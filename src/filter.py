@@ -39,6 +39,14 @@ class LogFilter:
         """Check if there are no entries to filter."""
         return len(self.entries) == 0
 
+    def has_entries(self) -> bool:
+        """Check if there are entries to filter.
+
+        Returns:
+            True if entries exist, False otherwise.
+        """
+        return len(self.entries) > 0
+
     @property
     def entry_count(self) -> int:
         """Get the total number of entries."""
