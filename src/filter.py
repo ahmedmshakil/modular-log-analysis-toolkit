@@ -132,9 +132,15 @@ class LogFilter:
         return self
 
     def apply(self) -> List[LogEntry]:
-        """Apply all filters and return matching entries."""
+        """Apply all filters and return matching entries.
+
+        Returns:
+            List of entries matching all active filters.
+        """
         if not self.entries:
             return []
+        if not self._filters:
+            return list(self.entries)
         result = self.entries
         for f in self._filters:
             result = [e for e in result if f(e)]
