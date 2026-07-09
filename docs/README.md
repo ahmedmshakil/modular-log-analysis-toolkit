@@ -106,6 +106,26 @@ Welcome to the Modular Log Analysis Toolkit documentation. This directory contai
 
 Use the search functionality of your IDE or text editor to find specific topics across all documentation files.
 
+## Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **Multi-format Parsing** | Parse standard, syslog, Apache, and custom log formats |
+| **Advanced Filtering** | Filter by level, time range, source, keyword, and regex |
+| **Full-text Search** | In-memory search index with stop-word filtering |
+| **Deduplication** | Hash-based duplicate detection and removal |
+| **Streaming Mode** | Memory-efficient processing of large log files |
+| **Export** | Export to JSON, CSV, and plain text formats |
+| **Alerts** | Configurable thresholds with callback notifications |
+| **Web Dashboard** | Real-time monitoring with dark/light theme |
+| **Plugin System** | Extensible architecture with custom plugins |
+| **Caching** | LRU cache with TTL for performance optimization |
+| **Geolocation** | IP address lookup with caching |
+| **Retention Policies** | Automated log compression, rotation, and deletion |
+| **Authentication** | Role-based access control (viewer, analyst, admin) |
+| **Webhooks** | Send alerts to external endpoints |
+| **Tagging** | Rule-based and manual log categorization |
+
 ## Documentation Updates
 
 This documentation is regularly updated. Last update: 2026
