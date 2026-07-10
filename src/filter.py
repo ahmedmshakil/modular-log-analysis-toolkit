@@ -14,6 +14,7 @@ class LogFilter:
     def __init__(self, entries: List[LogEntry]):
         self.entries = entries
         self._filters: List[Callable[[LogEntry], bool]] = []
+        self._entry_set = {(e.timestamp, e.level, e.message, e.source) for e in entries}
 
     def __repr__(self) -> str:
         return f"LogFilter(entries={len(self.entries)}, filters={len(self._filters)})"
@@ -32,8 +33,7 @@ class LogFilter:
         """
         if not isinstance(entry, LogEntry):
             return False
-        entry_set = {(e.timestamp, e.level, e.message, e.source) for e in self.entries}
-        return (entry.timestamp, entry.level, entry.message, entry.source) in entry_set
+        return (entry.timestamp, entry.level, entry.message, entry.source) in self._entry_set
 
     @property
     def is_empty(self) -> bool:
