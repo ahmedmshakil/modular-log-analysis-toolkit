@@ -112,6 +112,10 @@ class WebhookRouter:
     def __repr__(self) -> str:
         return f"WebhookRouter(endpoints={len(self._senders)})"
 
+    def __len__(self) -> int:
+        """Get number of registered endpoints."""
+        return len(self._senders)
+
     def add_endpoint(self, name: str, url: str, **kwargs) -> None:
         """Register a webhook endpoint.
 
