@@ -55,6 +55,9 @@ class AuthManager:
         self._sessions: Dict[str, Dict] = {}  # token -> {username, expires}
         self._load_users()
 
+    def __repr__(self) -> str:
+        return f"AuthManager(users={len(self._users)}, sessions={len(self._sessions)})"
+
     def _hash_password(self, password: str, salt: str = None) -> str:
         """Hash a password with salt."""
         if salt is None:
