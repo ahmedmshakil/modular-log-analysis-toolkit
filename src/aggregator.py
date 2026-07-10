@@ -48,7 +48,7 @@ class LogAggregator:
             return AnalysisResult()
 
         level_counts = Counter(e.level.value for e in self.entries)
-        sources = list(set(e.source for e in self.entries if e.source))
+        sources = list({e.source for e in self.entries if e.source})
         timestamps = [e.timestamp for e in self.entries]
 
         top_errors = [
