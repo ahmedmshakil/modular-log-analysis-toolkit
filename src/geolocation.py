@@ -56,6 +56,9 @@ class GeoLookup:
     def __repr__(self) -> str:
         return f"GeoLookup(cached={len(self._cache)}, lookups={self._lookup_count})"
 
+    def __str__(self) -> str:
+        return f"GeoLookup({len(self._cache)} cached IPs, {self._lookup_count} lookups)"
+
     def extract_ips(self, text: str) -> List[str]:
         """Extract IP addresses from text."""
         return self.IP_PATTERN.findall(text)
