@@ -31,7 +31,18 @@ def read_log_lines(file_path: str, encoding: str = "utf-8") -> Iterator[str]:
 
 
 def read_compressed_log(file_path: str, encoding: str = "utf-8") -> Iterator[str]:
-    """Read gzip-compressed log files."""
+    """Read gzip-compressed log files line by line.
+
+    Args:
+        file_path: Path to the gzip-compressed log file.
+        encoding: File encoding (default: utf-8).
+
+    Yields:
+        Lines from the compressed log file with trailing newlines removed.
+
+    Raises:
+        ValueError: If the file is not a valid gzip file.
+    """
     try:
         with gzip.open(file_path, "rt", encoding=encoding) as f:
             for line in f:
