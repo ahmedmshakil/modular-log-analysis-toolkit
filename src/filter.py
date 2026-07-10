@@ -1,6 +1,7 @@
 """Log filtering and query engine."""
 
 import re
+from collections import Counter
 from datetime import datetime
 from typing import List, Optional, Callable
 
@@ -162,11 +163,7 @@ class LogFilter:
         """Count entries grouped by level."""
         if not self.entries:
             return {}
-        counts = {}
-        for entry in self.entries:
-            level = entry.level.value
-            counts[level] = counts.get(level, 0) + 1
-        return counts
+        return dict(Counter(e.level.value for e in self.entries))
 
     def merge(self, other: "LogFilter") -> "LogFilter":
         """Merge entries from another LogFilter, removing duplicates."""
