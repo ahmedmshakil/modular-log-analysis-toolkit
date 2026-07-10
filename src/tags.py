@@ -83,9 +83,14 @@ class TagManager:
 
         Returns:
             The same list with tags applied to each entry.
+
+        Raises:
+            TypeError: If entries is not a list.
         """
         if not entries:
             return []
+        if not isinstance(entries, list):
+            raise TypeError("entries must be a list")
         for entry in entries:
             line_num = entry.get("line_number", 0)
             tags = set(entry.get("tags", []))
