@@ -127,6 +127,11 @@ class LogAggregator:
         return len(self.entries) > 0
 
     @property
+    def is_empty(self) -> bool:
+        """Check if aggregator has no entries."""
+        return len(self.entries) == 0
+
+    @property
     def level_counts(self) -> Dict[str, int]:
         """Get entry counts grouped by log level.
 
