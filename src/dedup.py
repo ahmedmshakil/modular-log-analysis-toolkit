@@ -141,3 +141,8 @@ class LogDeduplicator:
     def total_count(self) -> int:
         """Get the total number of entries processed."""
         return sum(self._seen.values())
+
+    @property
+    def duplicate_count(self) -> int:
+        """Get the number of entries that have duplicates."""
+        return sum(1 for count in self._seen.values() if count > 1)
