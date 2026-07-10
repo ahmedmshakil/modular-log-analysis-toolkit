@@ -26,6 +26,10 @@ class LogSearchIndex:
             "source": defaultdict(set),
         }
 
+    def __len__(self) -> int:
+        """Get the number of indexed entries."""
+        return len(self._entries)
+
     def add(self, entry: LogEntry):
         """Add an entry to the index."""
         idx = len(self._entries)
