@@ -29,6 +29,9 @@ class WebhookSender:
     def __repr__(self) -> str:
         return f"WebhookSender(url={self.url!r}, sent={self._sent_count})"
 
+    def __str__(self) -> str:
+        return f"WebhookSender({self.url}, {self._sent_count} sent, {self._error_count} errors)"
+
     def send_alert(self, entry: LogEntry, extra: Optional[Dict[str, Any]] = None) -> bool:
         """Send a webhook alert for a log entry.
 
