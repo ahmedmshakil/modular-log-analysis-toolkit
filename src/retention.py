@@ -22,12 +22,20 @@ class RetentionPolicy:
     def __post_init__(self):
         if self.patterns is None:
             self.patterns = ["*.log"]
+        if not isinstance(self.max_age_days, int):
+            raise TypeError(f"max_age_days must be an integer, got {type(self.max_age_days).__name__}")
         if self.max_age_days < 0:
             raise ValueError("max_age_days must be non-negative")
+        if not isinstance(self.compress_after_days, int):
+            raise TypeError(f"compress_after_days must be an integer, got {type(self.compress_after_days).__name__}")
         if self.compress_after_days < 0:
             raise ValueError("compress_after_days must be non-negative")
+        if not isinstance(self.delete_after_days, int):
+            raise TypeError(f"delete_after_days must be an integer, got {type(self.delete_after_days).__name__}")
         if self.delete_after_days < 0:
             raise ValueError("delete_after_days must be non-negative")
+        if not isinstance(self.max_size_mb, (int, float)):
+            raise TypeError(f"max_size_mb must be a number, got {type(self.max_size_mb).__name__}")
         if self.max_size_mb < 0:
             raise ValueError("max_size_mb must be non-negative")
 
