@@ -23,6 +23,10 @@ class LogStream:
     def __repr__(self) -> str:
         return f"LogStream(file={self.file_path.name}, processed={self._processed})"
 
+    def __str__(self) -> str:
+        status = "stopped" if self._stopped else ("paused" if self._paused else "active")
+        return f"LogStream({self.file_path.name}, {self._processed} processed, {status})"
+
     def stream(self, callback: Callable[[LogEntry], None], batch_size: int = 1):
         """Stream entries through a callback function.
 
