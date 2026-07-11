@@ -11,6 +11,7 @@ from .filter import LogFilter
 from .aggregator import LogAggregator
 from .exporter import LogExporter
 from .models import LogLevel
+from . import __version__
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -40,7 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--top-errors", type=int, default=10, help="Number of top errors")
     p.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
     p.add_argument("-q", "--quiet", action="store_true", help="Suppress non-essential output")
-    p.add_argument("--version", action="version", version="%(prog)s 1.2.0")
+    p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     return p
 
 
