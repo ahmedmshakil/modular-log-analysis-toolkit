@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
@@ -12,6 +13,13 @@ from .aggregator import LogAggregator
 from .exporter import LogExporter
 from .models import LogLevel
 from . import __version__
+
+
+def _parse_cli_datetime(value: str) -> datetime:
+    try:
+        return datetime.fromisoformat(value)
+    except ValueError:
+        raise ValueError("expected YYYY-MM-DD HH:MM:SS")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -93,6 +101,14 @@ def main(argv: Optional[List[str]] = None):
         log_filter.by_source(args.source)
     if args.keyword:
         log_filter.by_keyword(args.keyword)
+    if args.since or args.until:
+        try:
+            start = _parse_cli_datetime(args.since) if args.since else datetime.min
+            end = _parse_cli_datetime(args.until) if args.until else datetime.max
+        except ValueError as e:
+            print(f"Error: invalid datetime for --since/--until: {e}", file=sys.stderr)
+            sys.exit(1)
+        log_filter.by_time_range(start, end)
     filtered = log_filter.apply()
 
     # Generate summary
