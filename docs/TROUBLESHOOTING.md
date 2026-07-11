@@ -17,8 +17,9 @@
 
 **Fix:** Use streaming mode instead:
 ```python
-from src.streaming import StreamingProcessor
-processor = StreamingProcessor("large.log", chunk_size=10000)
+from src.streaming import LogStream
+stream = LogStream("large.log")
+stream.stream(lambda entry: None)
 ```
 
 ### Corrupted gzip file error
