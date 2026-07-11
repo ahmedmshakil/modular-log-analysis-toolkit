@@ -171,7 +171,7 @@ class RetentionManager:
 
     def get_actions_log(self) -> List[Dict]:
         """Get history of retention actions."""
-        return self._actions_log
+        return list(self._actions_log)
 
     def remove_policy(self, name: str) -> bool:
         """Remove a retention policy by name.
