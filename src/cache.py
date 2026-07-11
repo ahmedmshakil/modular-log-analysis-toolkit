@@ -52,7 +52,8 @@ class LRUCache:
 
     def invalidate(self, key: str):
         """Remove item from cache."""
-        self._cache.pop(key, None)
+        with self._lock:
+            self._cache.pop(key, None)
 
     def invalidate_pattern(self, prefix: str):
         """Remove all cache keys matching a prefix."""
