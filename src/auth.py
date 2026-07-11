@@ -223,6 +223,7 @@ class AuthManager:
                 "password_hash": user.password_hash,
                 "role": user.role,
                 "created_at": user.created_at.isoformat(),
+                "last_login": user.last_login.isoformat() if user.last_login else None,
                 "active": user.active,
             }
         path = self.data_dir / "users.json"
@@ -240,5 +241,6 @@ class AuthManager:
                     username=name,
                     password_hash=info["password_hash"],
                     role=info.get("role", "viewer"),
+                    last_login=datetime.fromisoformat(info["last_login"]) if info.get("last_login") else None,
                     active=info.get("active", True),
                 )
