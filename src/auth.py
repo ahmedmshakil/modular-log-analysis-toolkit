@@ -67,8 +67,11 @@ class AuthManager:
 
     def _verify_password(self, password: str, stored: str) -> bool:
         """Verify a password against stored hash."""
-        salt, hash_val = stored.split(":")
-        return self._hash_password(password, salt) == stored
+        try:
+            salt, hash_val = stored.split(":", 1)
+        except (AttributeError, ValueError):
+            return False
+        return self._hash_password(password, salt) == f"{salt}:{hash_val}"
 
     def create_user(self, username: str, password: str, role: str = "viewer") -> bool:
         """Create a new user.
