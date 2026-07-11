@@ -115,7 +115,7 @@ class TagManager:
 
     def get_tags(self, line_number: int) -> Set[str]:
         """Get all tags for an entry."""
-        return self._manual_tags.get(line_number, set())
+        return set(self._manual_tags.get(line_number, set()))
 
     def get_all_tags(self) -> Dict[str, int]:
         """Get all tags with their counts."""
