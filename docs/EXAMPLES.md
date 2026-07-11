@@ -42,13 +42,10 @@ print(f"Exported to {path}")
 ## Real-time Monitoring
 
 ```python
-from src.streaming import StreamingProcessor
+from src.streaming import LogStream
 
-processor = StreamingProcessor("/var/log/syslog", chunk_size=1000)
-for chunk in processor.stream():
-    errors = [e for e in chunk if e.level.value == "ERROR"]
-    if errors:
-        print(f"Alert: {len(errors)} errors detected!")
+stream = LogStream("/var/log/syslog")
+stream.stream(lambda entry: print(entry) if entry.level.value == "ERROR" else None)
 ```
 
 ## Custom Pattern
@@ -62,11 +59,12 @@ entries = parser.parse_lines(access_log_lines)
 ## Webhook Alerting
 
 ```python
-from src.alerts import AlertSystem
+from src.alerts import AlertManager, AlertSeverity
 from src.webhooks import WebhookSender
 
 webhook = WebhookSender("https://hooks.slack.com/services/xxx")
-alert_system = AlertSystem(error_threshold=10)
-alert_system.on_alert(lambda alert: webhook.send(alert.message))
-alert_system.evaluate(entries)
+alerts = AlertManager()
+alerts.set_threshold("error_rate", 10, severity=AlertSeverity.HIGH)
+alerts.register_callback(lambda alert: webhook.send(alert.message))
+alerts.check("error_rate", 12)
 ```
