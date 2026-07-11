@@ -122,6 +122,8 @@ class LogSearchIndex:
         """Suggest completions for a search prefix."""
         if not prefix:
             return []
+        if limit < 1:
+            return []
         prefix = prefix.lower()
         return sorted([word for word in self._index if word.startswith(prefix)])[:limit]
 
