@@ -127,6 +127,7 @@ from src.reader import read_log_lines
 from src.filter import LogFilter
 from src.aggregator import LogAggregator
 from src.exporter import LogExporter
+from src.models import LogLevel
 
 # Parse log file
 parser = LogParser(pattern_name="standard")
