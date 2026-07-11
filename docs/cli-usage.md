@@ -134,6 +134,8 @@ python -m src.cli app.log -k "connection failed"
 
 Filter by time range:
 
+Use `YYYY-MM-DD HH:MM:SS` timestamps. `--since` and `--until` can be combined with any other filter.
+
 ```bash
 # After a specific time
 python -m src.cli app.log --since "2024-01-15 10:00:00"
