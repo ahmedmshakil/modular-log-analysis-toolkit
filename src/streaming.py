@@ -36,13 +36,13 @@ class LogStream:
         """
         if not callable(callback):
             raise TypeError("callback must be callable")
-        for line in read_log_lines(str(self.file_path)):
+        for line_number, line in enumerate(read_log_lines(str(self.file_path)), start=1):
             if self._stopped:
                 break
             while self._paused:
                 time.sleep(0.1)
 
-            entry = self.parser.parse_line(line, self._processed + 1)
+            entry = self.parser.parse_line(line, line_number)
             if entry:
                 try:
                     callback(entry)
@@ -68,13 +68,13 @@ class LogStream:
         if not isinstance(batch_size, int) or batch_size < 1:
             raise ValueError("batch_size must be a positive integer")
         batch = []
-        for line in read_log_lines(str(self.file_path)):
+        for line_number, line in enumerate(read_log_lines(str(self.file_path)), start=1):
             if self._stopped:
                 break
             while self._paused:
                 time.sleep(0.1)
 
-            entry = self.parser.parse_line(line, self._processed + 1)
+            entry = self.parser.parse_line(line, line_number)
             if entry:
                 batch.append(entry)
                 self._processed += 1
