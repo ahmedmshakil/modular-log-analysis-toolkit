@@ -236,6 +236,8 @@ The dashboard shows:
 - Recent log entries
 - Real-time updates (every 5 seconds)
 
+For a short reference to the dashboard entry point, see [dashboard.md](dashboard.md).
+
 ## Common Tasks
 
 ### Task 1: Find All Errors
