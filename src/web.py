@@ -202,11 +202,12 @@ def build_table(rows):
     """Build HTML table from rows."""
     if not rows:
         return ''
+    from html import escape
     html = '<table>'
     # First row is header
     html += '<thead><tr>'
     for cell in rows[0]:
-        html += f'<th>{cell}</th>'
+        html += f'<th>{escape(cell)}</th>'
     html += '</tr></thead>'
     # Rest are body
     if len(rows) > 1:
@@ -214,7 +215,7 @@ def build_table(rows):
         for row in rows[1:]:
             html += '<tr>'
             for cell in row:
-                html += f'<td>{cell}</td>'
+                html += f'<td>{escape(cell)}</td>'
             html += '</tr>'
         html += '</tbody>'
     html += '</table>'
