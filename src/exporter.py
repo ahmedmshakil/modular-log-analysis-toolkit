@@ -94,6 +94,7 @@ class LogExporter:
             "time_range": [t.isoformat() for t in result.time_range] if result.time_range else None,
             "top_errors": result.top_errors,
             "sources": result.sources,
+            "duration_seconds": result.duration_seconds,
         }
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
