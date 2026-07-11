@@ -83,7 +83,11 @@ def main(argv: Optional[List[str]] = None):
     # Apply filters
     log_filter = LogFilter(entries)
     if args.level:
-        levels = [LogLevel[l.upper()] for l in args.level]
+        try:
+            levels = [LogLevel[l.upper()] for l in args.level]
+        except KeyError as e:
+            print(f"Error: invalid log level: {e.args[0]}", file=sys.stderr)
+            sys.exit(1)
         log_filter.by_level(*levels)
     if args.source:
         log_filter.by_source(args.source)
