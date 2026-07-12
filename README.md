@@ -168,6 +168,65 @@ Custom log patterns can be added to `config/patterns.yaml` using regex with name
 
 ---
 
+## Quick Examples
+
+### Search Logs
+
+```python
+from src.search import LogSearchIndex
+
+index = LogSearchIndex()
+index.add_batch(entries)
+
+# Full-text search
+results = index.search("database timeout")
+
+# Regex search
+errors = index.search_regex(r"ERROR.*timeout")
+```
+
+### Stream Large Files
+
+```python
+from src.streaming import LogStream
+
+stream = LogStream("large_file.log")
+error_count = 0
+
+def count_errors(entry):
+    global error_count
+    if entry.is_error:
+        error_count += 1
+
+stream.stream(count_errors)
+```
+
+### Set Up Alerts
+
+```python
+from src.alerts import AlertManager, AlertSeverity
+
+manager = AlertManager()
+manager.set_threshold("error_rate", 5.0, AlertSeverity.HIGH)
+
+def on_alert(alert):
+    print(f"ALERT: {alert}")
+
+manager.register_callback(on_alert)
+```
+
+### Deduplication
+
+```python
+from src.dedup import LogDeduplicator
+
+dedup = LogDeduplicator()
+unique, counts = dedup.deduplicate(entries)
+print(f"Removed {dedup.total_duplicates_removed()} duplicates")
+```
+
+---
+
 ## Running Tests
 
 ```bash
