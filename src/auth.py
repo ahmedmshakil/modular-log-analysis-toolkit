@@ -172,6 +172,26 @@ class AuthManager:
             del self._sessions[token]
         return len(expired)
 
+    def get_session_info(self, token: str) -> Optional[Dict]:
+        """Get session information without validating expiry.
+
+        Args:
+            token: Session token to look up.
+
+        Returns:
+            Session info dict if found, None otherwise.
+        """
+        if not token or not isinstance(token, str):
+            return None
+        session = self._sessions.get(token)
+        if not session:
+            return None
+        return {
+            "username": session["username"],
+            "expires": session["expires"].isoformat(),
+            "is_expired": datetime.now() > session["expires"],
+        }
+
     def list_users(self) -> List[Dict]:
         """List all users (admin only)."""
         return [u.to_dict() for u in self._users.values()]
