@@ -15,6 +15,7 @@ class LogFilter:
         self.entries = entries
         self._filters: List[Callable[[LogEntry], bool]] = []
         self._entry_set = {(e.timestamp, e.level, e.message, e.source) for e in entries}
+        self._regex_cache: Dict[str, re.Pattern] = {}
 
     def __repr__(self) -> str:
         return f"LogFilter(entries={len(self.entries)}, filters={len(self._filters)})"
@@ -128,10 +129,15 @@ class LogFilter:
         """
         if not pattern or not isinstance(pattern, str):
             raise ValueError("Pattern must be a non-empty string")
-        try:
-            compiled = re.compile(pattern)
-        except re.error as e:
-            raise ValueError(f"Invalid regex pattern: {e}")
+        # Use cached compiled regex if available
+        if pattern in self._regex_cache:
+            compiled = self._regex_cache[pattern]
+        else:
+            try:
+                compiled = re.compile(pattern)
+                self._regex_cache[pattern] = compiled
+            except re.error as e:
+                raise ValueError(f"Invalid regex pattern: {e}")
         def _filter(entry: LogEntry) -> bool:
             if not entry.message:
                 return False
