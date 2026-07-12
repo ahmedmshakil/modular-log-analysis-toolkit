@@ -49,6 +49,7 @@ class LogStream:
                     self._processed += 1
                 except Exception as e:
                     self._errors += 1
+                    self._processed += 1
             else:
                 self._errors += 1
 
