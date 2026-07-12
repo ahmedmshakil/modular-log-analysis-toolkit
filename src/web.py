@@ -416,8 +416,9 @@ class DashboardHandler(BaseHTTPRequestHandler):
 body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color: var(--text-primary); padding: 24px; line-height: 1.5; }}
 h1 {{ color: var(--accent-primary); margin-bottom: 16px; font-size: 1.8rem; }}
 h2 {{ color: var(--accent-secondary); margin: 20px 0 12px; font-size: 1.2rem; }}
-.stats {{ display: flex; gap: 16px; margin: 20px 0; flex-wrap: wrap; }}
-.stat {{ background: var(--bg-secondary); padding: 16px 20px; border-radius: 10px; min-width: 140px; border: 1px solid var(--border-color); }}
+.stats {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 20px 0; }}
+.stat {{ background: var(--bg-secondary); padding: 16px 20px; border-radius: 10px; border: 1px solid var(--border-color); transition: transform 0.2s, box-shadow 0.2s; }}
+.stat:hover {{ transform: translateY(-2px); box-shadow: var(--card-shadow); }}
 .stat h3 {{ color: var(--accent-green); margin: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }}
 .stat p {{ font-size: 28px; margin: 6px 0 0; font-weight: bold; color: var(--text-primary); }}
 table {{ width: 100%; border-collapse: collapse; margin-top: 8px; }}
