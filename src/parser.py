@@ -111,6 +111,9 @@ class LogParser:
         Returns:
             Parsed datetime, or current time if no format matches.
         """
+        if not ts_str or not isinstance(ts_str, str):
+            return datetime.now()
+        ts_str = ts_str.strip()
         if not ts_str:
             return datetime.now()
         for fmt in self.DEFAULT_TIMESTAMP_FORMATS:
