@@ -48,7 +48,11 @@ class LRUCache:
                 self._cache.move_to_end(key)
             self._cache[key] = {"value": value, "time": time.time()}
             if len(self._cache) > self._max_size:
-                self._cache.popitem(last=False)
+                # Evict oldest 10% to reduce frequent eviction overhead
+                evict_count = max(1, self._max_size // 10)
+                for _ in range(evict_count):
+                    if self._cache:
+                        self._cache.popitem(last=False)
 
     def invalidate(self, key: str):
         """Remove item from cache."""
@@ -66,6 +70,24 @@ class LRUCache:
         """Clear all cached items."""
         with self._lock:
             self._cache.clear()
+
+    def cleanup_expired(self) -> int:
+        """Remove all expired entries from cache.
+
+        Returns:
+            Number of expired entries removed.
+        """
+        removed = 0
+        now = time.time()
+        with self._lock:
+            expired_keys = [
+                k for k, v in self._cache.items()
+                if now - v["time"] >= self._ttl
+            ]
+            for key in expired_keys:
+                del self._cache[key]
+                removed += 1
+        return removed
 
     def invalidate_keys(self, keys: list):
         """Remove multiple items from cache by key."""
