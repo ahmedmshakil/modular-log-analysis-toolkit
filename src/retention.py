@@ -91,6 +91,7 @@ class RetentionManager:
             List of file metadata dictionaries.
         """
         files = []
+        now = datetime.now()
         for policy in self.policies:
             for pattern in policy.patterns:
                 for file_path in self.log_directory.glob(pattern):
@@ -98,17 +99,27 @@ class RetentionManager:
                         if not file_path.is_file():
                             continue
                         stat = file_path.stat()
-                        age_days = (datetime.now() - datetime.fromtimestamp(stat.st_mtime)).days
+                        modified = datetime.fromtimestamp(stat.st_mtime)
+                        age_days = (now - modified).days
                         files.append({
                             "path": str(file_path),
                             "size_mb": stat.st_size / (1024 * 1024),
                             "age_days": age_days,
-                            "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                            "modified": modified.isoformat(),
                             "policy": policy.name,
                         })
                     except (OSError, PermissionError):
                         continue
         return files
+
+    def get_total_size(self) -> float:
+        """Get total size of all scanned log files in MB.
+
+        Returns:
+            Total size in megabytes.
+        """
+        files = self.scan_files()
+        return sum(f["size_mb"] for f in files)
 
     def enforce(self, dry_run: bool = False) -> List[Dict]:
         """Enforce retention policies.
