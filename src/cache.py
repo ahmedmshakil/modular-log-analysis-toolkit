@@ -137,10 +137,24 @@ class LRUCache:
             total = self._hits + self._misses
             return {
                 "size": len(self._cache),
+                "max_size": self._max_size,
                 "hits": self._hits,
                 "misses": self._misses,
                 "hit_rate": round(self._hits / total * 100, 2) if total > 0 else 0,
+                "ttl": self._ttl,
             }
+
+    @property
+    def utilization(self) -> float:
+        """Get cache utilization as percentage of max size.
+
+        Returns:
+            Utilization percentage between 0 and 100.
+        """
+        with self._lock:
+            if self._max_size == 0:
+                return 0.0
+            return round(len(self._cache) / self._max_size * 100, 2)
 
 
 # Global cache instance
