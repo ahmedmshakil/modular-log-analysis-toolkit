@@ -77,7 +77,18 @@ class LogExporter:
 
     @staticmethod
     def to_text(entries: List[LogEntry], output_path: str, encoding: str = "utf-8") -> str:
-        """Export entries to plain text format."""
+        """Export entries to plain text format.
+
+        Args:
+            entries: List of log entries to export.
+            output_path: Path to write the text file.
+            encoding: File encoding.
+
+        Returns:
+            Path to the exported file.
+        """
+        if not entries:
+            return output_path
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w", encoding=encoding) as f:
@@ -86,20 +97,22 @@ class LogExporter:
         return str(path)
 
     @staticmethod
-    def result_to_json(result: AnalysisResult, output_path: str) -> str:
-        """Export analysis result to JSON."""
-        data = {
-            "total_entries": result.total_entries,
-            "level_counts": result.level_counts,
-            "time_range": [t.isoformat() for t in result.time_range] if result.time_range else None,
-            "top_errors": result.top_errors,
-            "sources": result.sources,
-            "duration_seconds": result.duration_seconds,
-        }
+    def result_to_json(result: AnalysisResult, output_path: str, encoding: str = "utf-8") -> str:
+        """Export analysis result to JSON.
+
+        Args:
+            result: AnalysisResult to export.
+            output_path: Path to write the JSON file.
+            encoding: File encoding.
+
+        Returns:
+            Path to the exported file.
+        """
+        data = result.to_dict()
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, "w") as f:
-            json.dump(data, f, indent=2)
+        with open(path, "w", encoding=encoding) as f:
+            json.dump(data, f, indent=2, default=str)
         return str(path)
 
     @staticmethod
