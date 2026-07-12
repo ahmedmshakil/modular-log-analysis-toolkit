@@ -110,6 +110,7 @@ class LogDeduplicator:
             "unique_entries": unique,
             "duplicates_found": duplicates,
             "dedup_rate": round(duplicates / total * 100, 2) if total > 0 else 0,
+            "hash_cache_size": len(self._hash_cache),
         }
 
     def has_duplicates(self) -> bool:
@@ -131,6 +132,10 @@ class LogDeduplicator:
         """
         duplicates = [(h, count) for h, count in self._seen.items() if count > 1]
         return sorted(duplicates, key=lambda x: x[1], reverse=True)[:limit]
+
+    def clear_hash_cache(self):
+        """Clear the hash computation cache."""
+        self._hash_cache.clear()
 
     @property
     def unique_count(self) -> int:
