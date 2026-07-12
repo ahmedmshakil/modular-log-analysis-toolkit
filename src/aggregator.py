@@ -93,10 +93,16 @@ class LogAggregator:
         return dict(windows)
 
     def error_rate(self) -> float:
-        """Calculate error rate as percentage."""
+        """Calculate error rate as percentage.
+
+        Returns:
+            Error rate as a float between 0 and 100.
+        """
         if not self.entries:
             return 0.0
         total = len(self.entries)
+        if total == 0:
+            return 0.0
         errors = sum(1 for e in self.entries if e.level in (LogLevel.ERROR, LogLevel.CRITICAL))
         return (errors / total) * 100
 
@@ -163,3 +169,15 @@ class LogAggregator:
             Number of entries.
         """
         return len(self.entries)
+
+    def level_distribution(self) -> Dict[str, float]:
+        """Get percentage distribution of log levels.
+
+        Returns:
+            Dictionary mapping level names to their percentage.
+        """
+        if not self.entries:
+            return {}
+        total = len(self.entries)
+        counts = self.level_counts
+        return {level: round(count / total * 100, 2) for level, count in counts.items()}
