@@ -74,6 +74,11 @@ class WebhookSender:
             self._error_count += 1
             return False
 
+        # Reject payloads larger than 1MB
+        if len(data) > 1024 * 1024:
+            self._error_count += 1
+            return False
+
         req = urllib.request.Request(self.url, data=data, headers=self.headers, method="POST")
 
         try:
