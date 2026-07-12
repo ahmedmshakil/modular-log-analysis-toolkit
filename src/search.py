@@ -119,13 +119,39 @@ class LogSearchIndex:
         return results
 
     def suggest(self, prefix: str, limit: int = 10) -> List[str]:
-        """Suggest completions for a search prefix."""
+        """Suggest completions for a search prefix.
+
+        Args:
+            prefix: Prefix to match against indexed words.
+            limit: Maximum number of suggestions to return.
+
+        Returns:
+            List of matching words sorted alphabetically.
+        """
         if not prefix:
             return []
         if limit < 1:
             return []
         prefix = prefix.lower()
         return sorted([word for word in self._index if word.startswith(prefix)])[:limit]
+
+    def suggest_with_count(self, prefix: str, limit: int = 10) -> List[tuple]:
+        """Suggest completions with occurrence counts.
+
+        Args:
+            prefix: Prefix to match against indexed words.
+            limit: Maximum number of suggestions to return.
+
+        Returns:
+            List of (word, count) tuples sorted by count descending.
+        """
+        if not prefix:
+            return []
+        if limit < 1:
+            return []
+        prefix = prefix.lower()
+        matches = [(word, len(self._index[word])) for word in self._index if word.startswith(prefix)]
+        return sorted(matches, key=lambda x: x[1], reverse=True)[:limit]
 
     def search_count(self, query: str) -> int:
         """Count matching entries without returning them.
@@ -156,7 +182,9 @@ class LogSearchIndex:
             return []
         text = re.sub(r"[^\w\s]", " ", text.lower())
         words = text.split()
-        return [w for w in words if w not in self.STOP_WORDS and len(w) > 1]
+        # Use set for O(1) stop word lookup
+        stop = self.STOP_WORDS
+        return [w for w in words if w not in stop and len(w) > 1]
 
     @property
     def stats(self) -> Dict[str, int]:
