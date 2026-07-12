@@ -100,6 +100,48 @@ class PluginManager:
         if name in self._enabled:
             self._enabled[name] = False
 
+    def enable_all(self) -> int:
+        """Enable all registered plugins.
+
+        Returns:
+            Number of plugins enabled.
+        """
+        count = 0
+        for name in self._enabled:
+            if not self._enabled[name]:
+                self._enabled[name] = True
+                count += 1
+        return count
+
+    def disable_all(self) -> int:
+        """Disable all registered plugins.
+
+        Returns:
+            Number of plugins disabled.
+        """
+        count = 0
+        for name in self._enabled:
+            if self._enabled[name]:
+                self._enabled[name] = False
+                count += 1
+        return count
+
+    def get_enabled_plugins(self) -> List[str]:
+        """Get list of enabled plugin names.
+
+        Returns:
+            List of enabled plugin names.
+        """
+        return [name for name, enabled in self._enabled.items() if enabled]
+
+    def get_disabled_plugins(self) -> List[str]:
+        """Get list of disabled plugin names.
+
+        Returns:
+            List of disabled plugin names.
+        """
+        return [name for name, enabled in self._enabled.items() if not enabled]
+
     def get_plugin(self, name: str) -> Optional[LogPlugin]:
         """Get a plugin by name."""
         return self._plugins.get(name)
