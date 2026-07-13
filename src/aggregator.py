@@ -181,3 +181,28 @@ class LogAggregator:
         total = len(self.entries)
         counts = self.level_counts
         return {level: round(count / total * 100, 2) for level, count in counts.items()}
+
+    def entries_by_source(self, source: str) -> List:
+        """Get all entries from a specific source.
+
+        Args:
+            source: Source name to filter by.
+
+        Returns:
+            List of entries matching the source.
+        """
+        if not source:
+            return []
+        return [e for e in self.entries if e.source and source.lower() in e.source.lower()]
+
+    def time_span_hours(self) -> float:
+        """Get total time span of entries in hours.
+
+        Returns:
+            Time span in hours, or 0.0 if no entries.
+        """
+        if not self.entries or len(self.entries) < 2:
+            return 0.0
+        timestamps = [e.timestamp for e in self.entries]
+        delta = max(timestamps) - min(timestamps)
+        return round(delta.total_seconds() / 3600, 2)
