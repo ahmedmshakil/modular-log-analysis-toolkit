@@ -198,3 +198,29 @@ class LogFilter:
             Copy of the entries list.
         """
         return list(self.entries)
+
+    def by_multiple_keywords(self, keywords: List[str], match_all: bool = False) -> "LogFilter":
+        """Filter by multiple keywords.
+
+        Args:
+            keywords: List of keywords to search for.
+            match_all: If True, all keywords must match; if False, any keyword matches.
+
+        Returns:
+            Self for method chaining.
+
+        Raises:
+            ValueError: If keywords list is empty.
+        """
+        if not keywords or not isinstance(keywords, list):
+            raise ValueError("Keywords must be a non-empty list")
+        def _filter(entry: LogEntry) -> bool:
+            if not entry.message:
+                return False
+            msg = entry.message.lower()
+            matches = [kw.lower() in msg for kw in keywords if kw]
+            if match_all:
+                return all(matches)
+            return any(matches)
+        self._filters.append(_filter)
+        return self
