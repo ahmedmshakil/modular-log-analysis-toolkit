@@ -2,8 +2,9 @@
 
 import gzip
 import os
+from datetime import datetime
 from pathlib import Path
-from typing import Iterator, Optional
+from typing import Dict, Iterator, Optional
 
 
 def read_log_lines(file_path: str, encoding: str = "utf-8") -> Iterator[str]:
@@ -157,3 +158,31 @@ def is_compressed(file_path: str) -> bool:
         True if file has .gz extension, False otherwise.
     """
     return file_path.endswith(".gz")
+
+
+def get_file_info(file_path: str) -> Dict:
+    """Get comprehensive file information.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        Dictionary with file metadata.
+
+    Raises:
+        FileNotFoundError: If file does not exist.
+    """
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+    stat = path.stat()
+    return {
+        "path": str(path.absolute()),
+        "name": path.name,
+        "extension": path.suffix,
+        "size_bytes": stat.st_size,
+        "size_formatted": format_size(stat.st_size),
+        "is_compressed": is_compressed(file_path),
+        "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+        "created": datetime.fromtimestamp(stat.st_ctime).isoformat(),
+    }
