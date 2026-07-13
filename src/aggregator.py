@@ -115,6 +115,8 @@ class LogAggregator:
 
     def busiest_hours(self, limit: int = 5) -> List[Tuple[int, int]]:
         """Find busiest hours of the day."""
+        if not self.entries:
+            return []
         hour_counts = Counter(e.timestamp.hour for e in self.entries)
         return sorted(hour_counts.items(), key=lambda x: x[1], reverse=True)[:limit]
 
