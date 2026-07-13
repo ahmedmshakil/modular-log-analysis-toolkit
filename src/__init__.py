@@ -24,3 +24,21 @@ __all__ = [
     "auth",
     "cache",
 ]
+
+
+def get_version() -> str:
+    """Get the current version string.
+
+    Returns:
+        Version string.
+    """
+    return __version__
+
+
+def get_modules() -> list:
+    """Get list of available modules.
+
+    Returns:
+        List of module names.
+    """
+    return __all__.copy()
