@@ -148,11 +148,7 @@ class LogAggregator:
         """
         if not self.entries:
             return {}
-        counts: Dict[str, int] = {}
-        for entry in self.entries:
-            level = entry.level.value
-            counts[level] = counts.get(level, 0) + 1
-        return counts
+        return dict(Counter(e.level.value for e in self.entries))
 
     @property
     def source_list(self) -> List[str]:
