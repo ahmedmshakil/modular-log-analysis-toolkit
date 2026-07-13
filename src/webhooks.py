@@ -179,3 +179,41 @@ class WebhookRouter:
     def clear(self):
         """Remove all registered endpoints."""
         self._senders.clear()
+
+    def get_endpoint(self, name: str) -> Optional[WebhookSender]:
+        """Get a specific endpoint by name.
+
+        Args:
+            name: Endpoint name.
+
+        Returns:
+            WebhookSender if found, None otherwise.
+        """
+        return self._senders.get(name)
+
+    def has_endpoint(self, name: str) -> bool:
+        """Check if an endpoint exists.
+
+        Args:
+            name: Endpoint name to check.
+
+        Returns:
+            True if endpoint exists, False otherwise.
+        """
+        return name in self._senders
+
+    def total_sent(self) -> int:
+        """Get total messages sent across all endpoints.
+
+        Returns:
+            Total sent count.
+        """
+        return sum(sender.stats["sent"] for sender in self._senders.values())
+
+    def total_errors(self) -> int:
+        """Get total errors across all endpoints.
+
+        Returns:
+            Total error count.
+        """
+        return sum(sender.stats["errors"] for sender in self._senders.values())
