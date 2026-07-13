@@ -179,6 +179,10 @@ class QueryCache:
     def __repr__(self) -> str:
         return f"QueryCache(queries_cached={self._cache.stats['size']})"
 
+    def __len__(self) -> int:
+        """Get number of cached queries."""
+        return self._cache.size
+
     def get_results(self, query: str) -> Optional[list]:
         """Get cached search results.
 
