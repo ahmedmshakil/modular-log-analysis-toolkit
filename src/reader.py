@@ -80,6 +80,27 @@ def count_lines(file_path: str) -> int:
         return sum(1 for _ in f)
 
 
+def read_log_lines_with_numbers(file_path: str, encoding: str = "utf-8") -> Iterator[tuple]:
+    """Read log file with line numbers.
+
+    Args:
+        file_path: Path to the log file.
+        encoding: File encoding (default: utf-8).
+
+    Yields:
+        Tuples of (line_number, line_content).
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+    """
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Log file not found: {file_path}")
+    with open(path, "r", encoding=encoding) as f:
+        for i, line in enumerate(f, 1):
+            yield (i, line.rstrip("\n"))
+
+
 def format_size(size_bytes: int) -> str:
     """Format byte size into human-readable string."""
     if size_bytes < 0:
