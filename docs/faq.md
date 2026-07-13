@@ -8,26 +8,93 @@ Start with [quickstart.md](quickstart.md) for a short end-to-end walkthrough.
 
 See [dashboard.md](dashboard.md) and the root [README](../README.md).
 
-## How do I filter logs by level or time?
+## How do I handle large log files?
 
-Use the [Filter module](modules/filter.md) for Python API, or see [CLI Usage](cli-usage.md) for command-line filtering with `-l` and `--since`/`--until` flags.
+Use the `LogStream` class for memory-efficient processing of large files. It reads line by line instead of loading the entire file into memory. See [streaming.md](modules/streaming.md) for details.
 
-## How do I process large log files efficiently?
+## How do I filter logs by multiple criteria?
 
-Use the [Streaming module](modules/streaming.md) for memory-efficient processing of large files.
+Chain filter methods together:
 
-## How do I set up alerts?
+```python
+from src.filter import LogFilter
+from src.models import LogLevel
 
-See the [Alerts module](modules/alerts.md) for threshold-based alerting with webhook notifications.
+filtered = (LogFilter(entries)
+    .by_level(LogLevel.ERROR)
+    .by_keyword("timeout")
+    .by_source("database")
+    .apply())
+```
+
+See [filter.md](modules/filter.md) for all available filters.
+
+## How do I export results to different formats?
+
+Use `LogExporter` to export to JSON, CSV, or text:
+
+```python
+from src.exporter import LogExporter
+
+exporter = LogExporter()
+exporter.to_json(entries, "output.json")
+exporter.to_csv(entries, "output.csv")
+exporter.to_text(entries, "output.txt")
+```
+
+See [exporter.md](modules/exporter.md) for details.
 
 ## How do I remove duplicate log entries?
 
-Use the [Deduplication module](modules/dedup.md) for hash-based duplicate detection.
+Use `LogDeduplicator` to detect and remove duplicates:
 
-## How do I export analysis results?
+```python
+from src.dedup import LogDeduplicator
 
-See the [Exporter module](modules/exporter.md) for JSON, CSV, and text export formats.
+dedup = LogDeduplicator()
+unique, counts = dedup.deduplicate(entries)
+```
 
-## How do I extend the toolkit with custom plugins?
+See [dedup.md](modules/dedup.md) for details.
 
-Read the [Plugin Development](plugin-development.md) guide for creating custom log processors.
+## How do I set up alerts?
+
+Use `AlertManager` to configure thresholds:
+
+```python
+from src.alerts import AlertManager, AlertSeverity
+
+manager = AlertManager()
+manager.set_threshold("error_rate", 5.0, AlertSeverity.HIGH)
+```
+
+See [alerts.md](modules/alerts.md) for the full alert system.
+
+## How do I add custom log patterns?
+
+Add patterns to `config/patterns.yaml` or use a custom regex:
+
+```python
+from src.parser import LogParser
+
+parser = LogParser(custom_pattern=r"(?P<timestamp>\d{4}-\d{2}-\d{2}).*\[(?P<level>\w+)\] (?P<message>.*)")
+```
+
+See [parser.md](modules/parser.md) for pattern details.
+
+## How do I use the caching system?
+
+Use `LRUCache` for general caching or the `@cached` decorator:
+
+```python
+from src.cache import LRUCache, cached
+
+cache = LRUCache(max_size=1000, ttl=300)
+cache.put("key", "value")
+
+@cached(ttl=600)
+def my_function(arg):
+    return expensive_computation(arg)
+```
+
+See [cache.md](modules/cache.md) for details.
