@@ -152,7 +152,7 @@ class LogSearchIndex:
 
     def _tokenize(self, text: str) -> List[str]:
         """Tokenize text into searchable words."""
-        if not text:
+        if not text or not isinstance(text, str):
             return []
         text = re.sub(r"[^\w\s]", " ", text.lower())
         words = text.split()
