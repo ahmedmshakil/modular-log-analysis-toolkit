@@ -64,3 +64,67 @@ Enable verbose output for debugging:
 ```bash
 python -m src.cli app.log --verbose --summary
 ```
+
+## Performance Issues
+
+### Slow search indexing
+
+**Cause:** Adding entries one by one instead of in batch.
+
+**Fix:** Use `add_batch` method:
+```python
+# Slow
+for entry in entries:
+    index.add(entry)
+
+# Fast
+index.add_batch(entries)
+```
+
+### Cache not improving performance
+
+**Cause:** Cache TTL too short or cache size too small.
+
+**Fix:** Adjust cache parameters:
+```python
+from src.cache import LRUCache
+
+cache = LRUCache(max_size=5000, ttl=600)  # 5000 items, 10 min TTL
+```
+
+## Import Errors
+
+### ModuleNotFoundError
+
+**Cause:** Package not installed or virtual environment not activated.
+
+**Fix:**
+```bash
+# Activate virtual environment
+source venv/bin/activate
+
+# Install in development mode
+pip install -e .
+```
+
+## CLI Issues
+
+### Command not found
+
+**Cause:** Package not installed or PATH not set.
+
+**Fix:**
+```bash
+# Use module syntax
+python -m src.cli --help
+
+# Or install and use entry point
+pip install -e .
+modular-log-analysis-toolkit --help
+```
+
+### Invalid log level error
+
+**Cause:** Typo in level name or unsupported level.
+
+**Fix:** Use valid levels: DEBUG, INFO, WARN, ERROR, CRITICAL
