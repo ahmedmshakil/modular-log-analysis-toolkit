@@ -176,3 +176,26 @@ class AlertManager:
             List of matching alerts.
         """
         return [a for a in self.alerts if a.severity == severity]
+
+    def get_unacknowledged_count(self) -> int:
+        """Get count of unacknowledged alerts.
+
+        Returns:
+            Number of alerts that have not been acknowledged.
+        """
+        return sum(1 for a in self.alerts if not a.acknowledged)
+
+    def acknowledge_all(self) -> int:
+        """Acknowledge all active alerts.
+
+        Returns:
+            Number of alerts acknowledged.
+        """
+        count = 0
+        now = datetime.now()
+        for alert in self.alerts:
+            if not alert.acknowledged:
+                alert.acknowledged = True
+                alert.acknowledged_at = now
+                count += 1
+        return count
