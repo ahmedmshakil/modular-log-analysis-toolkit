@@ -868,3 +868,44 @@ popular = query_cache.popular_queries(limit=10)
 - [CLI Usage](cli-usage.md) - Command-line interface
 - [Module Documentation](modules/) - Detailed module docs
 - [Examples](../examples/) - Code examples
+
+## Error Handling
+
+### Common Patterns
+
+```python
+from src.parser import LogParser
+from src.reader import read_log_lines
+
+# Handle missing files
+try:
+    lines = list(read_log_lines("missing.log"))
+except FileNotFoundError as e:
+    print(f"File not found: {e}")
+
+# Handle parsing errors
+parser = LogParser()
+entry = parser.parse_line("invalid log line")
+if entry is None:
+    print("Failed to parse line")
+
+# Handle invalid patterns
+try:
+    parser = LogParser(pattern_name="nonexistent")
+except ValueError as e:
+    print(f"Invalid pattern: {e}")
+```
+
+### Type Checking
+
+```python
+from src.models import LogEntry, LogLevel
+
+# Validate entry types
+if isinstance(entry, LogEntry):
+    print(f"Valid entry: {entry.level.value}")
+
+# Check log levels
+if entry.level in (LogLevel.ERROR, LogLevel.CRITICAL):
+    print("Error level entry")
+```
