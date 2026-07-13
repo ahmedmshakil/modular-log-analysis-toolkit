@@ -146,3 +146,47 @@ class LogParser:
             List of pattern names.
         """
         return list(PATTERNS.keys())
+
+    def parse_json_line(self, line: str, line_number: int = 0) -> Optional[LogEntry]:
+        """Parse a JSON-formatted log line.
+
+        Args:
+            line: JSON log line to parse.
+            line_number: Line number in the source file.
+
+        Returns:
+            LogEntry if parsing succeeds, None otherwise.
+        """
+        import json
+        if not line or not isinstance(line, str):
+            return None
+        line = line.strip()
+        if not line:
+            return None
+        try:
+            data = json.loads(line)
+        except json.JSONDecodeError:
+            return None
+
+        ts_str = data.get("timestamp", data.get("time", data.get("ts", "")))
+        level_str = data.get("level", data.get("severity", data.get("loglevel", "INFO")))
+        message = data.get("message", data.get("msg", data.get("text", "")))
+
+        if not message:
+            return None
+
+        timestamp = self._parse_timestamp(str(ts_str)) if ts_str else datetime.now()
+        level = self._parse_level(str(level_str))
+
+        return LogEntry(
+            timestamp=timestamp,
+            level=level,
+            message=str(message),
+            source=data.get("source", data.get("host", data.get("logger"))),
+            line_number=line_number,
+            raw=line,
+            metadata={k: v for k, v in data.items()
+                     if k not in ("timestamp", "time", "ts", "level", "severity",
+                                  "loglevel", "message", "msg", "text", "source",
+                                  "host", "logger")},
+        )
