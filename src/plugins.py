@@ -186,6 +186,26 @@ class PluginManager:
                     continue
         return result
 
+    def process_with_plugin(self, name: str, entries: List[LogEntry]) -> List[LogEntry]:
+        """Run a specific plugin on entries.
+
+        Args:
+            name: Plugin name to run.
+            entries: List of log entries to process.
+
+        Returns:
+            Processed list of log entries, or original if plugin not found.
+        """
+        if not entries:
+            return []
+        plugin = self._plugins.get(name)
+        if not plugin or not self._enabled.get(name, False):
+            return entries
+        try:
+            return plugin.process(entries)
+        except Exception:
+            return entries
+
     @property
     def stats(self) -> Dict[str, int]:
         """Get plugin manager statistics."""
