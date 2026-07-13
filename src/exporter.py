@@ -132,3 +132,44 @@ class LogExporter:
             List of format names.
         """
         return ["json", "csv", "text"]
+
+    @staticmethod
+    def entries_to_json_string(entries: List[LogEntry], indent: int = 2) -> str:
+        """Convert entries to JSON string without writing to file.
+
+        Args:
+            entries: List of log entries.
+            indent: JSON indentation level.
+
+        Returns:
+            JSON string representation.
+        """
+        if not entries:
+            return "[]"
+        data = [entry.to_dict() for entry in entries]
+        return json.dumps(data, indent=indent, default=str)
+
+    @staticmethod
+    def entries_to_csv_string(entries: List[LogEntry]) -> str:
+        """Convert entries to CSV string without writing to file.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            CSV string representation.
+        """
+        if not entries:
+            return ""
+        output = StringIO()
+        writer = csv.writer(output)
+        writer.writerow(["timestamp", "level", "source", "message", "line_number"])
+        for entry in entries:
+            writer.writerow([
+                entry.timestamp.isoformat(),
+                entry.level.value,
+                entry.source or "",
+                entry.message,
+                entry.line_number,
+            ])
+        return output.getvalue()
