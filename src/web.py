@@ -416,9 +416,8 @@ class DashboardHandler(BaseHTTPRequestHandler):
 body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color: var(--text-primary); padding: 24px; line-height: 1.5; }}
 h1 {{ color: var(--accent-primary); margin-bottom: 16px; font-size: 1.8rem; }}
 h2 {{ color: var(--accent-secondary); margin: 20px 0 12px; font-size: 1.2rem; }}
-.stats {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 20px 0; }}
-.stat {{ background: var(--bg-secondary); padding: 16px 20px; border-radius: 10px; border: 1px solid var(--border-color); transition: transform 0.2s, box-shadow 0.2s; }}
-.stat:hover {{ transform: translateY(-2px); box-shadow: var(--card-shadow); }}
+.stats {{ display: flex; gap: 16px; margin: 20px 0; flex-wrap: wrap; }}
+.stat {{ background: var(--bg-secondary); padding: 16px 20px; border-radius: 10px; min-width: 140px; border: 1px solid var(--border-color); }}
 .stat h3 {{ color: var(--accent-green); margin: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }}
 .stat p {{ font-size: 28px; margin: 6px 0 0; font-weight: bold; color: var(--text-primary); }}
 table {{ width: 100%; border-collapse: collapse; margin-top: 8px; }}
@@ -670,7 +669,13 @@ body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color
 
 
 def start_dashboard(host: str = "0.0.0.0", port: int = 8080, entries: List[LogEntry] = None):
-    """Start the dashboard web server."""
+    """Start the dashboard web server.
+
+    Args:
+        host: Host to bind to.
+        port: Port to listen on.
+        entries: Log entries to display.
+    """
     DashboardHandler.entries = entries or []
     server = HTTPServer((host, port), DashboardHandler)
     print(f"Dashboard running at http://{host}:{port}")
@@ -680,6 +685,19 @@ def start_dashboard(host: str = "0.0.0.0", port: int = 8080, entries: List[LogEn
     except KeyboardInterrupt:
         print("\nDashboard stopped.")
         server.shutdown()
+
+
+def get_dashboard_url(host: str = "localhost", port: int = 8080) -> str:
+    """Get the dashboard URL.
+
+    Args:
+        host: Dashboard host.
+        port: Dashboard port.
+
+    Returns:
+        Full URL string.
+    """
+    return f"http://{host}:{port}"
 
 
 if __name__ == "__main__":
