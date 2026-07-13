@@ -63,12 +63,6 @@ def main(argv: Optional[List[str]] = None):
         print("Error: verbose and quiet flags are mutually exclusive", file=sys.stderr)
         sys.exit(1)
 
-    # Validate input files exist
-    for file_path in args.input:
-        if not Path(file_path).exists():
-            print(f"Error: file not found: {file_path}", file=sys.stderr)
-            sys.exit(1)
-
     # Read log files
     entries = []
     log_parser = LogParser(pattern_name=args.pattern)
