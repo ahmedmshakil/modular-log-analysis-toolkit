@@ -196,3 +196,21 @@ class AnalysisResult:
             sources=data.get("sources", []),
             duration_seconds=data.get("duration_seconds", 0.0),
         )
+
+    @property
+    def error_count(self) -> int:
+        """Get total error and critical count.
+
+        Returns:
+            Sum of ERROR and CRITICAL level counts.
+        """
+        return self.level_counts.get("ERROR", 0) + self.level_counts.get("CRITICAL", 0)
+
+    @property
+    def has_errors(self) -> bool:
+        """Check if analysis found any errors.
+
+        Returns:
+            True if there are ERROR or CRITICAL entries.
+        """
+        return self.error_count > 0
