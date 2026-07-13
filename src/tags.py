@@ -183,3 +183,19 @@ class TagManager:
             except (TypeError, ValueError):
                 continue
         return imported
+
+    def get_rules(self) -> List[Dict]:
+        """Get all rules as dictionaries.
+
+        Returns:
+            List of rule dictionaries.
+        """
+        return [
+            {"name": r.name, "tag": r.tag, "conditions": r.conditions,
+             "color": r.color, "priority": r.priority}
+            for r in self._rules
+        ]
+
+    def clear_manual_tags(self):
+        """Clear all manual tags while keeping rules."""
+        self._manual_tags.clear()
