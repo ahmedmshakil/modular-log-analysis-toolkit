@@ -151,3 +151,24 @@ class LogDeduplicator:
     def duplicate_count(self) -> int:
         """Get the number of entries that have duplicates."""
         return sum(1 for count in self._seen.values() if count > 1)
+
+    @property
+    def dedup_rate(self) -> float:
+        """Get deduplication rate as percentage.
+
+        Returns:
+            Percentage of entries that were duplicates.
+        """
+        total = self.total_count
+        if total == 0:
+            return 0.0
+        duplicates = self.total_duplicates_removed()
+        return round(duplicates / total * 100, 2)
+
+    def get_unique_entries(self) -> List[str]:
+        """Get list of unique entry hashes.
+
+        Returns:
+            List of hash strings for unique entries.
+        """
+        return [h for h, count in self._seen.items() if count == 1]
