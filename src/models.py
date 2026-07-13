@@ -73,6 +73,23 @@ class LogEntry:
             "metadata": self.metadata,
         }
 
+    @property
+    def severity_rank(self) -> int:
+        """Get numeric severity rank for comparison.
+
+        Returns:
+            Integer rank where lower is less severe.
+        """
+        ranks = {
+            LogLevel.TRACE: 0,
+            LogLevel.DEBUG: 1,
+            LogLevel.INFO: 2,
+            LogLevel.WARN: 3,
+            LogLevel.ERROR: 4,
+            LogLevel.CRITICAL: 5,
+        }
+        return ranks.get(self.level, 2)
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "LogEntry":
         """Create a LogEntry from a dictionary."""
