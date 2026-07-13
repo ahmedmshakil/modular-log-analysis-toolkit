@@ -189,3 +189,34 @@ class GeoLookup:
             True if IP is in cache, False otherwise.
         """
         return ip in self._cache
+
+    def get_cached_ips(self) -> List[str]:
+        """Get list of all cached IP addresses.
+
+        Returns:
+            List of IP address strings.
+        """
+        return list(self._cache.keys())
+
+    def remove_from_cache(self, ip: str) -> bool:
+        """Remove a specific IP from cache.
+
+        Args:
+            ip: IP address to remove.
+
+        Returns:
+            True if IP was removed, False if not found.
+        """
+        if ip in self._cache:
+            del self._cache[ip]
+            return True
+        return False
+
+    @property
+    def cache_size(self) -> int:
+        """Get number of entries in cache.
+
+        Returns:
+            Number of cached entries.
+        """
+        return len(self._cache)
