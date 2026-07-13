@@ -48,11 +48,7 @@ class LRUCache:
                 self._cache.move_to_end(key)
             self._cache[key] = {"value": value, "time": time.time()}
             if len(self._cache) > self._max_size:
-                # Evict oldest 10% to reduce frequent eviction overhead
-                evict_count = max(1, self._max_size // 10)
-                for _ in range(evict_count):
-                    if self._cache:
-                        self._cache.popitem(last=False)
+                self._cache.popitem(last=False)
 
     def invalidate(self, key: str):
         """Remove item from cache."""
@@ -70,24 +66,6 @@ class LRUCache:
         """Clear all cached items."""
         with self._lock:
             self._cache.clear()
-
-    def cleanup_expired(self) -> int:
-        """Remove all expired entries from cache.
-
-        Returns:
-            Number of expired entries removed.
-        """
-        removed = 0
-        now = time.time()
-        with self._lock:
-            expired_keys = [
-                k for k, v in self._cache.items()
-                if now - v["time"] >= self._ttl
-            ]
-            for key in expired_keys:
-                del self._cache[key]
-                removed += 1
-        return removed
 
     def invalidate_keys(self, keys: list):
         """Remove multiple items from cache by key."""
@@ -137,24 +115,35 @@ class LRUCache:
             total = self._hits + self._misses
             return {
                 "size": len(self._cache),
-                "max_size": self._max_size,
                 "hits": self._hits,
                 "misses": self._misses,
                 "hit_rate": round(self._hits / total * 100, 2) if total > 0 else 0,
-                "ttl": self._ttl,
             }
 
-    @property
-    def utilization(self) -> float:
-        """Get cache utilization as percentage of max size.
+    def get_many(self, keys: List[str]) -> Dict[str, Any]:
+        """Get multiple items from cache at once.
+
+        Args:
+            keys: List of cache keys to retrieve.
 
         Returns:
-            Utilization percentage between 0 and 100.
+            Dictionary mapping found keys to their values.
         """
-        with self._lock:
-            if self._max_size == 0:
-                return 0.0
-            return round(len(self._cache) / self._max_size * 100, 2)
+        result = {}
+        for key in keys:
+            value = self.get(key)
+            if value is not None:
+                result[key] = value
+        return result
+
+    def put_many(self, items: Dict[str, Any]):
+        """Put multiple items in cache at once.
+
+        Args:
+            items: Dictionary mapping keys to values.
+        """
+        for key, value in items.items():
+            self.put(key, value)
 
 
 # Global cache instance
