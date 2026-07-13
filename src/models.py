@@ -5,7 +5,17 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional, List, Dict, Any
 
-__all__ = ["LogLevel", "LogEntry", "AnalysisResult"]
+__all__ = ["LogLevel", "LogEntry", "AnalysisResult", "LOG_LEVEL_ORDER"]
+
+
+LOG_LEVEL_ORDER = [
+    LogLevel.TRACE,
+    LogLevel.DEBUG,
+    LogLevel.INFO,
+    LogLevel.WARN,
+    LogLevel.ERROR,
+    LogLevel.CRITICAL,
+]
 
 
 class LogLevel(Enum):
