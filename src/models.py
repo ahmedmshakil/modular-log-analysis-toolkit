@@ -8,16 +8,6 @@ from typing import Optional, List, Dict, Any
 __all__ = ["LogLevel", "LogEntry", "AnalysisResult", "LOG_LEVEL_ORDER"]
 
 
-LOG_LEVEL_ORDER = [
-    LogLevel.TRACE,
-    LogLevel.DEBUG,
-    LogLevel.INFO,
-    LogLevel.WARN,
-    LogLevel.ERROR,
-    LogLevel.CRITICAL,
-]
-
-
 class LogLevel(Enum):
     """Supported log severity levels."""
     DEBUG = "DEBUG"
@@ -26,6 +16,16 @@ class LogLevel(Enum):
     ERROR = "ERROR"
     CRITICAL = "CRITICAL"
     TRACE = "TRACE"
+
+
+LOG_LEVEL_ORDER = [
+    LogLevel.TRACE,
+    LogLevel.DEBUG,
+    LogLevel.INFO,
+    LogLevel.WARN,
+    LogLevel.ERROR,
+    LogLevel.CRITICAL,
+]
 
 
 @dataclass
