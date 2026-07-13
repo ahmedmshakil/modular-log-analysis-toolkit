@@ -49,7 +49,6 @@ class LogStream:
                     self._processed += 1
                 except Exception as e:
                     self._errors += 1
-                    self._processed += 1
             else:
                 self._errors += 1
 
@@ -135,3 +134,24 @@ class LogStream:
         """Reset streaming statistics."""
         self._processed = 0
         self._errors = 0
+
+    @property
+    def error_rate(self) -> float:
+        """Get error rate as percentage.
+
+        Returns:
+            Error rate as a float between 0 and 100.
+        """
+        total = self._processed + self._errors
+        if total == 0:
+            return 0.0
+        return round(self._errors / total * 100, 2)
+
+    @property
+    def is_active(self) -> bool:
+        """Check if stream is currently active.
+
+        Returns:
+            True if stream is not stopped or paused.
+        """
+        return not self._stopped and not self._paused
