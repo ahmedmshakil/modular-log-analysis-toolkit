@@ -104,6 +104,71 @@ pip install -e .
 
 ---
 
+## Make Commands
+
+The project includes a `Makefile` for common development tasks. First activate your venv, then use these commands:
+
+### First Time Setup
+
+```bash
+# Create virtual environment
+make venv
+
+# Activate it
+source venv/bin/activate
+
+# Install package and dependencies
+make install
+```
+
+### Available Commands
+
+| Command           | Description                                              |
+| ----------------- | -------------------------------------------------------- |
+| `make help`       | Show all available make commands                         |
+| `make venv`       | Create virtual environment                               |
+| `make install`    | Install package in development mode                      |
+| `make install-deps` | Install optional dependencies (flask, pyyaml, requests, geoip2) |
+| `make test`       | Run test suite with pytest                               |
+| `make lint`       | Run linter on source files                               |
+| `make clean`      | Remove build artifacts and cache files                   |
+| `make run`        | Run analyzer on sample log file (test.log)               |
+| `make dashboard`  | Start web dashboard on port 8080                         |
+
+### Quick Start with Make
+
+```bash
+# Full setup (first time only)
+make venv && source venv/bin/activate && make install
+
+# Create a sample log file
+echo '2024-01-15 10:30:45 [ERROR] Database timeout
+2024-01-15 10:31:00 [INFO] App started
+2024-01-15 10:31:15 [WARN] High memory usage' > test.log
+
+# Run analysis
+make run
+
+# Start dashboard
+make dashboard
+# Open http://localhost:8080 in browser
+
+# Run tests
+make test
+
+# Clean build artifacts
+make clean
+```
+
+### Important Notes
+
+- Always activate venv before running make commands: `source venv/bin/activate`
+- `make run` requires a `test.log` file in the project root
+- `make dashboard` starts server on port 8080, press Ctrl+C to stop
+- Run `make help` to see all available commands with descriptions
+
+---
+
 ## Usage
 
 ### CLI
@@ -165,65 +230,6 @@ start_dashboard(port=8080, entries=entries)
 Edit `config/settings.yaml` to configure log paths, output format, retention policies, and alert thresholds.
 
 Custom log patterns can be added to `config/patterns.yaml` using regex with named groups.
-
----
-
-## Quick Examples
-
-### Search Logs
-
-```python
-from src.search import LogSearchIndex
-
-index = LogSearchIndex()
-index.add_batch(entries)
-
-# Full-text search
-results = index.search("database timeout")
-
-# Regex search
-errors = index.search_regex(r"ERROR.*timeout")
-```
-
-### Stream Large Files
-
-```python
-from src.streaming import LogStream
-
-stream = LogStream("large_file.log")
-error_count = 0
-
-def count_errors(entry):
-    global error_count
-    if entry.is_error:
-        error_count += 1
-
-stream.stream(count_errors)
-```
-
-### Set Up Alerts
-
-```python
-from src.alerts import AlertManager, AlertSeverity
-
-manager = AlertManager()
-manager.set_threshold("error_rate", 5.0, AlertSeverity.HIGH)
-
-def on_alert(alert):
-    print(f"ALERT: {alert}")
-
-manager.register_callback(on_alert)
-```
-
-### Deduplication
-
-```python
-from src.dedup import LogDeduplicator
-
-dedup = LogDeduplicator()
-unique, counts = dedup.deduplicate(entries)
-print(f"Removed {dedup.total_duplicates_removed()} duplicates")
-```
 
 ---
 
