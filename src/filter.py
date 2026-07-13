@@ -165,6 +165,22 @@ class LogFilter:
             result = [e for e in result if f(e)]
         return result
 
+    def apply_count(self) -> int:
+        """Count matching entries without building the full list.
+
+        Returns:
+            Number of entries matching all active filters.
+        """
+        if not self.entries:
+            return 0
+        if not self._filters:
+            return len(self.entries)
+        count = 0
+        for entry in self.entries:
+            if all(f(entry) for f in self._filters):
+                count += 1
+        return count
+
     def count_by_level(self) -> dict:
         """Count entries grouped by level."""
         if not self.entries:
