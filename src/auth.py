@@ -173,7 +173,7 @@ class AuthManager:
         return len(expired)
 
     def get_session_info(self, token: str) -> Optional[Dict]:
-        """Get session information without validating expiry.
+        """Get session information without expiry validation.
 
         Args:
             token: Session token to look up.
