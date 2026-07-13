@@ -379,3 +379,19 @@ examples/
 ├── plugin_example.py      # Custom plugin example
 └── dashboard_example.py   # Web dashboard setup
 ```
+
+## Quick Tips
+
+### Performance Tips
+
+- Use `LogStream` for files larger than 100MB
+- Enable caching for repeated queries with `LRUCache`
+- Use `add_batch` instead of individual `add` calls for search indexing
+- Use `LogDeduplicator` to reduce storage for repetitive logs
+
+### Common Pitfalls
+
+- Always check for `None` return values from `parse_line`
+- Use `encoding` parameter when reading non-UTF-8 files
+- Call `reset()` on filters before reusing them
+- Close web dashboard with Ctrl+C to free the port
