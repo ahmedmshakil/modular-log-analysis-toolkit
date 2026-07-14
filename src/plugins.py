@@ -206,6 +206,29 @@ class PluginManager:
         except Exception:
             return entries
 
+    def is_enabled(self, name: str) -> bool:
+        """Check if a plugin is enabled.
+
+        Args:
+            name: Plugin name.
+
+        Returns:
+            True if plugin exists and is enabled.
+        """
+        return self._enabled.get(name, False)
+
+    def get_plugin_version(self, name: str) -> Optional[str]:
+        """Get version of a specific plugin.
+
+        Args:
+            name: Plugin name.
+
+        Returns:
+            Version string if found, None otherwise.
+        """
+        plugin = self._plugins.get(name)
+        return plugin.version if plugin else None
+
     @property
     def stats(self) -> Dict[str, int]:
         """Get plugin manager statistics."""
