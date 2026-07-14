@@ -186,3 +186,29 @@ def get_file_info(file_path: str) -> Dict:
         "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
         "created": datetime.fromtimestamp(stat.st_ctime).isoformat(),
     }
+
+
+def get_line_count_fast(file_path: str) -> int:
+    """Count lines in a file quickly using buffer.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        Number of lines.
+
+    Raises:
+        FileNotFoundError: If file does not exist.
+    """
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+    count = 0
+    buffer_size = 1024 * 1024  # 1MB buffer
+    with open(path, "rb") as f:
+        while True:
+            buffer = f.read(buffer_size)
+            if not buffer:
+                break
+            count += buffer.count(b"\n")
+    return count
