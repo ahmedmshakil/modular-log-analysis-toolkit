@@ -233,3 +233,24 @@ class LogSearchIndex:
         self._entries.clear()
         self._field_index["level"].clear()
         self._field_index["source"].clear()
+
+    def get_word_frequency(self, word: str) -> int:
+        """Get frequency of a specific word in the index.
+
+        Args:
+            word: Word to look up.
+
+        Returns:
+            Number of entries containing the word.
+        """
+        if not word:
+            return 0
+        return len(self._index.get(word.lower(), set()))
+
+    def get_indexed_words(self) -> List[str]:
+        """Get all indexed words.
+
+        Returns:
+            List of unique indexed words.
+        """
+        return list(self._index.keys())
