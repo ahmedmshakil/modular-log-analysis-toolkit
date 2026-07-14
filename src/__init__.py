@@ -42,3 +42,12 @@ def get_modules() -> list:
         List of module names.
     """
     return __all__.copy()
+
+
+def get_module_count() -> int:
+    """Get number of available modules.
+
+    Returns:
+        Module count.
+    """
+    return len(__all__)
