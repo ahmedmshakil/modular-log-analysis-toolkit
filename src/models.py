@@ -67,6 +67,16 @@ class LogEntry:
         """Check if entry is an error or critical level."""
         return self.level in (LogLevel.ERROR, LogLevel.CRITICAL)
 
+    @property
+    def is_warning(self) -> bool:
+        """Check if entry is a warning level."""
+        return self.level == LogLevel.WARN
+
+    @property
+    def is_debug(self) -> bool:
+        """Check if entry is a debug level."""
+        return self.level == LogLevel.DEBUG
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert log entry to dictionary.
 
