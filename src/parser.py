@@ -147,6 +147,19 @@ class LogParser:
         """
         return list(PATTERNS.keys())
 
+    def can_parse(self, line: str) -> bool:
+        """Check if a line can be parsed by this parser.
+
+        Args:
+            line: Log line to check.
+
+        Returns:
+            True if the line matches the pattern.
+        """
+        if not line or not isinstance(line, str):
+            return False
+        return bool(self.pattern.match(line.strip()))
+
     def parse_json_line(self, line: str, line_number: int = 0) -> Optional[LogEntry]:
         """Parse a JSON-formatted log line.
 
