@@ -213,6 +213,31 @@ class LogFilter:
             return []
         return list(self.entries[-n:])
 
+    def sample(self, n: int = 10) -> List[LogEntry]:
+        """Get a sample of N entries evenly distributed.
+
+        Args:
+            n: Number of entries to sample.
+
+        Returns:
+            List of sampled entries.
+        """
+        if n < 1 or not self.entries:
+            return []
+        if n >= len(self.entries):
+            return list(self.entries)
+        step = len(self.entries) // n
+        return [self.entries[i] for i in range(0, len(self.entries), step)][:n]
+
+    @property
+    def unique_sources(self) -> List[str]:
+        """Get unique sources from entries.
+
+        Returns:
+            List of unique source names.
+        """
+        return list(set(e.source for e in self.entries if e.source))
+
     def merge(self, other: "LogFilter") -> "LogFilter":
         """Merge entries from another LogFilter, removing duplicates."""
         seen = set()
