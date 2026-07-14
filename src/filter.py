@@ -187,6 +187,32 @@ class LogFilter:
             return {}
         return dict(Counter(e.level.value for e in self.entries))
 
+    def first(self, n: int = 1) -> List[LogEntry]:
+        """Get first N entries.
+
+        Args:
+            n: Number of entries to return.
+
+        Returns:
+            List of first N entries.
+        """
+        if n < 1:
+            return []
+        return list(self.entries[:n])
+
+    def last(self, n: int = 1) -> List[LogEntry]:
+        """Get last N entries.
+
+        Args:
+            n: Number of entries to return.
+
+        Returns:
+            List of last N entries.
+        """
+        if n < 1:
+            return []
+        return list(self.entries[-n:])
+
     def merge(self, other: "LogFilter") -> "LogFilter":
         """Merge entries from another LogFilter, removing duplicates."""
         seen = set()
