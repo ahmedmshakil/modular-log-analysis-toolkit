@@ -226,3 +226,26 @@ class QueryCache:
     def query_count(self) -> int:
         """Get number of unique queries tracked."""
         return len(self._popular_queries)
+
+    def get_popular_query(self, index: int = 0) -> Optional[str]:
+        """Get a popular query by rank.
+
+        Args:
+            index: Rank index (0 = most popular).
+
+        Returns:
+            Query string if found, None otherwise.
+        """
+        sorted_queries = sorted(self._popular_queries.items(), key=lambda x: x[1], reverse=True)
+        if 0 <= index < len(sorted_queries):
+            return sorted_queries[index][0]
+        return None
+
+    @property
+    def hit_rate(self) -> float:
+        """Get cache hit rate.
+
+        Returns:
+            Hit rate as percentage.
+        """
+        return self._cache.hit_rate
