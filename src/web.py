@@ -700,6 +700,22 @@ def get_dashboard_url(host: str = "localhost", port: int = 8080) -> str:
     return f"http://{host}:{port}"
 
 
+def get_api_endpoints() -> Dict[str, str]:
+    """Get available API endpoints.
+
+    Returns:
+        Dictionary mapping endpoint paths to descriptions.
+    """
+    return {
+        "/": "Dashboard HTML page",
+        "/api/stats": "JSON statistics",
+        "/api/entries": "Recent log entries",
+        "/api/errors": "Error entries only",
+        "/docs": "Documentation index",
+        "/docs/*.md": "Documentation files",
+    }
+
+
 if __name__ == "__main__":
     from .parser import LogParser
     from .reader import read_log_lines
