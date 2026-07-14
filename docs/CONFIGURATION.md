@@ -59,3 +59,24 @@ Override configuration via environment variables:
 - `SK_LOG_PATH` — Override log file path
 - `SK_OUTPUT_DIR` — Override output directory
 - `SK_LOG_LEVEL` — Set minimum log level to process
+
+## Cache Configuration
+
+Configure caching behavior for performance optimization:
+
+```yaml
+cache:
+  max_size: 1000        # Maximum cache entries
+  ttl: 300              # Time to live in seconds
+  query_cache_size: 500 # Search query cache size
+```
+
+## Streaming Configuration
+
+Configure streaming mode for large files:
+
+```yaml
+streaming:
+  batch_size: 1000      # Entries per batch
+  buffer_size: 8192     # Read buffer size in bytes
+```
