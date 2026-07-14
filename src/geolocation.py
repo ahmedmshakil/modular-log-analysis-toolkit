@@ -220,3 +220,18 @@ class GeoLookup:
             Number of cached entries.
         """
         return len(self._cache)
+
+    def extract_ips_from_entries(self, entries: List) -> List[str]:
+        """Extract unique IPs from a list of log entries.
+
+        Args:
+            entries: List of LogEntry objects.
+
+        Returns:
+            List of unique IP addresses found.
+        """
+        ips = set()
+        for entry in entries:
+            if entry.message:
+                ips.update(self.extract_ips(entry.message))
+        return list(ips)
