@@ -68,3 +68,49 @@ alerts.set_threshold("error_rate", 10, severity=AlertSeverity.HIGH)
 alerts.register_callback(lambda alert: webhook.send(alert.message))
 alerts.check("error_rate", 12)
 ```
+
+## Deduplication
+
+```python
+from src.dedup import LogDeduplicator
+
+dedup = LogDeduplicator()
+unique_entries, counts = dedup.deduplicate(entries)
+print(f"Removed {dedup.total_duplicates_removed()} duplicates")
+```
+
+## Search Index
+
+```python
+from src.search import LogSearchIndex
+
+index = LogSearchIndex()
+index.add_batch(entries)
+
+results = index.search("database timeout")
+suggestions = index.suggest("data")
+```
+
+## Geolocation Enrichment
+
+```python
+from src.geolocation import GeoLookup
+
+geo = GeoLookup()
+ips = geo.extract_ips_from_entries(entries)
+locations = geo.lookup_batch(ips)
+```
+
+## Caching Results
+
+```python
+from src.cache import LRUCache, cached
+
+cache = LRUCache(max_size=1000, ttl=300)
+cache.put("analysis", results)
+cached_result = cache.get("analysis")
+
+@cached(ttl=600)
+def expensive_analysis(data):
+    return process(data)
+```
