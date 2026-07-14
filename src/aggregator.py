@@ -204,3 +204,23 @@ class LogAggregator:
         timestamps = [e.timestamp for e in self.entries]
         delta = max(timestamps) - min(timestamps)
         return round(delta.total_seconds() / 3600, 2)
+
+    def entries_in_range(self, start: datetime, end: datetime) -> List:
+        """Get entries within a specific time range.
+
+        Args:
+            start: Start datetime.
+            end: End datetime.
+
+        Returns:
+            List of entries within the range.
+        """
+        return [e for e in self.entries if start <= e.timestamp <= end]
+
+    def warning_count(self) -> int:
+        """Count warning level entries.
+
+        Returns:
+            Number of WARN level entries.
+        """
+        return sum(1 for e in self.entries if e.level == LogLevel.WARN)
