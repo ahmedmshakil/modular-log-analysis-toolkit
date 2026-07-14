@@ -45,3 +45,24 @@ Outputs results in JSON, CSV, or plain text format.
 3. Filters narrow the entry set
 4. Aggregator computes statistics
 5. Results are exported or displayed
+
+## Key Design Patterns
+
+### Method Chaining
+Filter and other classes support method chaining for fluent API:
+```python
+filtered = (LogFilter(entries)
+    .by_level(LogLevel.ERROR)
+    .by_keyword("timeout")
+    .by_source("database")
+    .apply())
+```
+
+### Thread Safety
+Cache and Alert modules use threading locks for concurrent access safety.
+
+### Plugin Architecture
+Custom processors extend `LogPlugin` base class and register with `PluginManager`.
+
+### Caching Strategy
+Two-level caching: `LRUCache` for general use, `QueryCache` for search optimization.
