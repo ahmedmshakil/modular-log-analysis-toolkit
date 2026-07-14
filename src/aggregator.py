@@ -240,3 +240,19 @@ class LogAggregator:
             Number of DEBUG level entries.
         """
         return sum(1 for e in self.entries if e.level == LogLevel.DEBUG)
+
+    def trace_count(self) -> int:
+        """Count trace level entries.
+
+        Returns:
+            Number of TRACE level entries.
+        """
+        return sum(1 for e in self.entries if e.level == LogLevel.TRACE)
+
+    def critical_count(self) -> int:
+        """Count critical level entries.
+
+        Returns:
+            Number of CRITICAL level entries.
+        """
+        return sum(1 for e in self.entries if e.level == LogLevel.CRITICAL)
