@@ -173,3 +173,20 @@ class LogExporter:
                 entry.line_number,
             ])
         return output.getvalue()
+
+    @staticmethod
+    def entries_to_text_string(entries: List[LogEntry]) -> str:
+        """Convert entries to plain text string without writing to file.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Text string representation.
+        """
+        if not entries:
+            return ""
+        lines = []
+        for entry in entries:
+            lines.append(f"[{entry.level.value}] {entry.timestamp} - {entry.message}")
+        return "\n".join(lines)
