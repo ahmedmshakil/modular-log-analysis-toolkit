@@ -224,3 +224,19 @@ class LogAggregator:
             Number of WARN level entries.
         """
         return sum(1 for e in self.entries if e.level == LogLevel.WARN)
+
+    def info_count(self) -> int:
+        """Count info level entries.
+
+        Returns:
+            Number of INFO level entries.
+        """
+        return sum(1 for e in self.entries if e.level == LogLevel.INFO)
+
+    def debug_count(self) -> int:
+        """Count debug level entries.
+
+        Returns:
+            Number of DEBUG level entries.
+        """
+        return sum(1 for e in self.entries if e.level == LogLevel.DEBUG)
