@@ -21,3 +21,12 @@ alerts:
   enabled: true
   threshold_error: 10
   threshold_warn: 50
+
+cache:
+  max_size: 1000
+  ttl: 300
+  query_cache_size: 500
+
+streaming:
+  batch_size: 100
+  buffer_size: 8192
