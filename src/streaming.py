@@ -155,3 +155,18 @@ class LogStream:
             True if stream is not stopped or paused.
         """
         return not self._stopped and not self._paused
+
+    @property
+    def progress_percent(self) -> float:
+        """Get progress percentage based on file size.
+
+        Returns:
+            Progress percentage, or 0.0 if file size unknown.
+        """
+        try:
+            file_size = self.file_path.stat().st_size
+            if file_size == 0:
+                return 0.0
+            return round((self._processed / max(1, file_size // 100)) * 100, 2)
+        except (OSError, ValueError):
+            return 0.0
