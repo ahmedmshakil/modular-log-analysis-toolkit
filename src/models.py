@@ -224,3 +224,21 @@ class AnalysisResult:
             True if there are ERROR or CRITICAL entries.
         """
         return self.error_count > 0
+
+    @property
+    def source_count(self) -> int:
+        """Get number of unique sources.
+
+        Returns:
+            Count of unique sources.
+        """
+        return len(self.sources)
+
+    @property
+    def duration_minutes(self) -> float:
+        """Get duration in minutes.
+
+        Returns:
+            Duration in minutes.
+        """
+        return round(self.duration_seconds / 60, 2)
