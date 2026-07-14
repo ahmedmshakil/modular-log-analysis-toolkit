@@ -212,3 +212,25 @@ def get_line_count_fast(file_path: str) -> int:
                 break
             count += buffer.count(b"\n")
     return count
+
+
+def read_last_lines(file_path: str, n: int = 10, encoding: str = "utf-8") -> List[str]:
+    """Read last N lines from a file.
+
+    Args:
+        file_path: Path to the file.
+        n: Number of lines to read from end.
+        encoding: File encoding.
+
+    Returns:
+        List of last N lines.
+
+    Raises:
+        FileNotFoundError: If file does not exist.
+    """
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+    with open(path, "r", encoding=encoding) as f:
+        lines = f.readlines()
+    return [line.rstrip("\n") for line in lines[-n:]]
