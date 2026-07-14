@@ -217,3 +217,20 @@ class WebhookRouter:
             Total error count.
         """
         return sum(sender.stats["errors"] for sender in self._senders.values())
+
+    def reset_all_stats(self):
+        """Reset statistics for all endpoints."""
+        for sender in self._senders.values():
+            sender.reset_stats()
+
+    def get_endpoint_stats(self, name: str) -> Optional[Dict[str, int]]:
+        """Get statistics for a specific endpoint.
+
+        Args:
+            name: Endpoint name.
+
+        Returns:
+            Stats dict if found, None otherwise.
+        """
+        sender = self._senders.get(name)
+        return sender.stats if sender else None
