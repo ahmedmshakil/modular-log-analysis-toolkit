@@ -199,3 +199,28 @@ class AlertManager:
                 alert.acknowledged_at = now
                 count += 1
         return count
+
+    def remove_threshold(self, metric: str) -> bool:
+        """Remove an alert threshold.
+
+        Args:
+            metric: Metric name to remove.
+
+        Returns:
+            True if threshold was removed, False if not found.
+        """
+        if metric in self.thresholds:
+            del self.thresholds[metric]
+            return True
+        return False
+
+    def get_threshold(self, metric: str) -> Optional[Dict]:
+        """Get threshold configuration for a metric.
+
+        Args:
+            metric: Metric name to look up.
+
+        Returns:
+            Threshold dict if found, None otherwise.
+        """
+        return self.thresholds.get(metric)
