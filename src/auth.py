@@ -235,6 +235,36 @@ class AuthManager:
         """Get number of active sessions."""
         return len(self._sessions)
 
+    def get_role_permissions(self, role: str) -> List[str]:
+        """Get permissions for a specific role.
+
+        Args:
+            role: Role name.
+
+        Returns:
+            List of permission strings.
+        """
+        return self.ROLES.get(role, [])
+
+    def change_user_role(self, username: str, new_role: str) -> bool:
+        """Change a user's role.
+
+        Args:
+            username: Username to update.
+            new_role: New role to assign.
+
+        Returns:
+            True if role was changed, False if user not found or invalid role.
+        """
+        if new_role not in self.ROLES:
+            return False
+        user = self._users.get(username)
+        if not user:
+            return False
+        user.role = new_role
+        self._save_users()
+        return True
+
     def _save_users(self):
         """Save users to file."""
         data = {}
