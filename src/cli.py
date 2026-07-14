@@ -50,6 +50,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
     p.add_argument("-q", "--quiet", action="store_true", help="Suppress non-essential output")
     p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    p.add_argument("--no-color", action="store_true", help="Disable colored output")
     return p
 
 
