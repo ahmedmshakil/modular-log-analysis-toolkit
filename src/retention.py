@@ -246,3 +246,21 @@ class RetentionManager:
         """
         files = self.scan_files()
         return [f for f in files if f["age_days"] >= min_age_days]
+
+    def get_compressed_files(self) -> List[Dict]:
+        """Get list of already compressed files.
+
+        Returns:
+            List of compressed file metadata.
+        """
+        files = self.scan_files()
+        return [f for f in files if f["path"].endswith(".gz")]
+
+    def get_uncompressed_files(self) -> List[Dict]:
+        """Get list of uncompressed log files.
+
+        Returns:
+            List of uncompressed file metadata.
+        """
+        files = self.scan_files()
+        return [f for f in files if not f["path"].endswith(".gz")]
