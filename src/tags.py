@@ -199,3 +199,31 @@ class TagManager:
     def clear_manual_tags(self):
         """Clear all manual tags while keeping rules."""
         self._manual_tags.clear()
+
+    def get_tags_for_entry(self, entry_dict: Dict) -> List[str]:
+        """Get all matching tags for an entry without applying them.
+
+        Args:
+            entry_dict: Entry dictionary to check.
+
+        Returns:
+            List of matching tag names.
+        """
+        tags = []
+        for rule in self._rules:
+            if rule.matches(entry_dict):
+                tags.append(rule.tag)
+        return tags
+
+    def remove_rule_by_tag(self, tag: str) -> int:
+        """Remove all rules that produce a specific tag.
+
+        Args:
+            tag: Tag name to remove rules for.
+
+        Returns:
+            Number of rules removed.
+        """
+        before = len(self._rules)
+        self._rules = [r for r in self._rules if r.tag != tag]
+        return before - len(self._rules)
