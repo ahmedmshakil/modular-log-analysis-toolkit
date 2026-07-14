@@ -172,3 +172,26 @@ class LogDeduplicator:
             List of hash strings for unique entries.
         """
         return [h for h, count in self._seen.items() if count == 1]
+
+    def is_duplicate(self, entry: LogEntry) -> bool:
+        """Check if an entry would be a duplicate.
+
+        Args:
+            entry: LogEntry to check.
+
+        Returns:
+            True if entry is a duplicate.
+        """
+        if not isinstance(entry, LogEntry):
+            return False
+        h = self._hash_entry(entry)
+        return h in self._seen and self._seen[h] > 1
+
+    @property
+    def cache_size(self) -> int:
+        """Get size of hash computation cache.
+
+        Returns:
+            Number of cached hashes.
+        """
+        return len(self._hash_cache)
