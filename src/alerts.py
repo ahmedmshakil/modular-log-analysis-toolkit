@@ -224,3 +224,33 @@ class AlertManager:
             Threshold dict if found, None otherwise.
         """
         return self.thresholds.get(metric)
+
+    def get_threshold_count(self) -> int:
+        """Get number of configured thresholds.
+
+        Returns:
+            Count of thresholds.
+        """
+        return len(self.thresholds)
+
+    def has_threshold(self, metric: str) -> bool:
+        """Check if a threshold exists for a metric.
+
+        Args:
+            metric: Metric name to check.
+
+        Returns:
+            True if threshold exists.
+        """
+        return metric in self.thresholds
+
+    def get_alerts_by_metric(self, metric: str) -> List[Alert]:
+        """Get alerts filtered by metric name.
+
+        Args:
+            metric: Metric name to filter by.
+
+        Returns:
+            List of matching alerts.
+        """
+        return [a for a in self.alerts if a.metric_name == metric]
