@@ -190,3 +190,27 @@ class LogExporter:
         for entry in entries:
             lines.append(f"[{entry.level.value}] {entry.timestamp} - {entry.message}")
         return "\n".join(lines)
+
+    @staticmethod
+    def get_entry_count(entries: List[LogEntry]) -> int:
+        """Get number of entries to export.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Count of entries.
+        """
+        return len(entries) if entries else 0
+
+    @staticmethod
+    def is_empty(entries: List[LogEntry]) -> bool:
+        """Check if entries list is empty.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            True if entries is empty or None.
+        """
+        return not entries
