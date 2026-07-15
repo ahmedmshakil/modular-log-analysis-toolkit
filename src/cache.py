@@ -249,3 +249,28 @@ class QueryCache:
             Hit rate as percentage.
         """
         return self._cache.hit_rate
+
+    def has_results(self, query: str) -> bool:
+        """Check if cached results exist for a query.
+
+        Args:
+            query: Query string to check.
+
+        Returns:
+            True if results are cached.
+        """
+        if not query:
+            return False
+        return self._cache.get(query) is not None
+
+    def get_stats(self) -> Dict[str, Any]:
+        """Get cache statistics.
+
+        Returns:
+            Dictionary with cache stats.
+        """
+        return {
+            "size": self._cache.size,
+            "hit_rate": self.hit_rate,
+            "query_count": self.query_count,
+        }
