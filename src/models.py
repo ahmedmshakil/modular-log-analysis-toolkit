@@ -279,3 +279,39 @@ class AnalysisResult:
             Count of WARN entries.
         """
         return self.level_counts.get("WARN", 0)
+
+    @property
+    def debug_count(self) -> int:
+        """Get DEBUG level count.
+
+        Returns:
+            Count of DEBUG entries.
+        """
+        return self.level_counts.get("DEBUG", 0)
+
+    @property
+    def trace_count(self) -> int:
+        """Get TRACE level count.
+
+        Returns:
+            Count of TRACE entries.
+        """
+        return self.level_counts.get("TRACE", 0)
+
+    @property
+    def has_sources(self) -> bool:
+        """Check if analysis has sources.
+
+        Returns:
+            True if sources exist.
+        """
+        return len(self.sources) > 0
+
+    @property
+    def has_top_errors(self) -> bool:
+        """Check if analysis has top errors.
+
+        Returns:
+            True if top errors exist.
+        """
+        return len(self.top_errors) > 0
