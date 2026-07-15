@@ -254,3 +254,37 @@ class LogSearchIndex:
             List of unique indexed words.
         """
         return list(self._index.keys())
+
+    def get_entries_by_level(self, level: str) -> List[LogEntry]:
+        """Get all entries of a specific level.
+
+        Args:
+            level: Level string (e.g., "ERROR", "INFO").
+
+        Returns:
+            List of entries matching the level.
+        """
+        indices = self._field_index["level"].get(level.upper(), set())
+        return [self._entries[i] for i in sorted(indices)]
+
+    def get_entries_by_source(self, source: str) -> List[LogEntry]:
+        """Get all entries from a specific source.
+
+        Args:
+            source: Source name.
+
+        Returns:
+            List of entries from the source.
+        """
+        if not source:
+            return []
+        indices = self._field_index["source"].get(source.lower(), set())
+        return [self._entries[i] for i in sorted(indices)]
+
+    def get_unique_sources(self) -> List[str]:
+        """Get list of unique sources in the index.
+
+        Returns:
+            List of source names.
+        """
+        return list(self._field_index["source"].keys())
