@@ -227,3 +227,34 @@ class TagManager:
         before = len(self._rules)
         self._rules = [r for r in self._rules if r.tag != tag]
         return before - len(self._rules)
+
+    def get_all_tag_names(self) -> List[str]:
+        """Get list of all unique tag names from rules.
+
+        Returns:
+            List of tag names.
+        """
+        return list(set(r.tag for r in self._rules))
+
+    def get_rules_by_priority(self, min_priority: int = 0) -> List[Dict]:
+        """Get rules filtered by minimum priority.
+
+        Args:
+            min_priority: Minimum priority level.
+
+        Returns:
+            List of rule dictionaries.
+        """
+        return [
+            {"name": r.name, "tag": r.tag, "conditions": r.conditions,
+             "color": r.color, "priority": r.priority}
+            for r in self._rules if r.priority >= min_priority
+        ]
+
+    def has_manual_tags(self) -> bool:
+        """Check if any manual tags exist.
+
+        Returns:
+            True if manual tags are present.
+        """
+        return len(self._manual_tags) > 0
