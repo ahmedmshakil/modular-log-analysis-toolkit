@@ -234,3 +234,24 @@ class WebhookRouter:
         """
         sender = self._senders.get(name)
         return sender.stats if sender else None
+
+    def get_all_stats(self) -> Dict[str, Any]:
+        """Get aggregated statistics for all endpoints.
+
+        Returns:
+            Dictionary with aggregated stats.
+        """
+        return {
+            "endpoints": self.endpoint_count,
+            "total_sent": self.total_sent(),
+            "total_errors": self.total_errors(),
+            "per_endpoint": self.stats,
+        }
+
+    def is_empty(self) -> bool:
+        """Check if router has no endpoints.
+
+        Returns:
+            True if no endpoints registered.
+        """
+        return len(self._senders) == 0
