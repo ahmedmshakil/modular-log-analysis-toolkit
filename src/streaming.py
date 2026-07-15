@@ -170,3 +170,22 @@ class LogStream:
             return round((self._processed / max(1, file_size // 100)) * 100, 2)
         except (OSError, ValueError):
             return 0.0
+
+    def get_file_name(self) -> str:
+        """Get the file name being streamed.
+
+        Returns:
+            File name string.
+        """
+        return self.file_path.name
+
+    def get_file_size_mb(self) -> float:
+        """Get file size in megabytes.
+
+        Returns:
+            File size in MB, or 0.0 if unknown.
+        """
+        try:
+            return round(self.file_path.stat().st_size / (1024 * 1024), 2)
+        except (OSError, ValueError):
+            return 0.0
