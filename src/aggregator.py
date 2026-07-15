@@ -256,3 +256,22 @@ class LogAggregator:
             Number of CRITICAL level entries.
         """
         return sum(1 for e in self.entries if e.level == LogLevel.CRITICAL)
+
+    def error_count(self) -> int:
+        """Count error level entries.
+
+        Returns:
+            Number of ERROR level entries.
+        """
+        return sum(1 for e in self.entries if e.level == LogLevel.ERROR)
+
+    def entries_by_level(self, level: LogLevel) -> List:
+        """Get all entries of a specific level.
+
+        Args:
+            level: LogLevel to filter by.
+
+        Returns:
+            List of entries matching the level.
+        """
+        return [e for e in self.entries if e.level == level]
