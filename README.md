@@ -63,6 +63,7 @@ modular-log-analysis-toolkit/
 │   ├── test_parser.py       # Parser unit tests
 │   ├── test_filter.py       # Filter unit tests
 │   └── test_aggregator.py   # Aggregator unit tests
+├── docs/                    # Documentation files
 ├── config/
 │   ├── settings.yaml        # Default configuration
 │   ├── patterns.yaml        # Custom log patterns
