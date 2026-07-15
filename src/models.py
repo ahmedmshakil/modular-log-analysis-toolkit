@@ -252,3 +252,30 @@ class AnalysisResult:
             Duration in minutes.
         """
         return round(self.duration_seconds / 60, 2)
+
+    @property
+    def duration_hours(self) -> float:
+        """Get duration in hours.
+
+        Returns:
+            Duration in hours.
+        """
+        return round(self.duration_seconds / 3600, 2)
+
+    @property
+    def info_count(self) -> int:
+        """Get INFO level count.
+
+        Returns:
+            Count of INFO entries.
+        """
+        return self.level_counts.get("INFO", 0)
+
+    @property
+    def warn_count(self) -> int:
+        """Get WARN level count.
+
+        Returns:
+            Count of WARN entries.
+        """
+        return self.level_counts.get("WARN", 0)
