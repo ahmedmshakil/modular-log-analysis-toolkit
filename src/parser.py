@@ -203,3 +203,27 @@ class LogParser:
                                   "loglevel", "message", "msg", "text", "source",
                                   "host", "logger")},
         )
+
+    def parse_lines_json(self, lines: List[str]) -> List[LogEntry]:
+        """Parse multiple JSON log lines.
+
+        Args:
+            lines: List of JSON log lines.
+
+        Returns:
+            List of parsed LogEntry objects.
+        """
+        entries = []
+        for i, line in enumerate(lines, 1):
+            entry = self.parse_json_line(line, line_number=i)
+            if entry:
+                entries.append(entry)
+        return entries
+
+    def get_pattern_name(self) -> str:
+        """Get the current pattern name.
+
+        Returns:
+            Pattern name string.
+        """
+        return self.pattern_name
