@@ -264,3 +264,33 @@ class RetentionManager:
         """
         files = self.scan_files()
         return [f for f in files if not f["path"].endswith(".gz")]
+
+    def get_file_count(self) -> int:
+        """Get total number of log files.
+
+        Returns:
+            Count of files found.
+        """
+        return len(self.scan_files())
+
+    def get_actions_count(self) -> int:
+        """Get number of retention actions taken.
+
+        Returns:
+            Count of actions.
+        """
+        return len(self._actions_log)
+
+    def get_policy_by_name(self, name: str) -> Optional[RetentionPolicy]:
+        """Get a policy by name.
+
+        Args:
+            name: Policy name.
+
+        Returns:
+            RetentionPolicy if found, None otherwise.
+        """
+        for policy in self.policies:
+            if policy.name == name:
+                return policy
+        return None
