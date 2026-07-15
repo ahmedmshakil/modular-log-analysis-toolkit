@@ -472,3 +472,63 @@ filtered = dynamic_filter(entries, config)
 - [Models](models.md) - LogEntry and LogLevel definitions
 - [Parser](parser.md) - Parse log lines into entries
 - [Aggregator](aggregator.md) - Analyze filtered entries
+
+## New Methods (v1.2.0)
+
+### by_multiple_keywords
+
+```python
+by_multiple_keywords(keywords: List[str], match_all: bool = False) -> LogFilter
+```
+
+Filter by multiple keywords.
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `keywords` | `List[str]` | required | List of keywords |
+| `match_all` | `bool` | `False` | If True, all must match; if False, any matches |
+
+### by_source_list
+
+```python
+by_source_list(sources: List[str]) -> LogFilter
+```
+
+Filter by multiple sources.
+
+### by_min_severity
+
+```python
+by_min_severity(min_level: LogLevel) -> LogFilter
+```
+
+Filter by minimum severity level.
+
+### first, last, sample
+
+```python
+first(n: int = 1) -> List[LogEntry]
+last(n: int = 1) -> List[LogEntry]
+sample(n: int = 10) -> List[LogEntry]
+```
+
+Get first N, last N, or sampled entries.
+
+### apply_count
+
+```python
+apply_count() -> int
+```
+
+Count matching entries without building the full list.
+
+### unique_sources
+
+```python
+@property
+unique_sources() -> List[str]
+```
+
+Get unique sources from entries.
