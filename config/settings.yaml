@@ -30,3 +30,11 @@ cache:
 streaming:
   batch_size: 100
   buffer_size: 8192
+
+search:
+  max_results: 100
+  stop_words_enabled: true
+
+export:
+  default_format: json
+  include_metadata: true
