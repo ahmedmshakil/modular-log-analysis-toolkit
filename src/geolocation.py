@@ -235,3 +235,27 @@ class GeoLookup:
             if entry.message:
                 ips.update(self.extract_ips(entry.message))
         return list(ips)
+
+    def get_stats_summary(self) -> Dict[str, Any]:
+        """Get summary of lookup statistics.
+
+        Returns:
+            Dictionary with lookup stats.
+        """
+        return {
+            "lookups": self._lookup_count,
+            "cache_hits": self._cache_hits,
+            "cached": len(self._cache),
+            "hit_rate": self.cache_hit_rate,
+        }
+
+    def has_cached(self, ip: str) -> bool:
+        """Check if IP is in cache (alias for is_cached).
+
+        Args:
+            ip: IP address to check.
+
+        Returns:
+            True if cached.
+        """
+        return ip in self._cache
