@@ -428,3 +428,22 @@ logsummary app.log
 - [Python API](python-api.md) - Programmatic usage
 - [Configuration](configuration.md) - Configuration options
 - [FAQ](faq.md) - Frequently asked questions
+
+## New Options (v1.2.0)
+
+### No Color (`--no-color`)
+
+Disable colored output for piping or logging:
+
+```bash
+python -m src.cli app.log --no-color
+```
+
+### Count (`--count`)
+
+Show only the entry count:
+
+```bash
+python -m src.cli app.log --count
+python -m src.cli app.log -l ERROR --count
+```
