@@ -170,3 +170,27 @@ from src.streaming import LogStream
 ## Feedback
 
 Found an error or have a suggestion? Please open an issue on GitHub.
+
+## Module Overview
+
+| Module        | Description                              |
+| ------------- | ---------------------------------------- |
+| `models.py`   | Data models: LogEntry, LogLevel, AnalysisResult |
+| `parser.py`   | Log parsing with pattern matching        |
+| `filter.py`   | Chainable filtering engine               |
+| `aggregator.py` | Statistics and aggregation              |
+| `exporter.py` | JSON, CSV, text export                   |
+| `reader.py`   | File reading utilities                   |
+| `search.py`   | Full-text search indexing                |
+| `dedup.py`    | Duplicate detection                      |
+| `streaming.py` | Large file processing                   |
+| `alerts.py`   | Threshold-based alerting                 |
+| `webhooks.py` | Webhook notifications                    |
+| `tags.py`     | Tagging system                           |
+| `plugins.py`  | Plugin architecture                      |
+| `retention.py` | Log retention policies                  |
+| `geolocation.py` | IP geolocation lookup                  |
+| `auth.py`     | User authentication                      |
+| `cache.py`    | LRU caching layer                        |
+| `web.py`      | Web dashboard                            |
+| `cli.py`      | Command-line interface                   |
