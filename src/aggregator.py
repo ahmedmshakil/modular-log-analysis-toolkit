@@ -275,3 +275,24 @@ class LogAggregator:
             List of entries matching the level.
         """
         return [e for e in self.entries if e.level == level]
+
+    def sources_count(self) -> int:
+        """Get number of unique sources.
+
+        Returns:
+            Count of unique sources.
+        """
+        return len(set(e.source for e in self.entries if e.source))
+
+    def has_source(self, source: str) -> bool:
+        """Check if a source exists in entries.
+
+        Args:
+            source: Source name to check.
+
+        Returns:
+            True if source found.
+        """
+        if not source:
+            return False
+        return any(e.source and source.lower() in e.source.lower() for e in self.entries)
