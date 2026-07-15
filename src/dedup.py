@@ -195,3 +195,31 @@ class LogDeduplicator:
             Number of cached hashes.
         """
         return len(self._hash_cache)
+
+    def get_stats(self) -> Dict[str, Any]:
+        """Get deduplication statistics.
+
+        Returns:
+            Dictionary with dedup stats.
+        """
+        return {
+            "unique_count": self.unique_count,
+            "total_count": self.total_count,
+            "duplicate_count": self.duplicate_count,
+            "dedup_rate": self.dedup_rate,
+            "cache_size": self.cache_size,
+        }
+
+    def has_seen(self, entry: LogEntry) -> bool:
+        """Check if an entry has been seen before.
+
+        Args:
+            entry: LogEntry to check.
+
+        Returns:
+            True if entry was previously seen.
+        """
+        if not isinstance(entry, LogEntry):
+            return False
+        h = self._hash_entry(entry)
+        return h in self._seen
