@@ -234,3 +234,39 @@ def read_last_lines(file_path: str, n: int = 10, encoding: str = "utf-8") -> Lis
     with open(path, "r", encoding=encoding) as f:
         lines = f.readlines()
     return [line.rstrip("\n") for line in lines[-n:]]
+
+
+def get_file_extension(file_path: str) -> str:
+    """Get file extension.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        File extension string (e.g., ".log", ".gz").
+    """
+    return Path(file_path).suffix
+
+
+def get_file_name(file_path: str) -> str:
+    """Get file name without path.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        File name string.
+    """
+    return Path(file_path).name
+
+
+def get_parent_directory(file_path: str) -> str:
+    """Get parent directory of a file.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        Parent directory path string.
+    """
+    return str(Path(file_path).parent)
