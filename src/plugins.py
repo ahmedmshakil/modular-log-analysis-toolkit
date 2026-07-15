@@ -257,3 +257,22 @@ class PluginManager:
                     if (isinstance(attr, type) and issubclass(attr, LogPlugin)
                             and attr is not LogPlugin):
                         self.register(attr())
+
+    def get_plugin_names(self) -> List[str]:
+        """Get list of all registered plugin names.
+
+        Returns:
+            List of plugin names.
+        """
+        return list(self._plugins.keys())
+
+    def has_plugin(self, name: str) -> bool:
+        """Check if a plugin is registered.
+
+        Args:
+            name: Plugin name to check.
+
+        Returns:
+            True if plugin exists.
+        """
+        return name in self._plugins
