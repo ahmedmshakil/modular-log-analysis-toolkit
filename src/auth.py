@@ -265,6 +265,46 @@ class AuthManager:
         self._save_users()
         return True
 
+    def deactivate_user(self, username: str) -> bool:
+        """Deactivate a user account.
+
+        Args:
+            username: Username to deactivate.
+
+        Returns:
+            True if user was deactivated, False if not found.
+        """
+        user = self._users.get(username)
+        if not user:
+            return False
+        user.active = False
+        self._save_users()
+        return True
+
+    def activate_user(self, username: str) -> bool:
+        """Activate a user account.
+
+        Args:
+            username: Username to activate.
+
+        Returns:
+            True if user was activated, False if not found.
+        """
+        user = self._users.get(username)
+        if not user:
+            return False
+        user.active = True
+        self._save_users()
+        return True
+
+    def get_active_users(self) -> List[Dict]:
+        """Get list of active users.
+
+        Returns:
+            List of active user dictionaries.
+        """
+        return [u.to_dict() for u in self._users.values() if u.active]
+
     def _save_users(self):
         """Save users to file."""
         data = {}
