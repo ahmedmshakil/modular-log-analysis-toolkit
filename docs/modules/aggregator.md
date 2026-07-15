@@ -421,3 +421,74 @@ with open("full_analysis.json", "w") as f:
 - [Models](models.md) - AnalysisResult data structure
 - [Filter](filter.md) - Filter entries before aggregation
 - [Exporter](exporter.md) - Export analysis results
+
+## New Methods (v1.2.0)
+
+### entries_by_level
+
+```python
+entries_by_level(level: LogLevel) -> List[LogEntry]
+```
+
+Get all entries of a specific level.
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `level` | `LogLevel` | Level to filter by |
+
+**Returns:** `List[LogEntry]` - Entries matching the level
+
+### entries_in_range
+
+```python
+entries_in_range(start: datetime, end: datetime) -> List[LogEntry]
+```
+
+Get entries within a specific time range.
+
+### warning_count, info_count, debug_count, trace_count, critical_count, error_count
+
+```python
+warning_count() -> int
+info_count() -> int
+debug_count() -> int
+trace_count() -> int
+critical_count() -> int
+error_count() -> int
+```
+
+Count entries by specific level.
+
+### time_span_hours
+
+```python
+time_span_hours() -> float
+```
+
+Get total time span of entries in hours.
+
+### entries_by_source
+
+```python
+entries_by_source(source: str) -> List[LogEntry]
+```
+
+Get all entries from a specific source.
+
+### sources_count
+
+```python
+sources_count() -> int
+```
+
+Get number of unique sources.
+
+### has_source
+
+```python
+has_source(source: str) -> bool
+```
+
+Check if a source exists in entries.
