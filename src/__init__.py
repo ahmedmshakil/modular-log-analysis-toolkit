@@ -51,3 +51,17 @@ def get_module_count() -> int:
         Module count.
     """
     return len(__all__)
+
+
+def get_package_info() -> dict:
+    """Get package information.
+
+    Returns:
+        Dictionary with package metadata.
+    """
+    return {
+        "name": "modular-log-analysis-toolkit",
+        "version": __version__,
+        "author": __author__,
+        "modules": len(__all__),
+    }
