@@ -238,6 +238,50 @@ class LogFilter:
         """
         return list(set(e.source for e in self.entries if e.source))
 
+    def by_source_list(self, sources: List[str]) -> "LogFilter":
+        """Filter by multiple sources.
+
+        Args:
+            sources: List of source names to match.
+
+        Returns:
+            Self for method chaining.
+
+        Raises:
+            ValueError: If sources list is empty.
+        """
+        if not sources or not isinstance(sources, list):
+            raise ValueError("Sources must be a non-empty list")
+        def _filter(entry: LogEntry) -> bool:
+            if not entry.source:
+                return False
+            return any(s.lower() in entry.source.lower() for s in sources if s)
+        self._filters.append(_filter)
+        return self
+
+    def by_min_severity(self, min_level: LogLevel) -> "LogFilter":
+        """Filter by minimum severity level.
+
+        Args:
+            min_level: Minimum LogLevel to include.
+
+        Returns:
+            Self for method chaining.
+        """
+        ranks = {
+            LogLevel.TRACE: 0,
+            LogLevel.DEBUG: 1,
+            LogLevel.INFO: 2,
+            LogLevel.WARN: 3,
+            LogLevel.ERROR: 4,
+            LogLevel.CRITICAL: 5,
+        }
+        min_rank = ranks.get(min_level, 0)
+        def _filter(entry: LogEntry) -> bool:
+            return ranks.get(entry.level, 0) >= min_rank
+        self._filters.append(_filter)
+        return self
+
     def merge(self, other: "LogFilter") -> "LogFilter":
         """Merge entries from another LogFilter, removing duplicates."""
         seen = set()
