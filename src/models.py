@@ -87,6 +87,28 @@ class LogEntry:
         """Check if entry is a critical level."""
         return self.level == LogLevel.CRITICAL
 
+    @property
+    def is_trace(self) -> bool:
+        """Check if entry is a trace level."""
+        return self.level == LogLevel.TRACE
+
+    @property
+    def message_length(self) -> int:
+        """Get length of the message.
+
+        Returns:
+            Length of message string.
+        """
+        return len(self.message) if self.message else 0
+
+    def has_source(self) -> bool:
+        """Check if entry has a source.
+
+        Returns:
+            True if source is set.
+        """
+        return self.source is not None and self.source != ""
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert log entry to dictionary.
 
