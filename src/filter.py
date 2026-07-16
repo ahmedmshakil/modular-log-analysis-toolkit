@@ -335,3 +335,41 @@ class LogFilter:
             return any(matches)
         self._filters.append(_filter)
         return self
+
+    def by_message_length(self, min_length: int = 0, max_length: int = 0) -> "LogFilter":
+        """Filter by message length.
+
+        Args:
+            min_length: Minimum message length (0 for no minimum).
+            max_length: Maximum message length (0 for no maximum).
+
+        Returns:
+            Self for method chaining.
+        """
+        def _filter(entry: LogEntry) -> bool:
+            if not entry.message:
+                return False
+            length = len(entry.message)
+            if min_length and length < min_length:
+                return False
+            if max_length and length > max_length:
+                return False
+            return True
+        self._filters.append(_filter)
+        return self
+
+    def get_filter_count(self) -> int:
+        """Get number of active filters.
+
+        Returns:
+            Count of filters.
+        """
+        return len(self._filters)
+
+    def has_filters(self) -> bool:
+        """Check if any filters are active.
+
+        Returns:
+            True if filters exist.
+        """
+        return len(self._filters) > 0
