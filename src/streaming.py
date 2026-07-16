@@ -189,3 +189,43 @@ class LogStream:
             return round(self.file_path.stat().st_size / (1024 * 1024), 2)
         except (OSError, ValueError):
             return 0.0
+
+    def has_errors(self) -> bool:
+        """Check if any errors occurred during streaming.
+
+        Returns:
+            True if errors exist.
+        """
+        return self._errors > 0
+
+    def is_paused(self) -> bool:
+        """Check if stream is paused.
+
+        Returns:
+            True if paused.
+        """
+        return self._paused
+
+    def is_stopped(self) -> bool:
+        """Check if stream is stopped.
+
+        Returns:
+            True if stopped.
+        """
+        return self._stopped
+
+    def get_processed_count(self) -> int:
+        """Get number of processed entries.
+
+        Returns:
+            Count of processed entries.
+        """
+        return self._processed
+
+    def get_error_count(self) -> int:
+        """Get number of errors.
+
+        Returns:
+            Count of errors.
+        """
+        return self._errors
