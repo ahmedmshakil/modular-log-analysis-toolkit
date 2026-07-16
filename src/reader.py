@@ -270,3 +270,46 @@ def get_parent_directory(file_path: str) -> str:
         Parent directory path string.
     """
     return str(Path(file_path).parent)
+
+
+def get_file_stem(file_path: str) -> str:
+    """Get file name without extension.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        File stem string.
+    """
+    return Path(file_path).stem
+
+
+def is_text_file(file_path: str) -> bool:
+    """Check if file is a text file based on extension.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        True if file has a text extension.
+    """
+    text_extensions = {".log", ".txt", ".csv", ".json", ".yaml", ".yml", ".md", ".xml"}
+    return Path(file_path).suffix.lower() in text_extensions
+
+
+def get_file_size_formatted(file_path: str) -> str:
+    """Get formatted file size string.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        Formatted size string (e.g., "1.5 MB").
+
+    Raises:
+        FileNotFoundError: If file does not exist.
+    """
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+    return format_size(path.stat().st_size)
