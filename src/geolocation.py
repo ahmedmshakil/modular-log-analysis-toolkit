@@ -259,3 +259,43 @@ class GeoLookup:
             True if cached.
         """
         return ip in self._cache
+
+    def is_cache_full(self) -> bool:
+        """Check if cache has reached maximum size.
+
+        Returns:
+            True if cache is full.
+        """
+        return len(self._cache) >= self._cache_size
+
+    def get_cache_capacity(self) -> int:
+        """Get maximum cache capacity.
+
+        Returns:
+            Maximum cache size.
+        """
+        return self._cache_size
+
+    def has_lookups(self) -> bool:
+        """Check if any lookups have been performed.
+
+        Returns:
+            True if lookups exist.
+        """
+        return self._lookup_count > 0 or self._cache_hits > 0
+
+    def get_lookup_count(self) -> int:
+        """Get number of API lookups performed.
+
+        Returns:
+            Lookup count.
+        """
+        return self._lookup_count
+
+    def get_cache_hits(self) -> int:
+        """Get number of cache hits.
+
+        Returns:
+            Cache hit count.
+        """
+        return self._cache_hits
