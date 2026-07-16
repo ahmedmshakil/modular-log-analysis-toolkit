@@ -255,3 +255,35 @@ class WebhookRouter:
             True if no endpoints registered.
         """
         return len(self._senders) == 0
+
+    def has_endpoints(self) -> bool:
+        """Check if any endpoints are registered.
+
+        Returns:
+            True if endpoints exist.
+        """
+        return len(self._senders) > 0
+
+    def has_sent(self) -> bool:
+        """Check if any messages have been sent.
+
+        Returns:
+            True if messages sent.
+        """
+        return self.total_sent() > 0
+
+    def has_errors(self) -> bool:
+        """Check if any errors have occurred.
+
+        Returns:
+            True if errors exist.
+        """
+        return self.total_errors() > 0
+
+    def get_endpoint_names(self) -> List[str]:
+        """Get list of endpoint names.
+
+        Returns:
+            List of endpoint name strings.
+        """
+        return list(self._senders.keys())
