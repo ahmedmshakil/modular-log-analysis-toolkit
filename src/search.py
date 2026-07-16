@@ -288,3 +288,35 @@ class LogSearchIndex:
             List of source names.
         """
         return list(self._field_index["source"].keys())
+
+    def get_unique_levels(self) -> List[str]:
+        """Get list of unique levels in the index.
+
+        Returns:
+            List of level strings.
+        """
+        return list(self._field_index["level"].keys())
+
+    def has_entries(self) -> bool:
+        """Check if index has any entries.
+
+        Returns:
+            True if entries exist.
+        """
+        return len(self._entries) > 0
+
+    def has_words(self) -> bool:
+        """Check if index has any words.
+
+        Returns:
+            True if words are indexed.
+        """
+        return len(self._index) > 0
+
+    def get_word_count(self) -> int:
+        """Get number of unique words in index.
+
+        Returns:
+            Count of unique words.
+        """
+        return len(self._index)
