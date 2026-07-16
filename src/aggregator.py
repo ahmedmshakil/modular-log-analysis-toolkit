@@ -296,3 +296,29 @@ class LogAggregator:
         if not source:
             return False
         return any(e.source and source.lower() in e.source.lower() for e in self.entries)
+
+    def get_summary_dict(self) -> Dict[str, Any]:
+        """Get summary as dictionary.
+
+        Returns:
+            Dictionary with summary statistics.
+        """
+        summary = self.summary()
+        return summary.to_dict()
+
+    def level_counts_sorted(self) -> List[Tuple[str, int]]:
+        """Get level counts sorted by count descending.
+
+        Returns:
+            List of (level, count) tuples.
+        """
+        counts = self.level_counts
+        return sorted(counts.items(), key=lambda x: x[1], reverse=True)
+
+    def has_errors(self) -> bool:
+        """Check if entries contain any errors.
+
+        Returns:
+            True if ERROR or CRITICAL entries exist.
+        """
+        return any(e.level in (LogLevel.ERROR, LogLevel.CRITICAL) for e in self.entries)
