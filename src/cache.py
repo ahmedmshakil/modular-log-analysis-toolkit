@@ -274,3 +274,20 @@ class QueryCache:
             "hit_rate": self.hit_rate,
             "query_count": self.query_count,
         }
+
+    def is_empty(self) -> bool:
+        """Check if cache is empty.
+
+        Returns:
+            True if no queries cached.
+        """
+        return self._cache.size == 0
+
+    def get_popular_queries_list(self) -> List[str]:
+        """Get list of popular queries without counts.
+
+        Returns:
+            List of query strings sorted by popularity.
+        """
+        sorted_queries = sorted(self._popular_queries.items(), key=lambda x: x[1], reverse=True)
+        return [q for q, _ in sorted_queries]
