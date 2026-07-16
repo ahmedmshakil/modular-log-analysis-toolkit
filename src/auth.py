@@ -305,6 +305,33 @@ class AuthManager:
         """
         return [u.to_dict() for u in self._users.values() if u.active]
 
+    def get_inactive_users(self) -> List[Dict]:
+        """Get list of inactive users.
+
+        Returns:
+            List of inactive user dictionaries.
+        """
+        return [u.to_dict() for u in self._users.values() if not u.active]
+
+    def has_users(self) -> bool:
+        """Check if any users exist.
+
+        Returns:
+            True if users exist.
+        """
+        return len(self._users) > 0
+
+    def get_users_by_role(self, role: str) -> List[Dict]:
+        """Get users filtered by role.
+
+        Args:
+            role: Role to filter by.
+
+        Returns:
+            List of user dictionaries with the specified role.
+        """
+        return [u.to_dict() for u in self._users.values() if u.role == role]
+
     def _save_users(self):
         """Save users to file."""
         data = {}
