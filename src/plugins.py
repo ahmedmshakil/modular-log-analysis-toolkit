@@ -276,3 +276,35 @@ class PluginManager:
             True if plugin exists.
         """
         return name in self._plugins
+
+    def has_plugins(self) -> bool:
+        """Check if any plugins are registered.
+
+        Returns:
+            True if plugins exist.
+        """
+        return len(self._plugins) > 0
+
+    def has_enabled_plugins(self) -> bool:
+        """Check if any plugins are enabled.
+
+        Returns:
+            True if enabled plugins exist.
+        """
+        return any(self._enabled.values())
+
+    def get_enabled_count(self) -> int:
+        """Get number of enabled plugins.
+
+        Returns:
+            Count of enabled plugins.
+        """
+        return sum(1 for v in self._enabled.values() if v)
+
+    def get_disabled_count(self) -> int:
+        """Get number of disabled plugins.
+
+        Returns:
+            Count of disabled plugins.
+        """
+        return sum(1 for v in self._enabled.values() if not v)
