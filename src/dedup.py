@@ -223,3 +223,27 @@ class LogDeduplicator:
             return False
         h = self._hash_entry(entry)
         return h in self._seen
+
+    def is_empty(self) -> bool:
+        """Check if no entries have been processed.
+
+        Returns:
+            True if no entries seen.
+        """
+        return len(self._seen) == 0
+
+    def has_cache(self) -> bool:
+        """Check if hash cache has entries.
+
+        Returns:
+            True if cache is not empty.
+        """
+        return len(self._hash_cache) > 0
+
+    def get_seen_hashes(self) -> List[str]:
+        """Get all seen hashes.
+
+        Returns:
+            List of hash strings.
+        """
+        return list(self._seen.keys())
