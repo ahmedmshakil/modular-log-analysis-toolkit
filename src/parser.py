@@ -227,3 +227,27 @@ class LogParser:
             Pattern name string.
         """
         return self.pattern_name
+
+    def has_custom_pattern(self) -> bool:
+        """Check if parser uses a custom pattern.
+
+        Returns:
+            True if custom pattern is set.
+        """
+        return self.pattern_name not in PATTERNS
+
+    def get_pattern_count(self) -> int:
+        """Get number of available patterns.
+
+        Returns:
+            Count of available patterns.
+        """
+        return len(PATTERNS)
+
+    def is_json_pattern(self) -> bool:
+        """Check if parser uses JSON pattern.
+
+        Returns:
+            True if using json_log pattern.
+        """
+        return self.pattern_name == "json_log"
