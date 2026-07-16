@@ -258,3 +258,58 @@ class TagManager:
             True if manual tags are present.
         """
         return len(self._manual_tags) > 0
+
+    def has_rules(self) -> bool:
+        """Check if any rules are configured.
+
+        Returns:
+            True if rules exist.
+        """
+        return len(self._rules) > 0
+
+    def has_tag(self, tag: str) -> bool:
+        """Check if a tag exists in any rule.
+
+        Args:
+            tag: Tag name to check.
+
+        Returns:
+            True if tag exists.
+        """
+        return any(r.tag == tag for r in self._rules)
+
+    def get_rule_by_name(self, name: str) -> Optional[Dict]:
+        """Get a rule by name.
+
+        Args:
+            name: Rule name.
+
+        Returns:
+            Rule dictionary if found, None otherwise.
+        """
+        for rule in self._rules:
+            if rule.name == name:
+                return {
+                    "name": rule.name,
+                    "tag": rule.tag,
+                    "conditions": rule.conditions,
+                    "color": rule.color,
+                    "priority": rule.priority,
+                }
+        return None
+
+    def get_manual_tag_count(self) -> int:
+        """Get number of manual tags.
+
+        Returns:
+            Count of manual tags.
+        """
+        return sum(len(tags) for tags in self._manual_tags.values())
+
+    def get_rule_count(self) -> int:
+        """Get number of rules.
+
+        Returns:
+            Count of rules.
+        """
+        return len(self._rules)
