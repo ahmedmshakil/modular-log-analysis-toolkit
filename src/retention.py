@@ -294,3 +294,38 @@ class RetentionManager:
             if policy.name == name:
                 return policy
         return None
+
+    def has_policies(self) -> bool:
+        """Check if any policies are configured.
+
+        Returns:
+            True if policies exist.
+        """
+        return len(self.policies) > 0
+
+    def has_actions(self) -> bool:
+        """Check if any actions have been taken.
+
+        Returns:
+            True if actions exist.
+        """
+        return len(self._actions_log) > 0
+
+    def has_files(self) -> bool:
+        """Check if any log files exist.
+
+        Returns:
+            True if files found.
+        """
+        return len(self.scan_files()) > 0
+
+    def get_total_size_formatted(self) -> str:
+        """Get total size as formatted string.
+
+        Returns:
+            Formatted size string.
+        """
+        from .reader import format_size
+        files = self.scan_files()
+        total_bytes = sum(f.get("size_bytes", 0) for f in files)
+        return format_size(total_bytes)
