@@ -254,3 +254,27 @@ class AlertManager:
             List of matching alerts.
         """
         return [a for a in self.alerts if a.metric_name == metric]
+
+    def get_thresholds(self) -> Dict[str, Dict]:
+        """Get all configured thresholds.
+
+        Returns:
+            Dictionary of threshold configurations.
+        """
+        return dict(self.thresholds)
+
+    def get_alert_count(self) -> int:
+        """Get total number of alerts.
+
+        Returns:
+            Count of alerts.
+        """
+        return len(self.alerts)
+
+    def has_callbacks(self) -> bool:
+        """Check if any callbacks are registered.
+
+        Returns:
+            True if callbacks exist.
+        """
+        return len(self.callbacks) > 0
