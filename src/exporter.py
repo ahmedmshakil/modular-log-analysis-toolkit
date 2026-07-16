@@ -214,3 +214,21 @@ class LogExporter:
             True if entries is empty or None.
         """
         return not entries
+
+    @staticmethod
+    def get_supported_formats() -> List[str]:
+        """Get list of supported export formats.
+
+        Returns:
+            List of format strings.
+        """
+        return ["json", "csv", "text"]
+
+    @staticmethod
+    def get_format_count() -> int:
+        """Get number of supported formats.
+
+        Returns:
+            Count of formats.
+        """
+        return 3
