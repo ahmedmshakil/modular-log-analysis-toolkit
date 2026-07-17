@@ -320,3 +320,51 @@ class LogSearchIndex:
             Count of unique words.
         """
         return len(self._index)
+
+    def has_level(self, level: str) -> bool:
+        """Check if level exists in index.
+
+        Args:
+            level: Level string to check.
+
+        Returns:
+            True if level exists.
+        """
+        return level.upper() in self._field_index["level"]
+
+    def has_source(self, source: str) -> bool:
+        """Check if source exists in index.
+
+        Args:
+            source: Source name to check.
+
+        Returns:
+            True if source exists.
+        """
+        if not source:
+            return False
+        return source.lower() in self._field_index["source"]
+
+    def get_entries_dict(self) -> List[Dict[str, Any]]:
+        """Get all entries as dictionaries.
+
+        Returns:
+            List of entry dictionaries.
+        """
+        return [e.to_dict() for e in self._entries]
+
+    def get_source_count(self) -> int:
+        """Get number of unique sources.
+
+        Returns:
+            Count of sources.
+        """
+        return len(self._field_index["source"])
+
+    def get_level_count(self) -> int:
+        """Get number of unique levels.
+
+        Returns:
+            Count of levels.
+        """
+        return len(self._field_index["level"])
