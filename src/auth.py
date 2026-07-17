@@ -332,6 +332,38 @@ class AuthManager:
         """
         return [u.to_dict() for u in self._users.values() if u.role == role]
 
+    def get_all_users(self) -> List[Dict]:
+        """Get all users.
+
+        Returns:
+            List of all user dictionaries.
+        """
+        return [u.to_dict() for u in self._users.values()]
+
+    def get_roles(self) -> List[str]:
+        """Get list of available roles.
+
+        Returns:
+            List of role strings.
+        """
+        return list(self.ROLES.keys())
+
+    def has_sessions(self) -> bool:
+        """Check if any sessions exist.
+
+        Returns:
+            True if sessions exist.
+        """
+        return len(self._sessions) > 0
+
+    def get_session_count(self) -> int:
+        """Get number of active sessions.
+
+        Returns:
+            Count of sessions.
+        """
+        return len(self._sessions)
+
     def _save_users(self):
         """Save users to file."""
         data = {}
