@@ -251,3 +251,35 @@ class LogParser:
             True if using json_log pattern.
         """
         return self.pattern_name == "json_log"
+
+    def get_pattern(self) -> Pattern:
+        """Get the compiled pattern.
+
+        Returns:
+            Compiled regex pattern.
+        """
+        return self.pattern
+
+    def is_standard_pattern(self) -> bool:
+        """Check if parser uses standard pattern.
+
+        Returns:
+            True if using standard pattern.
+        """
+        return self.pattern_name == "standard"
+
+    def is_syslog_pattern(self) -> bool:
+        """Check if parser uses syslog pattern.
+
+        Returns:
+            True if using syslog pattern.
+        """
+        return self.pattern_name == "syslog"
+
+    def is_apache_pattern(self) -> bool:
+        """Check if parser uses apache pattern.
+
+        Returns:
+            True if using apache pattern.
+        """
+        return self.pattern_name == "apache"
