@@ -52,6 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     p.add_argument("--no-color", action="store_true", help="Disable colored output")
     p.add_argument("--count", action="store_true", help="Show entry count only")
+    p.add_argument("--dedup", action="store_true", help="Remove duplicate entries")
     return p
 
 
