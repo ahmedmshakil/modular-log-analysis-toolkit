@@ -716,6 +716,39 @@ def get_api_endpoints() -> Dict[str, str]:
     }
 
 
+def get_endpoint_count() -> int:
+    """Get number of API endpoints.
+
+    Returns:
+        Count of endpoints.
+    """
+    return len(get_api_endpoints())
+
+
+def has_entries(entries: List[LogEntry]) -> bool:
+    """Check if entries list has entries.
+
+    Args:
+        entries: List of log entries.
+
+    Returns:
+        True if entries exist.
+    """
+    return entries is not None and len(entries) > 0
+
+
+def get_entries_count(entries: List[LogEntry]) -> int:
+    """Get number of entries.
+
+    Args:
+        entries: List of log entries.
+
+    Returns:
+        Count of entries.
+    """
+    return len(entries) if entries else 0
+
+
 if __name__ == "__main__":
     from .parser import LogParser
     from .reader import read_log_lines
