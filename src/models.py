@@ -109,6 +109,44 @@ class LogEntry:
         """
         return self.source is not None and self.source != ""
 
+    def has_tags(self) -> bool:
+        """Check if entry has any tags.
+
+        Returns:
+            True if tags exist.
+        """
+        return len(self.tags) > 0
+
+    def has_metadata(self) -> bool:
+        """Check if entry has any metadata.
+
+        Returns:
+            True if metadata exists.
+        """
+        return len(self.metadata) > 0
+
+    def get_tag(self, key: str) -> Optional[str]:
+        """Get a specific tag value.
+
+        Args:
+            key: Tag key.
+
+        Returns:
+            Tag value if found, None otherwise.
+        """
+        return self.tags.get(key)
+
+    def get_metadata(self, key: str) -> Optional[Any]:
+        """Get a specific metadata value.
+
+        Args:
+            key: Metadata key.
+
+        Returns:
+            Metadata value if found, None otherwise.
+        """
+        return self.metadata.get(key)
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert log entry to dictionary.
 
