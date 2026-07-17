@@ -287,3 +287,38 @@ class WebhookRouter:
             List of endpoint name strings.
         """
         return list(self._senders.keys())
+
+    def get_endpoints_dict(self) -> List[Dict[str, Any]]:
+        """Get all endpoints as dictionaries.
+
+        Returns:
+            List of endpoint dictionaries.
+        """
+        return [
+            {
+                "name": name,
+                "url": sender.url,
+                "stats": sender.stats,
+            }
+            for name, sender in self._senders.items()
+        ]
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get router statistics as dictionary.
+
+        Returns:
+            Dictionary with router stats.
+        """
+        return {
+            "endpoints": self.endpoint_count,
+            "total_sent": self.total_sent(),
+            "total_errors": self.total_errors(),
+        }
+
+    def has_multiple_endpoints(self) -> bool:
+        """Check if multiple endpoints are registered.
+
+        Returns:
+            True if more than one endpoint exists.
+        """
+        return len(self._senders) > 1
