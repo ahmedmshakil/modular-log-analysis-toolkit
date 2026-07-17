@@ -375,3 +375,41 @@ class AnalysisResult:
             True if top errors exist.
         """
         return len(self.top_errors) > 0
+
+    @property
+    def has_time_range(self) -> bool:
+        """Check if analysis has time range.
+
+        Returns:
+            True if time range exists.
+        """
+        return self.time_range is not None
+
+    @property
+    def has_duration(self) -> bool:
+        """Check if analysis has duration.
+
+        Returns:
+            True if duration is greater than 0.
+        """
+        return self.duration_seconds > 0
+
+    @property
+    def top_error_count(self) -> int:
+        """Get number of top errors.
+
+        Returns:
+            Count of top errors.
+        """
+        return len(self.top_errors)
+
+    def get_level_count(self, level: str) -> int:
+        """Get count for a specific level.
+
+        Args:
+            level: Level string (e.g., "ERROR", "INFO").
+
+        Returns:
+            Count for the level, 0 if not found.
+        """
+        return self.level_counts.get(level.upper(), 0)
