@@ -308,3 +308,45 @@ class PluginManager:
             Count of disabled plugins.
         """
         return sum(1 for v in self._enabled.values() if not v)
+
+    def get_plugins_dict(self) -> List[Dict[str, Any]]:
+        """Get all plugins as dictionaries.
+
+        Returns:
+            List of plugin dictionaries.
+        """
+        return [
+            {
+                "name": name,
+                "version": plugin.version,
+                "enabled": self._enabled.get(name, False),
+            }
+            for name, plugin in self._plugins.items()
+        ]
+
+    def get_enabled_plugins_dict(self) -> List[Dict[str, Any]]:
+        """Get enabled plugins as dictionaries.
+
+        Returns:
+            List of enabled plugin dictionaries.
+        """
+        return [
+            {
+                "name": name,
+                "version": plugin.version,
+            }
+            for name, plugin in self._plugins.items()
+            if self._enabled.get(name, False)
+        ]
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get plugin manager statistics as dictionary.
+
+        Returns:
+            Dictionary with plugin stats.
+        """
+        return {
+            "total": len(self._plugins),
+            "enabled": self.get_enabled_count(),
+            "disabled": self.get_disabled_count(),
+        }
