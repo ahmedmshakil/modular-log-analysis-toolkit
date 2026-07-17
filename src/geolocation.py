@@ -299,3 +299,36 @@ class GeoLookup:
             Cache hit count.
         """
         return self._cache_hits
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get statistics as dictionary.
+
+        Returns:
+            Dictionary with lookup stats.
+        """
+        return {
+            "lookups": self._lookup_count,
+            "cache_hits": self._cache_hits,
+            "cached": len(self._cache),
+            "cache_capacity": self._cache_size,
+            "hit_rate": self.cache_hit_rate,
+            "is_full": self.is_cache_full(),
+        }
+
+    def has_cache_entries(self) -> bool:
+        """Check if cache has any entries.
+
+        Returns:
+            True if cache is not empty.
+        """
+        return len(self._cache) > 0
+
+    def get_cache_usage_percent(self) -> float:
+        """Get cache usage as percentage.
+
+        Returns:
+            Cache usage percentage.
+        """
+        if self._cache_size == 0:
+            return 0.0
+        return round(len(self._cache) / self._cache_size * 100, 2)
