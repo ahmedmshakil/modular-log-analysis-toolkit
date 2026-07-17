@@ -278,3 +278,35 @@ class AlertManager:
             True if callbacks exist.
         """
         return len(self.callbacks) > 0
+
+    def get_alerts_dict(self) -> List[Dict[str, Any]]:
+        """Get all alerts as dictionaries.
+
+        Returns:
+            List of alert dictionaries.
+        """
+        return [a.to_dict() for a in self.alerts]
+
+    def get_active_alerts_dict(self) -> List[Dict[str, Any]]:
+        """Get active alerts as dictionaries.
+
+        Returns:
+            List of active alert dictionaries.
+        """
+        return [a.to_dict() for a in self.alerts if not a.acknowledged]
+
+    def has_thresholds(self) -> bool:
+        """Check if any thresholds are configured.
+
+        Returns:
+            True if thresholds exist.
+        """
+        return len(self.thresholds) > 0
+
+    def get_callback_count(self) -> int:
+        """Get number of registered callbacks.
+
+        Returns:
+            Count of callbacks.
+        """
+        return len(self.callbacks)
