@@ -322,3 +322,38 @@ class LogAggregator:
             True if ERROR or CRITICAL entries exist.
         """
         return any(e.level in (LogLevel.ERROR, LogLevel.CRITICAL) for e in self.entries)
+
+    def get_entries_dict(self) -> List[Dict[str, Any]]:
+        """Get all entries as dictionaries.
+
+        Returns:
+            List of entry dictionaries.
+        """
+        return [e.to_dict() for e in self.entries]
+
+    def get_entries_str(self) -> List[str]:
+        """Get all entries as strings.
+
+        Returns:
+            List of entry string representations.
+        """
+        return [str(e) for e in self.entries]
+
+    def has_multiple_sources(self) -> bool:
+        """Check if entries come from multiple sources.
+
+        Returns:
+            True if more than one source exists.
+        """
+        return self.sources_count() > 1
+
+    def get_time_range(self) -> Optional[Tuple[datetime, datetime]]:
+        """Get time range of entries.
+
+        Returns:
+            Tuple of (min_timestamp, max_timestamp) or None.
+        """
+        if not self.entries or len(self.entries) < 2:
+            return None
+        timestamps = [e.timestamp for e in self.entries]
+        return (min(timestamps), max(timestamps))
