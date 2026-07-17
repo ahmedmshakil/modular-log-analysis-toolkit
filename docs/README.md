@@ -194,3 +194,11 @@ Found an error or have a suggestion? Please open an issue on GitHub.
 | `cache.py`    | LRU caching layer                        |
 | `web.py`      | Web dashboard                            |
 | `cli.py`      | Command-line interface                   |
+
+## Version History
+
+| Version    | Date       | Highlights                                  |
+| ---------- | ---------- | ------------------------------------------- |
+| 1.2.0-dev  | 2026-07-17 | Enhanced methods, CLI flags, improved docs  |
+| 1.1.0      | 2026-06-01 | Search, retention, geolocation, auth, cache |
+| 1.0.0      | 2026-05-01 | Initial release with core features          |
