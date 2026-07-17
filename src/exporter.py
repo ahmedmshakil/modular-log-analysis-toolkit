@@ -232,3 +232,36 @@ class LogExporter:
             Count of formats.
         """
         return 3
+
+    @staticmethod
+    def is_valid_format(format_name: str) -> bool:
+        """Check if a format name is valid.
+
+        Args:
+            format_name: Format name to check.
+
+        Returns:
+            True if format is supported.
+        """
+        return format_name.lower() in ["json", "csv", "text"]
+
+    @staticmethod
+    def get_entries_summary(entries: List[LogEntry]) -> Dict[str, Any]:
+        """Get summary of entries to export.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Dictionary with entry summary.
+        """
+        if not entries:
+            return {"count": 0, "levels": {}, "sources": []}
+        from collections import Counter
+        levels = Counter(e.level.value for e in entries)
+        sources = list(set(e.source for e in entries if e.source))
+        return {
+            "count": len(entries),
+            "levels": dict(levels),
+            "sources": sources,
+        }
