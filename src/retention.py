@@ -329,3 +329,41 @@ class RetentionManager:
         files = self.scan_files()
         total_bytes = sum(f.get("size_bytes", 0) for f in files)
         return format_size(total_bytes)
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get retention manager statistics as dictionary.
+
+        Returns:
+            Dictionary with retention stats.
+        """
+        return {
+            "policies": len(self.policies),
+            "files": self.get_file_count(),
+            "actions": self.get_actions_count(),
+            "has_files": self.has_files(),
+        }
+
+    def get_actions_log(self) -> List[Dict]:
+        """Get actions log.
+
+        Returns:
+            List of action dictionaries.
+        """
+        return list(self._actions_log)
+
+    def get_policies_dict(self) -> List[Dict[str, Any]]:
+        """Get all policies as dictionaries.
+
+        Returns:
+            List of policy dictionaries.
+        """
+        return [
+            {
+                "name": p.name,
+                "max_age_days": p.max_age_days,
+                "compress_after_days": p.compress_after_days,
+                "delete_after_days": p.delete_after_days,
+                "max_size_mb": p.max_size_mb,
+            }
+            for p in self.policies
+        ]
