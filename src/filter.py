@@ -373,3 +373,41 @@ class LogFilter:
             True if filters exist.
         """
         return len(self._filters) > 0
+
+    def get_entries_dict(self) -> List[Dict[str, Any]]:
+        """Get all entries as dictionaries.
+
+        Returns:
+            List of entry dictionaries.
+        """
+        return [e.to_dict() for e in self.entries]
+
+    def get_entries_str(self) -> List[str]:
+        """Get all entries as strings.
+
+        Returns:
+            List of entry string representations.
+        """
+        return [str(e) for e in self.entries]
+
+    def has_level(self, level: LogLevel) -> bool:
+        """Check if entries contain a specific level.
+
+        Args:
+            level: LogLevel to check.
+
+        Returns:
+            True if level exists in entries.
+        """
+        return any(e.level == level for e in self.entries)
+
+    def get_level_count(self, level: LogLevel) -> int:
+        """Count entries of a specific level.
+
+        Args:
+            level: LogLevel to count.
+
+        Returns:
+            Count of entries with the level.
+        """
+        return sum(1 for e in self.entries if e.level == level)
