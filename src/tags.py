@@ -313,3 +313,40 @@ class TagManager:
             Count of rules.
         """
         return len(self._rules)
+
+    def get_rules_dict(self) -> List[Dict[str, Any]]:
+        """Get all rules as dictionaries.
+
+        Returns:
+            List of rule dictionaries.
+        """
+        return [
+            {
+                "name": r.name,
+                "tag": r.tag,
+                "conditions": r.conditions,
+                "color": r.color,
+                "priority": r.priority,
+            }
+            for r in self._rules
+        ]
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get tag manager statistics as dictionary.
+
+        Returns:
+            Dictionary with tag stats.
+        """
+        return {
+            "rules": len(self._rules),
+            "manual_tags": self.get_manual_tag_count(),
+            "unique_tags": len(self.get_all_tag_names()),
+        }
+
+    def has_tags(self) -> bool:
+        """Check if any tags exist (rules or manual).
+
+        Returns:
+            True if tags exist.
+        """
+        return len(self._rules) > 0 or len(self._manual_tags) > 0
