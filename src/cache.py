@@ -291,3 +291,27 @@ class QueryCache:
         """
         sorted_queries = sorted(self._popular_queries.items(), key=lambda x: x[1], reverse=True)
         return [q for q, _ in sorted_queries]
+
+    def has_queries(self) -> bool:
+        """Check if any queries are tracked.
+
+        Returns:
+            True if queries exist.
+        """
+        return len(self._popular_queries) > 0
+
+    def get_query_count(self) -> int:
+        """Get number of unique queries.
+
+        Returns:
+            Count of unique queries.
+        """
+        return len(self._popular_queries)
+
+    def get_most_popular(self) -> Optional[str]:
+        """Get the most popular query.
+
+        Returns:
+            Most popular query string, or None.
+        """
+        return self.get_popular_query(0)
