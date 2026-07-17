@@ -313,3 +313,45 @@ def get_file_size_formatted(file_path: str) -> str:
     if not path.exists():
         raise FileNotFoundError(f"File not found: {file_path}")
     return format_size(path.stat().st_size)
+
+
+def is_log_file(file_path: str) -> bool:
+    """Check if file is a log file based on extension.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        True if file has a log extension.
+    """
+    log_extensions = {".log", ".log.gz", ".syslog", ".auth.log"}
+    path = Path(file_path)
+    return path.suffix.lower() in log_extensions or file_path.endswith(".log.gz")
+
+
+def get_file_info_dict(file_path: str) -> Dict[str, Any]:
+    """Get file info as dictionary.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        Dictionary with file info.
+
+    Raises:
+        FileNotFoundError: If file does not exist.
+    """
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+    stat = path.stat()
+    return {
+        "name": path.name,
+        "stem": path.stem,
+        "extension": path.suffix,
+        "size_bytes": stat.st_size,
+        "size_formatted": format_size(stat.st_size),
+        "is_compressed": is_compressed(file_path),
+        "is_text": is_text_file(file_path),
+        "is_log": is_log_file(file_path),
+    }
