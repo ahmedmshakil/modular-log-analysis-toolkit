@@ -247,3 +247,39 @@ class LogDeduplicator:
             List of hash strings.
         """
         return list(self._seen.keys())
+
+    def get_duplicate_hashes(self) -> List[str]:
+        """Get hashes that have duplicates.
+
+        Returns:
+            List of hash strings with count > 1.
+        """
+        return [h for h, count in self._seen.items() if count > 1]
+
+    def get_unique_hashes(self) -> List[str]:
+        """Get hashes that are unique (count == 1).
+
+        Returns:
+            List of unique hash strings.
+        """
+        return [h for h, count in self._seen.items() if count == 1]
+
+    def get_max_duplicates(self) -> int:
+        """Get maximum duplicate count for any entry.
+
+        Returns:
+            Maximum duplicate count, or 0 if no entries.
+        """
+        if not self._seen:
+            return 0
+        return max(self._seen.values())
+
+    def get_min_duplicates(self) -> int:
+        """Get minimum duplicate count for any entry.
+
+        Returns:
+            Minimum duplicate count, or 0 if no entries.
+        """
+        if not self._seen:
+            return 0
+        return min(self._seen.values())
