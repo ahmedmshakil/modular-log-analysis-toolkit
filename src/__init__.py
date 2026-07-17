@@ -65,3 +65,27 @@ def get_package_info() -> dict:
         "author": __author__,
         "modules": len(__all__),
     }
+
+
+def get_version_info() -> dict:
+    """Get version information.
+
+    Returns:
+        Dictionary with version details.
+    """
+    parts = __version__.split(".")
+    return {
+        "version": __version__,
+        "major": int(parts[0]) if len(parts) > 0 else 0,
+        "minor": int(parts[1]) if len(parts) > 1 else 0,
+        "patch": parts[2] if len(parts) > 2 else "0",
+    }
+
+
+def is_dev_version() -> bool:
+    """Check if this is a development version.
+
+    Returns:
+        True if version contains 'dev'.
+    """
+    return "dev" in __version__
