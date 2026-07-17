@@ -229,3 +229,35 @@ class LogStream:
             Count of errors.
         """
         return self._errors
+
+    def get_file_path(self) -> str:
+        """Get the file path being streamed.
+
+        Returns:
+            File path string.
+        """
+        return str(self.file_path)
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get streaming statistics as dictionary.
+
+        Returns:
+            Dictionary with streaming stats.
+        """
+        return {
+            "file": self.file_path.name,
+            "processed": self._processed,
+            "errors": self._errors,
+            "error_rate": self.error_rate,
+            "paused": self._paused,
+            "stopped": self._stopped,
+            "active": self.is_active,
+        }
+
+    def has_processed(self) -> bool:
+        """Check if any entries have been processed.
+
+        Returns:
+            True if processed entries exist.
+        """
+        return self._processed > 0
