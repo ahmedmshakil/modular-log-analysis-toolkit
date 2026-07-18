@@ -357,3 +357,39 @@ class LogAggregator:
             return None
         timestamps = [e.timestamp for e in self.entries]
         return (min(timestamps), max(timestamps))
+
+    def get_summary_string(self) -> str:
+        """Get a formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        return (
+            f"Entries: {self.entry_count}, "
+            f"Errors: {self.error_count()}, "
+            f"Sources: {self.sources_count()}, "
+            f"Error Rate: {self.error_rate():.1f}%"
+        )
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get aggregator statistics as dictionary.
+
+        Returns:
+            Dictionary with aggregator stats.
+        """
+        return {
+            "entries": self.entry_count,
+            "sources": self.sources_count(),
+            "error_rate": self.error_rate(),
+            "has_errors": self.has_errors(),
+            "has_multiple_sources": self.has_multiple_sources(),
+        }
+
+    def get_source_counts(self) -> Dict[str, int]:
+        """Get counts per source.
+
+        Returns:
+            Dictionary mapping source names to counts.
+        """
+        from collections import Counter
+        return dict(Counter(e.source for e in self.entries if e.source))
