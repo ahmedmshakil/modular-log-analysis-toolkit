@@ -283,3 +283,31 @@ class LogParser:
             True if using apache pattern.
         """
         return self.pattern_name == "apache"
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get parser statistics as dictionary.
+
+        Returns:
+            Dictionary with parser stats.
+        """
+        return {
+            "pattern_name": self.pattern_name,
+            "is_custom": self.has_custom_pattern(),
+            "available_patterns": self.get_pattern_count(),
+        }
+
+    def get_summary_string(self) -> str:
+        """Get a formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        return f"Pattern: {self.pattern_name}, Custom: {self.has_custom_pattern()}"
+
+    def get_available_patterns_list(self) -> List[str]:
+        """Get list of available pattern names.
+
+        Returns:
+            List of pattern name strings.
+        """
+        return list(PATTERNS.keys())
