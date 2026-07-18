@@ -453,3 +453,47 @@ class AnalysisResult:
             Count for the level, 0 if not found.
         """
         return self.level_counts.get(level.upper(), 0)
+
+    def get_summary_string(self) -> str:
+        """Get a formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        return (
+            f"Entries: {self.total_entries}, "
+            f"Errors: {self.error_count}, "
+            f"Sources: {self.source_count}, "
+            f"Duration: {self.duration_minutes:.1f}m"
+        )
+
+    def has_entries(self) -> bool:
+        """Check if analysis has any entries.
+
+        Returns:
+            True if entries exist.
+        """
+        return self.total_entries > 0
+
+    def get_level_distribution(self) -> Dict[str, float]:
+        """Get level distribution as percentages.
+
+        Returns:
+            Dictionary mapping level names to percentages.
+        """
+        if self.total_entries == 0:
+            return {}
+        return {
+            level: round(count / self.total_entries * 100, 2)
+            for level, count in self.level_counts.items()
+        }
+
+    def get_most_common_level(self) -> Optional[str]:
+        """Get the most common log level.
+
+        Returns:
+            Most common level string, or None.
+        """
+        if not self.level_counts:
+            return None
+        return max(self.level_counts, key=self.level_counts.get)
