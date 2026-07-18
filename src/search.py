@@ -368,3 +368,44 @@ class LogSearchIndex:
             Count of levels.
         """
         return len(self._field_index["level"])
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get search index statistics as dictionary.
+
+        Returns:
+            Dictionary with search stats.
+        """
+        return {
+            "entries": len(self._entries),
+            "words": len(self._index),
+            "sources": len(self._field_index["source"]),
+            "levels": len(self._field_index["level"]),
+        }
+
+    def get_summary_string(self) -> str:
+        """Get a formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        return (
+            f"Entries: {len(self._entries)}, "
+            f"Words: {len(self._index)}, "
+            f"Sources: {len(self._field_index['source'])}"
+        )
+
+    def get_level_counts(self) -> Dict[str, int]:
+        """Get counts per level.
+
+        Returns:
+            Dictionary mapping level names to counts.
+        """
+        return {level: len(indices) for level, indices in self._field_index["level"].items()}
+
+    def get_source_counts(self) -> Dict[str, int]:
+        """Get counts per source.
+
+        Returns:
+            Dictionary mapping source names to counts.
+        """
+        return {source: len(indices) for source, indices in self._field_index["source"].items()}
