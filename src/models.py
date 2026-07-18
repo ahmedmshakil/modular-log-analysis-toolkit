@@ -147,6 +147,46 @@ class LogEntry:
         """
         return self.metadata.get(key)
 
+    def set_tag(self, key: str, value: str):
+        """Set a tag value.
+
+        Args:
+            key: Tag key.
+            value: Tag value.
+        """
+        self.tags[key] = value
+
+    def set_metadata(self, key: str, value: Any):
+        """Set a metadata value.
+
+        Args:
+            key: Metadata key.
+            value: Metadata value.
+        """
+        self.metadata[key] = value
+
+    def remove_tag(self, key: str) -> bool:
+        """Remove a tag.
+
+        Args:
+            key: Tag key to remove.
+
+        Returns:
+            True if tag was removed.
+        """
+        if key in self.tags:
+            del self.tags[key]
+            return True
+        return False
+
+    def clear_tags(self):
+        """Clear all tags."""
+        self.tags.clear()
+
+    def clear_metadata(self):
+        """Clear all metadata."""
+        self.metadata.clear()
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert log entry to dictionary.
 
