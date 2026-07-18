@@ -411,3 +411,37 @@ class LogFilter:
             Count of entries with the level.
         """
         return sum(1 for e in self.entries if e.level == level)
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get filter statistics as dictionary.
+
+        Returns:
+            Dictionary with filter stats.
+        """
+        return {
+            "entries": self.entry_count,
+            "filters": self.get_filter_count(),
+            "unique_sources": len(self.unique_sources),
+            "has_filters": self.has_filters(),
+        }
+
+    def get_summary_string(self) -> str:
+        """Get a formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        return (
+            f"Entries: {self.entry_count}, "
+            f"Filters: {self.get_filter_count()}, "
+            f"Sources: {len(self.unique_sources)}"
+        )
+
+    def get_source_counts(self) -> Dict[str, int]:
+        """Get counts per source.
+
+        Returns:
+            Dictionary mapping source names to counts.
+        """
+        from collections import Counter
+        return dict(Counter(e.source for e in self.entries if e.source))
