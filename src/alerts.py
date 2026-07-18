@@ -310,3 +310,36 @@ class AlertManager:
             Count of callbacks.
         """
         return len(self.callbacks)
+
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get alert manager statistics as dictionary.
+
+        Returns:
+            Dictionary with alert stats.
+        """
+        return {
+            "thresholds": len(self.thresholds),
+            "alerts": len(self.alerts),
+            "active": self.get_unacknowledged_count(),
+            "callbacks": len(self.callbacks),
+        }
+
+    def get_summary_string(self) -> str:
+        """Get a formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        return (
+            f"Thresholds: {len(self.thresholds)}, "
+            f"Alerts: {len(self.alerts)}, "
+            f"Active: {self.get_unacknowledged_count()}"
+        )
+
+    def get_threshold_names(self) -> List[str]:
+        """Get list of threshold metric names.
+
+        Returns:
+            List of metric name strings.
+        """
+        return list(self.thresholds.keys())
