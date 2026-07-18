@@ -364,6 +364,40 @@ class AuthManager:
         """
         return len(self._sessions)
 
+    def get_stats_dict(self) -> Dict[str, Any]:
+        """Get auth manager statistics as dictionary.
+
+        Returns:
+            Dictionary with auth stats.
+        """
+        return {
+            "users": len(self._users),
+            "active_users": len(self.get_active_users()),
+            "sessions": len(self._sessions),
+            "roles": len(self.ROLES),
+        }
+
+    def get_summary_string(self) -> str:
+        """Get a formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        return (
+            f"Users: {len(self._users)}, "
+            f"Active: {len(self.get_active_users())}, "
+            f"Sessions: {len(self._sessions)}"
+        )
+
+    def get_role_counts(self) -> Dict[str, int]:
+        """Get count of users per role.
+
+        Returns:
+            Dictionary mapping role names to counts.
+        """
+        from collections import Counter
+        return dict(Counter(u.role for u in self._users.values()))
+
     def _save_users(self):
         """Save users to file."""
         data = {}
