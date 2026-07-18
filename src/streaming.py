@@ -261,3 +261,39 @@ class LogStream:
             True if processed entries exist.
         """
         return self._processed > 0
+
+    def get_summary_string(self) -> str:
+        """Get a formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        status = "stopped" if self._stopped else ("paused" if self._paused else "active")
+        return (
+            f"File: {self.file_path.name}, "
+            f"Processed: {self._processed}, "
+            f"Errors: {self._errors}, "
+            f"Status: {status}"
+        )
+
+    def get_stats_summary(self) -> Dict[str, Any]:
+        """Get streaming statistics summary.
+
+        Returns:
+            Dictionary with streaming stats.
+        """
+        return {
+            "file": self.file_path.name,
+            "processed": self._processed,
+            "errors": self._errors,
+            "error_rate": self.error_rate,
+            "status": "stopped" if self._stopped else ("paused" if self._paused else "active"),
+        }
+
+    def has_file(self) -> bool:
+        """Check if the stream file exists.
+
+        Returns:
+            True if file exists.
+        """
+        return self.file_path.exists()
