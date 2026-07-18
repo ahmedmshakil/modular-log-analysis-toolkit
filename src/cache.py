@@ -315,3 +315,36 @@ class QueryCache:
             Most popular query string, or None.
         """
         return self.get_popular_query(0)
+
+    def get_summary_string(self) -> str:
+        """Get a formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        return (
+            f"Size: {self._cache.size}, "
+            f"Hit Rate: {self.hit_rate:.1f}%, "
+            f"Queries: {self.query_count}"
+        )
+
+    def get_stats_summary(self) -> Dict[str, Any]:
+        """Get cache statistics summary.
+
+        Returns:
+            Dictionary with cache stats.
+        """
+        return {
+            "size": self._cache.size,
+            "hit_rate": self.hit_rate,
+            "queries": self.query_count,
+            "is_empty": self.is_empty(),
+        }
+
+    def has_popular_queries(self) -> bool:
+        """Check if any popular queries exist.
+
+        Returns:
+            True if popular queries exist.
+        """
+        return len(self._popular_queries) > 0
