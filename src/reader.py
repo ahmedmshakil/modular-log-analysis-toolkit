@@ -355,3 +355,44 @@ def get_file_info_dict(file_path: str) -> Dict[str, Any]:
         "is_text": is_text_file(file_path),
         "is_log": is_log_file(file_path),
     }
+
+
+def get_file_summary_string(file_path: str) -> str:
+    """Get a formatted file summary string.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        Formatted summary string.
+
+    Raises:
+        FileNotFoundError: If file does not exist.
+    """
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+    stat = path.stat()
+    return (
+        f"Name: {path.name}, "
+        f"Size: {format_size(stat.st_size)}, "
+        f"Type: {path.suffix}"
+    )
+
+
+def get_supported_encodings() -> List[str]:
+    """Get list of supported file encodings.
+
+    Returns:
+        List of encoding strings.
+    """
+    return ["utf-8", "utf-8-sig", "utf-16-le", "utf-16-be", "latin-1"]
+
+
+def get_encoding_count() -> int:
+    """Get number of supported encodings.
+
+    Returns:
+        Count of encodings.
+    """
+    return 5
