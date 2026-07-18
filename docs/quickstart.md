@@ -395,3 +395,35 @@ examples/
 - Use `encoding` parameter when reading non-UTF-8 files
 - Call `reset()` on filters before reusing them
 - Close web dashboard with Ctrl+C to free the port
+
+## New Features (v1.2.0)
+
+### CLI Enhancements
+
+```bash
+# Show entry count only
+python -m src.cli app.log --count
+
+# Remove duplicates
+python -m src.cli app.log --dedup
+
+# Disable colored output
+python -m src.cli app.log --no-color
+```
+
+### New Python API Methods
+
+```python
+# Get statistics as dictionary
+stats = aggregator.get_stats_dict()
+summary = aggregator.get_summary_string()
+
+# Get entries as dictionaries
+entries_dict = filter.get_entries_dict()
+
+# Get source counts
+source_counts = aggregator.get_source_counts()
+
+# Get level distribution
+distribution = result.get_level_distribution()
+```
