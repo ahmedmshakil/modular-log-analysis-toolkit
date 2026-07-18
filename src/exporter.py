@@ -265,3 +265,35 @@ class LogExporter:
             "levels": dict(levels),
             "sources": sources,
         }
+
+    @staticmethod
+    def get_summary_string(entries: List[LogEntry]) -> str:
+        """Get a formatted summary string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted summary string.
+        """
+        if not entries:
+            return "No entries"
+        from collections import Counter
+        levels = Counter(e.level.value for e in entries)
+        return f"Entries: {len(entries)}, Levels: {dict(levels)}"
+
+    @staticmethod
+    def get_stats_dict(entries: List[LogEntry]) -> Dict[str, Any]:
+        """Get export statistics as dictionary.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Dictionary with export stats.
+        """
+        return {
+            "count": len(entries) if entries else 0,
+            "is_empty": not entries,
+            "formats": LogExporter.get_format_count(),
+        }
