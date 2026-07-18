@@ -283,3 +283,38 @@ class LogDeduplicator:
         if not self._seen:
             return 0
         return min(self._seen.values())
+
+    def get_summary_string(self) -> str:
+        """Get a formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        return (
+            f"Unique: {self.unique_count}, "
+            f"Total: {self.total_count}, "
+            f"Duplicates: {self.duplicate_count}, "
+            f"Rate: {self.dedup_rate:.1f}%"
+        )
+
+    def get_stats_summary(self) -> Dict[str, Any]:
+        """Get deduplication statistics summary.
+
+        Returns:
+            Dictionary with dedup stats.
+        """
+        return {
+            "unique": self.unique_count,
+            "total": self.total_count,
+            "duplicates": self.duplicate_count,
+            "dedup_rate": self.dedup_rate,
+            "cache_size": self.cache_size,
+        }
+
+    def has_duplicates_found(self) -> bool:
+        """Check if any duplicates were found.
+
+        Returns:
+            True if duplicates exist.
+        """
+        return self.duplicate_count > 0
