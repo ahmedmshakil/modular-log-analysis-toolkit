@@ -445,3 +445,38 @@ class LogFilter:
         """
         from collections import Counter
         return dict(Counter(e.source for e in self.entries if e.source))
+
+    def get_level_distribution(self) -> Dict[str, float]:
+        """Get level distribution as percentages.
+
+        Returns:
+            Dictionary mapping level names to percentages.
+        """
+        if not self.entries:
+            return {}
+        total = len(self.entries)
+        counts = self.count_by_level()
+        return {level: round(count / total * 100, 2) for level, count in counts.items()}
+
+    def get_most_common_level(self) -> Optional[str]:
+        """Get the most common log level.
+
+        Returns:
+            Most common level string, or None.
+        """
+        counts = self.count_by_level()
+        if not counts:
+            return None
+        return max(counts, key=counts.get)
+
+    def get_error_rate(self) -> float:
+        """Get error rate as percentage.
+
+        Returns:
+            Error rate percentage.
+        """
+        if not self.entries:
+            return 0.0
+        total = len(self.entries)
+        errors = self.get_level_count(LogLevel.ERROR) + self.get_level_count(LogLevel.CRITICAL)
+        return round(errors / total * 100, 2)
