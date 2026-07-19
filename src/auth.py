@@ -398,6 +398,45 @@ class AuthManager:
         from collections import Counter
         return dict(Counter(u.role for u in self._users.values()))
 
+    def get_active_user_count(self) -> int:
+        """Get count of active users.
+
+        Returns:
+            Count of active users.
+        """
+        return sum(1 for u in self._users.values() if u.active)
+
+    def get_inactive_user_count(self) -> int:
+        """Get count of inactive users.
+
+        Returns:
+            Count of inactive users.
+        """
+        return sum(1 for u in self._users.values() if not u.active)
+
+    def has_role(self, role: str) -> bool:
+        """Check if any user has a specific role.
+
+        Args:
+            role: Role name to check.
+
+        Returns:
+            True if role exists.
+        """
+        return any(u.role == role for u in self._users.values())
+
+    def get_role_distribution(self) -> Dict[str, float]:
+        """Get role distribution as percentages.
+
+        Returns:
+            Dictionary mapping role names to percentages.
+        """
+        if not self._users:
+            return {}
+        total = len(self._users)
+        counts = self.get_role_counts()
+        return {role: round(count / total * 100, 2) for role, count in counts.items()}
+
     def _save_users(self):
         """Save users to file."""
         data = {}
