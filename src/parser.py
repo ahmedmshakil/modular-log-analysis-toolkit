@@ -311,3 +311,37 @@ class LogParser:
             List of pattern name strings.
         """
         return list(PATTERNS.keys())
+
+    def get_pattern_type(self) -> str:
+        """Get the type of pattern being used.
+
+        Returns:
+            Pattern type string.
+        """
+        if self.has_custom_pattern():
+            return "custom"
+        return self.pattern_name
+
+    def has_pattern(self) -> bool:
+        """Check if a pattern is set.
+
+        Returns:
+            True if pattern exists.
+        """
+        return self.pattern is not None
+
+    def get_pattern_string(self) -> str:
+        """Get the pattern as string.
+
+        Returns:
+            Pattern string representation.
+        """
+        return self.pattern.pattern if self.pattern else ""
+
+    def is_builtin_pattern(self) -> bool:
+        """Check if parser uses a built-in pattern.
+
+        Returns:
+            True if using built-in pattern.
+        """
+        return self.pattern_name in PATTERNS
