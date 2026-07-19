@@ -393,3 +393,38 @@ class LogAggregator:
         """
         from collections import Counter
         return dict(Counter(e.source for e in self.entries if e.source))
+
+    def get_level_distribution(self) -> Dict[str, float]:
+        """Get level distribution as percentages.
+
+        Returns:
+            Dictionary mapping level names to percentages.
+        """
+        if not self.entries:
+            return {}
+        total = len(self.entries)
+        counts = self.level_counts
+        return {level: round(count / total * 100, 2) for level, count in counts.items()}
+
+    def get_most_common_level(self) -> Optional[str]:
+        """Get the most common log level.
+
+        Returns:
+            Most common level string, or None.
+        """
+        counts = self.level_counts
+        if not counts:
+            return None
+        return max(counts, key=counts.get)
+
+    def get_source_distribution(self) -> Dict[str, float]:
+        """Get source distribution as percentages.
+
+        Returns:
+            Dictionary mapping source names to percentages.
+        """
+        if not self.entries:
+            return {}
+        total = len(self.entries)
+        counts = self.get_source_counts()
+        return {source: round(count / total * 100, 2) for source, count in counts.items()}
