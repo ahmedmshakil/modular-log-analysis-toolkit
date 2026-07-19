@@ -396,3 +396,39 @@ def get_encoding_count() -> int:
         Count of encodings.
     """
     return 5
+
+
+def get_supported_text_extensions() -> List[str]:
+    """Get list of supported text file extensions.
+
+    Returns:
+        List of extension strings.
+    """
+    return [".log", ".txt", ".csv", ".json", ".yaml", ".yml", ".md", ".xml"]
+
+
+def get_text_extension_count() -> int:
+    """Get number of supported text extensions.
+
+    Returns:
+        Count of extensions.
+    """
+    return 8
+
+
+def get_supported_log_extensions() -> List[str]:
+    """Get list of supported log file extensions.
+
+    Returns:
+        List of extension strings.
+    """
+    return [".log", ".log.gz", ".syslog", ".auth.log"]
+
+
+def get_log_extension_count() -> int:
+    """Get number of supported log extensions.
+
+    Returns:
+        Count of extensions.
+    """
+    return 4
