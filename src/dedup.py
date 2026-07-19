@@ -318,3 +318,39 @@ class LogDeduplicator:
             True if duplicates exist.
         """
         return self.duplicate_count > 0
+
+    def get_unique_rate(self) -> float:
+        """Get unique rate as percentage.
+
+        Returns:
+            Unique rate percentage.
+        """
+        if self.total_count == 0:
+            return 0.0
+        return round(self.unique_count / self.total_count * 100, 2)
+
+    def get_duplicate_rate_formatted(self) -> str:
+        """Get formatted duplicate rate string.
+
+        Returns:
+            Formatted duplicate rate string.
+        """
+        return f"{self.dedup_rate:.1f}%"
+
+    def get_average_duplicates(self) -> float:
+        """Get average duplicate count per entry.
+
+        Returns:
+            Average duplicate count.
+        """
+        if self.unique_count == 0:
+            return 0.0
+        return round(self.total_count / self.unique_count, 2)
+
+    def has_cache_entries(self) -> bool:
+        """Check if hash cache has entries.
+
+        Returns:
+            True if cache entries exist.
+        """
+        return len(self._hash_cache) > 0
