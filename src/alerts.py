@@ -343,3 +343,28 @@ class AlertManager:
             List of metric name strings.
         """
         return list(self.thresholds.keys())
+
+    def get_alert_severity_counts(self) -> Dict[str, int]:
+        """Get counts per alert severity.
+
+        Returns:
+            Dictionary mapping severity names to counts.
+        """
+        from collections import Counter
+        return dict(Counter(a.severity.value for a in self.alerts))
+
+    def get_acknowledged_count(self) -> int:
+        """Get count of acknowledged alerts.
+
+        Returns:
+            Count of acknowledged alerts.
+        """
+        return sum(1 for a in self.alerts if a.acknowledged)
+
+    def has_active_alerts(self) -> bool:
+        """Check if any active alerts exist.
+
+        Returns:
+            True if active alerts exist.
+        """
+        return self.get_unacknowledged_count() > 0
