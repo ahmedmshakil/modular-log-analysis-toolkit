@@ -297,3 +297,53 @@ class LogExporter:
             "is_empty": not entries,
             "formats": LogExporter.get_format_count(),
         }
+
+    @staticmethod
+    def get_level_distribution(entries: List[LogEntry]) -> Dict[str, float]:
+        """Get level distribution as percentages.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Dictionary mapping level names to percentages.
+        """
+        if not entries:
+            return {}
+        from collections import Counter
+        total = len(entries)
+        counts = Counter(e.level.value for e in entries)
+        return {level: round(count / total * 100, 2) for level, count in counts.items()}
+
+    @staticmethod
+    def get_source_distribution(entries: List[LogEntry]) -> Dict[str, float]:
+        """Get source distribution as percentages.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Dictionary mapping source names to percentages.
+        """
+        if not entries:
+            return {}
+        from collections import Counter
+        total = len(entries)
+        counts = Counter(e.source for e in entries if e.source)
+        return {source: round(count / total * 100, 2) for source, count in counts.items()}
+
+    @staticmethod
+    def get_most_common_level(entries: List[LogEntry]) -> Optional[str]:
+        """Get the most common level.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Most common level string, or None.
+        """
+        if not entries:
+            return None
+        from collections import Counter
+        counts = Counter(e.level.value for e in entries)
+        return max(counts, key=counts.get) if counts else None
