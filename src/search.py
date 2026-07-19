@@ -409,3 +409,49 @@ class LogSearchIndex:
             Dictionary mapping source names to counts.
         """
         return {source: len(indices) for source, indices in self._field_index["source"].items()}
+
+    def get_level_distribution(self) -> Dict[str, float]:
+        """Get level distribution as percentages.
+
+        Returns:
+            Dictionary mapping level names to percentages.
+        """
+        if not self._entries:
+            return {}
+        total = len(self._entries)
+        counts = self.get_level_counts()
+        return {level: round(count / total * 100, 2) for level, count in counts.items()}
+
+    def get_source_distribution(self) -> Dict[str, float]:
+        """Get source distribution as percentages.
+
+        Returns:
+            Dictionary mapping source names to percentages.
+        """
+        if not self._entries:
+            return {}
+        total = len(self._entries)
+        counts = self.get_source_counts()
+        return {source: round(count / total * 100, 2) for source, count in counts.items()}
+
+    def get_most_common_level(self) -> Optional[str]:
+        """Get the most common level in index.
+
+        Returns:
+            Most common level string, or None.
+        """
+        counts = self.get_level_counts()
+        if not counts:
+            return None
+        return max(counts, key=counts.get)
+
+    def get_most_common_source(self) -> Optional[str]:
+        """Get the most common source in index.
+
+        Returns:
+            Most common source string, or None.
+        """
+        counts = self.get_source_counts()
+        if not counts:
+            return None
+        return max(counts, key=counts.get)
