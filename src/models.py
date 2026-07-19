@@ -497,3 +497,44 @@ class AnalysisResult:
         if not self.level_counts:
             return None
         return max(self.level_counts, key=self.level_counts.get)
+
+    def get_least_common_level(self) -> Optional[str]:
+        """Get the least common log level.
+
+        Returns:
+            Least common level string, or None.
+        """
+        if not self.level_counts:
+            return None
+        return min(self.level_counts, key=self.level_counts.get)
+
+    def has_level(self, level: str) -> bool:
+        """Check if a specific level exists.
+
+        Args:
+            level: Level string to check.
+
+        Returns:
+            True if level exists.
+        """
+        return level.upper() in self.level_counts
+
+    def get_error_rate(self) -> float:
+        """Get error rate as percentage.
+
+        Returns:
+            Error rate percentage.
+        """
+        if self.total_entries == 0:
+            return 0.0
+        return round(self.error_count / self.total_entries * 100, 2)
+
+    def get_warning_rate(self) -> float:
+        """Get warning rate as percentage.
+
+        Returns:
+            Warning rate percentage.
+        """
+        if self.total_entries == 0:
+            return 0.0
+        return round(self.warn_count / self.total_entries * 100, 2)
