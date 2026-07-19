@@ -261,3 +261,63 @@ entry = LogEntry.from_dict(data)
 - [Parser](parser.md) - Parse log lines into LogEntry objects
 - [Aggregator](aggregator.md) - Generate AnalysisResult from entries
 - [Exporter](exporter.md) - Export entries and results
+
+## New Methods (v1.2.0)
+
+### LogEntry Methods
+
+```python
+# Tag management
+entry.set_tag("key", "value")
+entry.get_tag("key")
+entry.remove_tag("key")
+entry.clear_tags()
+entry.has_tags()
+
+# Metadata management
+entry.set_metadata("key", value)
+entry.get_metadata("key")
+entry.clear_metadata()
+entry.has_metadata()
+
+# Level checks
+entry.is_info
+entry.is_warning
+entry.is_debug
+entry.is_trace
+entry.is_critical
+
+# Properties
+entry.message_length
+entry.severity_rank
+entry.has_source()
+```
+
+### AnalysisResult Methods
+
+```python
+# Summary and stats
+result.get_summary_string()
+result.get_level_distribution()
+result.get_most_common_level()
+result.get_least_common_level()
+result.get_error_rate()
+result.get_warning_rate()
+
+# Checks
+result.has_entries()
+result.has_level("ERROR")
+result.has_time_range()
+result.has_duration()
+result.has_sources()
+result.has_top_errors()
+
+# Counts
+result.error_count
+result.info_count
+result.warn_count
+result.debug_count
+result.trace_count
+result.source_count
+result.top_error_count
+```
