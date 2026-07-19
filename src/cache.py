@@ -348,3 +348,38 @@ class QueryCache:
             True if popular queries exist.
         """
         return len(self._popular_queries) > 0
+
+    def get_popular_query_count(self) -> int:
+        """Get count of popular queries.
+
+        Returns:
+            Count of popular queries.
+        """
+        return len(self._popular_queries)
+
+    def get_cache_size(self) -> int:
+        """Get current cache size.
+
+        Returns:
+            Cache size.
+        """
+        return self._cache.size
+
+    def get_hit_rate_formatted(self) -> str:
+        """Get formatted hit rate string.
+
+        Returns:
+            Formatted hit rate string.
+        """
+        return f"{self.hit_rate:.1f}%"
+
+    def get_query_popularity(self, query: str) -> int:
+        """Get popularity count for a specific query.
+
+        Args:
+            query: Query string.
+
+        Returns:
+            Popularity count, 0 if not found.
+        """
+        return self._popular_queries.get(query, 0)
