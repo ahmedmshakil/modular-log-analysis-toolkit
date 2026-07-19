@@ -297,3 +297,42 @@ class LogStream:
             True if file exists.
         """
         return self.file_path.exists()
+
+    def get_success_rate(self) -> float:
+        """Get success rate as percentage.
+
+        Returns:
+            Success rate percentage.
+        """
+        total = self._processed + self._errors
+        if total == 0:
+            return 0.0
+        return round(self._processed / total * 100, 2)
+
+    def get_success_rate_formatted(self) -> str:
+        """Get formatted success rate string.
+
+        Returns:
+            Formatted success rate string.
+        """
+        return f"{self.get_success_rate():.1f}%"
+
+    def get_error_rate_formatted(self) -> str:
+        """Get formatted error rate string.
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"{self.error_rate:.1f}%"
+
+    def get_status(self) -> str:
+        """Get current stream status.
+
+        Returns:
+            Status string.
+        """
+        if self._stopped:
+            return "stopped"
+        if self._paused:
+            return "paused"
+        return "active"
