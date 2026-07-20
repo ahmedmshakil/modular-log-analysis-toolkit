@@ -347,3 +347,67 @@ class LogExporter:
         from collections import Counter
         counts = Counter(e.level.value for e in entries)
         return max(counts, key=counts.get) if counts else None
+
+    @staticmethod
+    def get_least_common_level(entries: List[LogEntry]) -> Optional[str]:
+        """Get the least common level.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Least common level string, or None.
+        """
+        if not entries:
+            return None
+        from collections import Counter
+        counts = Counter(e.level.value for e in entries)
+        return min(counts, key=counts.get) if counts else None
+
+    @staticmethod
+    def get_most_common_source(entries: List[LogEntry]) -> Optional[str]:
+        """Get the most common source.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Most common source string, or None.
+        """
+        if not entries:
+            return None
+        from collections import Counter
+        counts = Counter(e.source for e in entries if e.source)
+        return max(counts, key=counts.get) if counts else None
+
+    @staticmethod
+    def get_error_rate(entries: List[LogEntry]) -> float:
+        """Get error rate as percentage.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Error rate percentage.
+        """
+        if not entries:
+            return 0.0
+        from collections import Counter
+        total = len(entries)
+        counts = Counter(e.level.value for e in entries)
+        errors = counts.get("ERROR", 0) + counts.get("CRITICAL", 0)
+        return round(errors / total * 100, 2)
+
+    @staticmethod
+    def get_source_count(entries: List[LogEntry]) -> int:
+        """Get number of unique sources.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Count of unique sources.
+        """
+        if not entries:
+            return 0
+        return len(set(e.source for e in entries if e.source))
