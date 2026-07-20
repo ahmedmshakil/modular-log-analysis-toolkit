@@ -350,3 +350,47 @@ class PluginManager:
             "enabled": self.get_enabled_count(),
             "disabled": self.get_disabled_count(),
         }
+
+    def get_enabled_rate(self) -> float:
+        """Get enabled plugin rate as percentage.
+
+        Returns:
+            Enabled rate percentage.
+        """
+        if not self._plugins:
+            return 0.0
+        return round(self.get_enabled_count() / len(self._plugins) * 100, 2)
+
+    def get_disabled_rate(self) -> float:
+        """Get disabled plugin rate as percentage.
+
+        Returns:
+            Disabled rate percentage.
+        """
+        if not self._plugins:
+            return 0.0
+        return round(self.get_disabled_count() / len(self._plugins) * 100, 2)
+
+    def get_enabled_rate_formatted(self) -> str:
+        """Get formatted enabled rate string.
+
+        Returns:
+            Formatted enabled rate string.
+        """
+        return f"{self.get_enabled_rate():.1f}%"
+
+    def get_plugin_versions(self) -> Dict[str, str]:
+        """Get plugin versions as dictionary.
+
+        Returns:
+            Dictionary mapping plugin names to versions.
+        """
+        return {name: plugin.version for name, plugin in self._plugins.items()}
+
+    def has_disabled_plugins(self) -> bool:
+        """Check if any plugins are disabled.
+
+        Returns:
+            True if disabled plugins exist.
+        """
+        return self.get_disabled_count() > 0
