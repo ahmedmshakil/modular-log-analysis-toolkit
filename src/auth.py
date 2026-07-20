@@ -437,6 +437,47 @@ class AuthManager:
         counts = self.get_role_counts()
         return {role: round(count / total * 100, 2) for role, count in counts.items()}
 
+    def get_active_rate(self) -> float:
+        """Get active user rate as percentage.
+
+        Returns:
+            Active user rate percentage.
+        """
+        if not self._users:
+            return 0.0
+        return round(self.get_active_user_count() / len(self._users) * 100, 2)
+
+    def get_inactive_rate(self) -> float:
+        """Get inactive user rate as percentage.
+
+        Returns:
+            Inactive user rate percentage.
+        """
+        if not self._users:
+            return 0.0
+        return round(self.get_inactive_user_count() / len(self._users) * 100, 2)
+
+    def get_most_common_role(self) -> Optional[str]:
+        """Get the most common user role.
+
+        Returns:
+            Most common role string, or None.
+        """
+        counts = self.get_role_counts()
+        if not counts:
+            return None
+        return max(counts, key=counts.get)
+
+    def get_session_rate(self) -> float:
+        """Get sessions per user rate.
+
+        Returns:
+            Sessions per user rate.
+        """
+        if not self._users:
+            return 0.0
+        return round(len(self._sessions) / len(self._users), 2)
+
     def _save_users(self):
         """Save users to file."""
         data = {}
