@@ -538,3 +538,43 @@ class AnalysisResult:
         if self.total_entries == 0:
             return 0.0
         return round(self.warn_count / self.total_entries * 100, 2)
+
+    def get_info_rate(self) -> float:
+        """Get info rate as percentage.
+
+        Returns:
+            Info rate percentage.
+        """
+        if self.total_entries == 0:
+            return 0.0
+        return round(self.info_count / self.total_entries * 100, 2)
+
+    def get_debug_rate(self) -> float:
+        """Get debug rate as percentage.
+
+        Returns:
+            Debug rate percentage.
+        """
+        if self.total_entries == 0:
+            return 0.0
+        return round(self.debug_count / self.total_entries * 100, 2)
+
+    def get_critical_rate(self) -> float:
+        """Get critical rate as percentage.
+
+        Returns:
+            Critical rate percentage.
+        """
+        if self.total_entries == 0:
+            return 0.0
+        return round(self.level_counts.get("CRITICAL", 0) / self.total_entries * 100, 2)
+
+    def get_non_error_rate(self) -> float:
+        """Get non-error rate as percentage.
+
+        Returns:
+            Non-error rate percentage.
+        """
+        if self.total_entries == 0:
+            return 0.0
+        return round((self.total_entries - self.error_count) / self.total_entries * 100, 2)
