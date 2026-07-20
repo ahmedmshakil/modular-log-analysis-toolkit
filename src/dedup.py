@@ -354,3 +354,41 @@ class LogDeduplicator:
             True if cache entries exist.
         """
         return len(self._hash_cache) > 0
+
+    def get_unique_rate_formatted(self) -> str:
+        """Get formatted unique rate string.
+
+        Returns:
+            Formatted unique rate string.
+        """
+        return f"{self.get_unique_rate():.1f}%"
+
+    def get_cache_hit_rate(self) -> float:
+        """Get hash cache hit rate.
+
+        Returns:
+            Cache hit rate percentage.
+        """
+        if self.total_count == 0:
+            return 0.0
+        return round(len(self._hash_cache) / self.total_count * 100, 2)
+
+    def get_duplicate_ratio(self) -> float:
+        """Get duplicate to unique ratio.
+
+        Returns:
+            Duplicate ratio.
+        """
+        if self.unique_count == 0:
+            return 0.0
+        return round(self.duplicate_count / self.unique_count, 2)
+
+    def get_savings_rate(self) -> float:
+        """Get storage savings rate from deduplication.
+
+        Returns:
+            Savings rate percentage.
+        """
+        if self.total_count == 0:
+            return 0.0
+        return round(self.total_duplicates_removed() / self.total_count * 100, 2)
