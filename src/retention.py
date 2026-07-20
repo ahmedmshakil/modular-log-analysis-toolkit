@@ -367,3 +367,51 @@ class RetentionManager:
             }
             for p in self.policies
         ]
+
+    def get_compressed_count(self) -> int:
+        """Get count of compressed files.
+
+        Returns:
+            Count of compressed files.
+        """
+        return len(self.get_compressed_files())
+
+    def get_uncompressed_count(self) -> int:
+        """Get count of uncompressed files.
+
+        Returns:
+            Count of uncompressed files.
+        """
+        return len(self.get_uncompressed_files())
+
+    def get_compression_rate(self) -> float:
+        """Get compression rate as percentage.
+
+        Returns:
+            Compression rate percentage.
+        """
+        files = self.scan_files()
+        if not files:
+            return 0.0
+        compressed = sum(1 for f in files if f["path"].endswith(".gz"))
+        return round(compressed / len(files) * 100, 2)
+
+    def get_compression_rate_formatted(self) -> str:
+        """Get formatted compression rate string.
+
+        Returns:
+            Formatted compression rate string.
+        """
+        return f"{self.get_compression_rate():.1f}%"
+
+    def get_average_file_size(self) -> float:
+        """Get average file size in MB.
+
+        Returns:
+            Average file size in MB.
+        """
+        files = self.scan_files()
+        if not files:
+            return 0.0
+        total_mb = sum(f.get("size_mb", 0) for f in files)
+        return round(total_mb / len(files), 2)
