@@ -428,3 +428,49 @@ class LogAggregator:
         total = len(self.entries)
         counts = self.get_source_counts()
         return {source: round(count / total * 100, 2) for source, count in counts.items()}
+
+    def get_least_common_level(self) -> Optional[str]:
+        """Get the least common log level.
+
+        Returns:
+            Least common level string, or None.
+        """
+        counts = self.level_counts
+        if not counts:
+            return None
+        return min(counts, key=counts.get)
+
+    def get_most_common_source(self) -> Optional[str]:
+        """Get the most common source.
+
+        Returns:
+            Most common source string, or None.
+        """
+        counts = self.get_source_counts()
+        if not counts:
+            return None
+        return max(counts, key=counts.get)
+
+    def get_warning_rate(self) -> float:
+        """Get warning rate as percentage.
+
+        Returns:
+            Warning rate percentage.
+        """
+        if not self.entries:
+            return 0.0
+        total = len(self.entries)
+        warnings = self.warning_count()
+        return round(warnings / total * 100, 2)
+
+    def get_info_rate(self) -> float:
+        """Get info rate as percentage.
+
+        Returns:
+            Info rate percentage.
+        """
+        if not self.entries:
+            return 0.0
+        total = len(self.entries)
+        infos = self.info_count()
+        return round(infos / total * 100, 2)
