@@ -455,3 +455,45 @@ class LogSearchIndex:
         if not counts:
             return None
         return max(counts, key=counts.get)
+
+    def get_least_common_level(self) -> Optional[str]:
+        """Get the least common level in index.
+
+        Returns:
+            Least common level string, or None.
+        """
+        counts = self.get_level_counts()
+        if not counts:
+            return None
+        return min(counts, key=counts.get)
+
+    def get_least_common_source(self) -> Optional[str]:
+        """Get the least common source in index.
+
+        Returns:
+            Least common source string, or None.
+        """
+        counts = self.get_source_counts()
+        if not counts:
+            return None
+        return min(counts, key=counts.get)
+
+    def get_average_words_per_entry(self) -> float:
+        """Get average words per entry.
+
+        Returns:
+            Average words per entry.
+        """
+        if not self._entries:
+            return 0.0
+        return round(len(self._index) / len(self._entries), 2)
+
+    def get_index_density(self) -> float:
+        """Get index density (words per entry ratio).
+
+        Returns:
+            Index density percentage.
+        """
+        if not self._entries:
+            return 0.0
+        return round(len(self._index) / len(self._entries) * 100, 2)
