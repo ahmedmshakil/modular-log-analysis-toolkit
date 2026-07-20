@@ -383,3 +383,39 @@ class QueryCache:
             Popularity count, 0 if not found.
         """
         return self._popular_queries.get(query, 0)
+
+    def get_most_popular_count(self) -> int:
+        """Get the popularity count of the most popular query.
+
+        Returns:
+            Popularity count, or 0 if no queries.
+        """
+        if not self._popular_queries:
+            return 0
+        return max(self._popular_queries.values())
+
+    def get_average_popularity(self) -> float:
+        """Get average query popularity.
+
+        Returns:
+            Average popularity count.
+        """
+        if not self._popular_queries:
+            return 0.0
+        return round(sum(self._popular_queries.values()) / len(self._popular_queries), 2)
+
+    def get_total_queries(self) -> int:
+        """Get total query count including duplicates.
+
+        Returns:
+            Total query count.
+        """
+        return sum(self._popular_queries.values())
+
+    def has_cached_results(self) -> bool:
+        """Check if any results are cached.
+
+        Returns:
+            True if results exist.
+        """
+        return self._cache.size > 0
