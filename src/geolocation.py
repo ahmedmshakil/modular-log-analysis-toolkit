@@ -332,3 +332,43 @@ class GeoLookup:
         if self._cache_size == 0:
             return 0.0
         return round(len(self._cache) / self._cache_size * 100, 2)
+
+    def get_cache_usage_formatted(self) -> str:
+        """Get formatted cache usage string.
+
+        Returns:
+            Formatted cache usage string.
+        """
+        return f"{self.get_cache_usage_percent():.1f}%"
+
+    def get_hit_rate_formatted(self) -> str:
+        """Get formatted hit rate string.
+
+        Returns:
+            Formatted hit rate string.
+        """
+        return f"{self.cache_hit_rate:.1f}%"
+
+    def get_api_calls(self) -> int:
+        """Get number of API calls made.
+
+        Returns:
+            API call count.
+        """
+        return self._lookup_count
+
+    def get_cache_misses(self) -> int:
+        """Get number of cache misses.
+
+        Returns:
+            Cache miss count.
+        """
+        return self._lookup_count
+
+    def get_total_lookups(self) -> int:
+        """Get total lookups (API + cache).
+
+        Returns:
+            Total lookup count.
+        """
+        return self._lookup_count + self._cache_hits
