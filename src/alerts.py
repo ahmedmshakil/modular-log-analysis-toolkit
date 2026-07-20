@@ -368,3 +368,46 @@ class AlertManager:
             True if active alerts exist.
         """
         return self.get_unacknowledged_count() > 0
+
+    def get_alert_rate(self) -> float:
+        """Get acknowledgment rate as percentage.
+
+        Returns:
+            Acknowledgment rate percentage.
+        """
+        if not self.alerts:
+            return 0.0
+        return round(self.get_acknowledged_count() / len(self.alerts) * 100, 2)
+
+    def get_active_rate(self) -> float:
+        """Get active alert rate as percentage.
+
+        Returns:
+            Active alert rate percentage.
+        """
+        if not self.alerts:
+            return 0.0
+        return round(self.get_unacknowledged_count() / len(self.alerts) * 100, 2)
+
+    def get_most_common_severity(self) -> Optional[str]:
+        """Get the most common alert severity.
+
+        Returns:
+            Most common severity string, or None.
+        """
+        counts = self.get_alert_severity_counts()
+        if not counts:
+            return None
+        return max(counts, key=counts.get)
+
+    def get_severity_distribution(self) -> Dict[str, float]:
+        """Get severity distribution as percentages.
+
+        Returns:
+            Dictionary mapping severity names to percentages.
+        """
+        if not self.alerts:
+            return {}
+        total = len(self.alerts)
+        counts = self.get_alert_severity_counts()
+        return {sev: round(count / total * 100, 2) for sev, count in counts.items()}
