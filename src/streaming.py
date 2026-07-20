@@ -336,3 +336,48 @@ class LogStream:
         if self._paused:
             return "paused"
         return "active"
+
+    def get_total_count(self) -> int:
+        """Get total count of processed and errors.
+
+        Returns:
+            Total count.
+        """
+        return self._processed + self._errors
+
+    def get_processing_rate(self) -> float:
+        """Get processing rate (processed per total).
+
+        Returns:
+            Processing rate percentage.
+        """
+        total = self.get_total_count()
+        if total == 0:
+            return 0.0
+        return round(self._processed / total * 100, 2)
+
+    def get_error_ratio(self) -> float:
+        """Get error to processed ratio.
+
+        Returns:
+            Error ratio.
+        """
+        if self._processed == 0:
+            return 0.0
+        return round(self._errors / self._processed, 2)
+
+    def is_complete(self) -> bool:
+        """Check if streaming is complete (stopped).
+
+        Returns:
+            True if stopped.
+        """
+        return self._stopped
+
+    def is_running(self) -> bool:
+        """Check if stream is actively running.
+
+        Returns:
+            True if not stopped and not paused.
+        """
+        return not self._stopped and not self._paused
