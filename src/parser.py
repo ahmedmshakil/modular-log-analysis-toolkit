@@ -345,3 +345,45 @@ class LogParser:
             True if using built-in pattern.
         """
         return self.pattern_name in PATTERNS
+
+    def get_pattern_groups(self) -> List[str]:
+        """Get the named groups in the pattern.
+
+        Returns:
+            List of group name strings.
+        """
+        if self.pattern:
+            return list(self.pattern.groupindex.keys())
+        return []
+
+    def get_pattern_group_count(self) -> int:
+        """Get number of named groups in pattern.
+
+        Returns:
+            Count of named groups.
+        """
+        return len(self.get_pattern_groups())
+
+    def has_timestamp_group(self) -> bool:
+        """Check if pattern has a timestamp group.
+
+        Returns:
+            True if timestamp group exists.
+        """
+        return "timestamp" in self.get_pattern_groups()
+
+    def has_level_group(self) -> bool:
+        """Check if pattern has a level group.
+
+        Returns:
+            True if level group exists.
+        """
+        return "level" in self.get_pattern_groups()
+
+    def has_message_group(self) -> bool:
+        """Check if pattern has a message group.
+
+        Returns:
+            True if message group exists.
+        """
+        return "message" in self.get_pattern_groups()
