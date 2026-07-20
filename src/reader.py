@@ -432,3 +432,52 @@ def get_log_extension_count() -> int:
         Count of extensions.
     """
     return 4
+
+
+def get_all_supported_extensions() -> List[str]:
+    """Get all supported file extensions.
+
+    Returns:
+        List of all extension strings.
+    """
+    return list(set(get_supported_text_extensions() + get_supported_log_extensions()))
+
+
+def get_all_extension_count() -> int:
+    """Get total number of supported extensions.
+
+    Returns:
+        Count of all extensions.
+    """
+    return len(get_all_supported_extensions())
+
+
+def is_supported_file(file_path: str) -> bool:
+    """Check if file has a supported extension.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        True if file extension is supported.
+    """
+    path = Path(file_path)
+    return path.suffix.lower() in get_all_supported_extensions()
+
+
+def get_file_type(file_path: str) -> str:
+    """Get the type of file based on extension.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        File type string.
+    """
+    if is_log_file(file_path):
+        return "log"
+    if is_text_file(file_path):
+        return "text"
+    if is_compressed(file_path):
+        return "compressed"
+    return "unknown"
