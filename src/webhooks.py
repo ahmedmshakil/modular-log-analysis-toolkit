@@ -322,3 +322,65 @@ class WebhookRouter:
             True if more than one endpoint exists.
         """
         return len(self._senders) > 1
+
+    def get_total_sent_formatted(self) -> str:
+        """Get formatted total sent string.
+
+        Returns:
+            Formatted total sent string.
+        """
+        return f"{self.total_sent()} sent"
+
+    def get_total_errors_formatted(self) -> str:
+        """Get formatted total errors string.
+
+        Returns:
+            Formatted total errors string.
+        """
+        return f"{self.total_errors()} errors"
+
+    def get_endpoint_count_formatted(self) -> str:
+        """Get formatted endpoint count string.
+
+        Returns:
+            Formatted endpoint count string.
+        """
+        return f"{self.endpoint_count} endpoints"
+
+    def get_success_rate(self) -> float:
+        """Get success rate as percentage.
+
+        Returns:
+            Success rate percentage.
+        """
+        total = self.total_sent() + self.total_errors()
+        if total == 0:
+            return 0.0
+        return round(self.total_sent() / total * 100, 2)
+
+    def get_error_rate(self) -> float:
+        """Get error rate as percentage.
+
+        Returns:
+            Error rate percentage.
+        """
+        total = self.total_sent() + self.total_errors()
+        if total == 0:
+            return 0.0
+        return round(self.total_errors() / total * 100, 2)
+
+    def get_success_rate_formatted(self) -> str:
+        """Get formatted success rate string.
+
+        Returns:
+            Formatted success rate string.
+        """
+        return f"{self.get_success_rate():.1f}%"
+
+    def get_error_rate_formatted(self) -> str:
+        """Get formatted error rate string.
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"{self.get_error_rate():.1f}%"
