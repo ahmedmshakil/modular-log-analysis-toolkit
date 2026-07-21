@@ -474,3 +474,55 @@ class LogAggregator:
         total = len(self.entries)
         infos = self.info_count()
         return round(infos / total * 100, 2)
+
+    def get_debug_rate(self) -> float:
+        """Get debug rate as percentage.
+
+        Returns:
+            Debug rate percentage.
+        """
+        if not self.entries:
+            return 0.0
+        total = len(self.entries)
+        debugs = self.debug_count()
+        return round(debugs / total * 100, 2)
+
+    def get_critical_rate(self) -> float:
+        """Get critical rate as percentage.
+
+        Returns:
+            Critical rate percentage.
+        """
+        if not self.entries:
+            return 0.0
+        total = len(self.entries)
+        criticals = self.critical_count()
+        return round(criticals / total * 100, 2)
+
+    def get_non_error_rate(self) -> float:
+        """Get non-error rate as percentage.
+
+        Returns:
+            Non-error rate percentage.
+        """
+        if not self.entries:
+            return 0.0
+        total = len(self.entries)
+        errors = self.error_count()
+        return round((total - errors) / total * 100, 2)
+
+    def get_entries_per_second(self) -> float:
+        """Get entries per second rate.
+
+        Returns:
+            Entries per second.
+        """
+        if not self.entries or len(self.entries) < 2:
+            return 0.0
+        time_range = self.get_time_range()
+        if not time_range:
+            return 0.0
+        duration = (time_range[1] - time_range[0]).total_seconds()
+        if duration == 0:
+            return 0.0
+        return round(len(self.entries) / duration, 2)
