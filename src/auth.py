@@ -478,6 +478,57 @@ class AuthManager:
             return 0.0
         return round(len(self._sessions) / len(self._users), 2)
 
+    def get_active_rate_formatted(self) -> str:
+        """Get formatted active rate string.
+
+        Returns:
+            Formatted active rate string.
+        """
+        return f"{self.get_active_rate():.1f}%"
+
+    def get_inactive_rate_formatted(self) -> str:
+        """Get formatted inactive rate string.
+
+        Returns:
+            Formatted inactive rate string.
+        """
+        return f"{self.get_inactive_rate():.1f}%"
+
+    def get_least_common_role(self) -> Optional[str]:
+        """Get the least common user role.
+
+        Returns:
+            Least common role string, or None.
+        """
+        counts = self.get_role_counts()
+        if not counts:
+            return None
+        return min(counts, key=counts.get)
+
+    def get_admin_count(self) -> int:
+        """Get count of admin users.
+
+        Returns:
+            Count of admin users.
+        """
+        return sum(1 for u in self._users.values() if u.role == "admin")
+
+    def get_viewer_count(self) -> int:
+        """Get count of viewer users.
+
+        Returns:
+            Count of viewer users.
+        """
+        return sum(1 for u in self._users.values() if u.role == "viewer")
+
+    def get_analyst_count(self) -> int:
+        """Get count of analyst users.
+
+        Returns:
+            Count of analyst users.
+        """
+        return sum(1 for u in self._users.values() if u.role == "analyst")
+
     def _save_users(self):
         """Save users to file."""
         data = {}
