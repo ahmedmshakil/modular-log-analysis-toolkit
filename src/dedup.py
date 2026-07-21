@@ -392,3 +392,43 @@ class LogDeduplicator:
         if self.total_count == 0:
             return 0.0
         return round(self.total_duplicates_removed() / self.total_count * 100, 2)
+
+    def get_savings_rate_formatted(self) -> str:
+        """Get formatted savings rate string.
+
+        Returns:
+            Formatted savings rate string.
+        """
+        return f"{self.get_savings_rate():.1f}%"
+
+    def get_duplicate_ratio_formatted(self) -> str:
+        """Get formatted duplicate ratio string.
+
+        Returns:
+            Formatted duplicate ratio string.
+        """
+        return f"{self.get_duplicate_ratio():.2f}"
+
+    def get_cache_hit_rate_formatted(self) -> str:
+        """Get formatted cache hit rate string.
+
+        Returns:
+            Formatted cache hit rate string.
+        """
+        return f"{self.get_cache_hit_rate():.1f}%"
+
+    def get_average_duplicates_formatted(self) -> str:
+        """Get formatted average duplicates string.
+
+        Returns:
+            Formatted average duplicates string.
+        """
+        return f"{self.get_average_duplicates():.2f}"
+
+    def get_total_duplicates_removed_formatted(self) -> str:
+        """Get formatted total duplicates removed string.
+
+        Returns:
+            Formatted total duplicates removed string.
+        """
+        return f"{self.total_duplicates_removed()} duplicates"
