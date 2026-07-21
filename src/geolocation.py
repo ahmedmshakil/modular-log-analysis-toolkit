@@ -372,3 +372,46 @@ class GeoLookup:
             Total lookup count.
         """
         return self._lookup_count + self._cache_hits
+
+    def get_total_lookups_formatted(self) -> str:
+        """Get formatted total lookups string.
+
+        Returns:
+            Formatted total lookups string.
+        """
+        return f"{self.get_total_lookups()} lookups"
+
+    def get_api_calls_formatted(self) -> str:
+        """Get formatted API calls string.
+
+        Returns:
+            Formatted API calls string.
+        """
+        return f"{self.get_api_calls()} API calls"
+
+    def get_cache_misses_formatted(self) -> str:
+        """Get formatted cache misses string.
+
+        Returns:
+            Formatted cache misses string.
+        """
+        return f"{self.get_cache_misses()} misses"
+
+    def get_cache_size_formatted(self) -> str:
+        """Get formatted cache size string.
+
+        Returns:
+            Formatted cache size string.
+        """
+        return f"{len(self._cache)}/{self._cache_size}"
+
+    def get_lookup_efficiency(self) -> float:
+        """Get lookup efficiency (cache hits per total lookups).
+
+        Returns:
+            Lookup efficiency percentage.
+        """
+        total = self.get_total_lookups()
+        if total == 0:
+            return 0.0
+        return round(self._cache_hits / total * 100, 2)
