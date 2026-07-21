@@ -749,6 +749,55 @@ def get_entries_count(entries: List[LogEntry]) -> int:
     return len(entries) if entries else 0
 
 
+def get_endpoint_count_formatted() -> str:
+    """Get formatted endpoint count string.
+
+    Returns:
+        Formatted endpoint count string.
+    """
+    return f"{get_endpoint_count()} endpoints"
+
+
+def get_entries_count_formatted(entries: List[LogEntry]) -> str:
+    """Get formatted entries count string.
+
+    Args:
+        entries: List of log entries.
+
+    Returns:
+        Formatted entries count string.
+    """
+    return f"{get_entries_count(entries)} entries"
+
+
+def get_api_endpoints_formatted() -> str:
+    """Get formatted API endpoints string.
+
+    Returns:
+        Formatted API endpoints string.
+    """
+    endpoints = get_api_endpoints()
+    return ", ".join(endpoints.keys())
+
+
+def get_dashboard_info(host: str = "localhost", port: int = 8080) -> Dict[str, Any]:
+    """Get dashboard information.
+
+    Args:
+        host: Dashboard host.
+        port: Dashboard port.
+
+    Returns:
+        Dictionary with dashboard info.
+    """
+    return {
+        "url": get_dashboard_url(host, port),
+        "endpoints": get_endpoint_count(),
+        "host": host,
+        "port": port,
+    }
+
+
 if __name__ == "__main__":
     from .parser import LogParser
     from .reader import read_log_lines
