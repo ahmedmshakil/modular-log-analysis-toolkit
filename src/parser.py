@@ -387,3 +387,46 @@ class LogParser:
             True if message group exists.
         """
         return "message" in self.get_pattern_groups()
+
+    def has_host_group(self) -> bool:
+        """Check if pattern has a host group.
+
+        Returns:
+            True if host group exists.
+        """
+        return "host" in self.get_pattern_groups()
+
+    def has_program_group(self) -> bool:
+        """Check if pattern has a program group.
+
+        Returns:
+            True if program group exists.
+        """
+        return "program" in self.get_pattern_groups()
+
+    def has_ip_group(self) -> bool:
+        """Check if pattern has an IP group.
+
+        Returns:
+            True if IP group exists.
+        """
+        return "ip" in self.get_pattern_groups()
+
+    def get_pattern_groups_formatted(self) -> str:
+        """Get formatted pattern groups string.
+
+        Returns:
+            Formatted groups string.
+        """
+        groups = self.get_pattern_groups()
+        if not groups:
+            return "none"
+        return ", ".join(groups)
+
+    def get_pattern_length(self) -> int:
+        """Get length of the pattern string.
+
+        Returns:
+            Pattern length.
+        """
+        return len(self.get_pattern_string())
