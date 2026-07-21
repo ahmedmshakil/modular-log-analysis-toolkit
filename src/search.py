@@ -497,3 +497,49 @@ class LogSearchIndex:
         if not self._entries:
             return 0.0
         return round(len(self._index) / len(self._entries) * 100, 2)
+
+    def get_level_counts_formatted(self) -> str:
+        """Get formatted level counts string.
+
+        Returns:
+            Formatted level counts string.
+        """
+        counts = self.get_level_counts()
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+
+    def get_source_counts_formatted(self) -> str:
+        """Get formatted source counts string.
+
+        Returns:
+            Formatted source counts string.
+        """
+        counts = self.get_source_counts()
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+
+    def get_index_size_formatted(self) -> str:
+        """Get formatted index size string.
+
+        Returns:
+            Formatted index size string.
+        """
+        return f"{len(self._entries)} entries, {len(self._index)} words"
+
+    def get_average_words_per_entry_formatted(self) -> str:
+        """Get formatted average words per entry string.
+
+        Returns:
+            Formatted average words string.
+        """
+        return f"{self.get_average_words_per_entry():.1f} words/entry"
+
+    def get_index_density_formatted(self) -> str:
+        """Get formatted index density string.
+
+        Returns:
+            Formatted index density string.
+        """
+        return f"{self.get_index_density():.1f}%"
