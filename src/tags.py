@@ -350,3 +350,59 @@ class TagManager:
             True if tags exist.
         """
         return len(self._rules) > 0 or len(self._manual_tags) > 0
+
+    def get_rule_count_formatted(self) -> str:
+        """Get formatted rule count string.
+
+        Returns:
+            Formatted rule count string.
+        """
+        return f"{self.get_rule_count()} rules"
+
+    def get_manual_tag_count_formatted(self) -> str:
+        """Get formatted manual tag count string.
+
+        Returns:
+            Formatted manual tag count string.
+        """
+        return f"{self.get_manual_tag_count()} manual tags"
+
+    def get_unique_tag_count_formatted(self) -> str:
+        """Get formatted unique tag count string.
+
+        Returns:
+            Formatted unique tag count string.
+        """
+        return f"{len(self.get_all_tag_names())} unique tags"
+
+    def get_tag_names_formatted(self) -> str:
+        """Get formatted tag names string.
+
+        Returns:
+            Formatted tag names string.
+        """
+        names = self.get_all_tag_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_rule_names_formatted(self) -> str:
+        """Get formatted rule names string.
+
+        Returns:
+            Formatted rule names string.
+        """
+        names = [r.name for r in self._rules]
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_average_priority(self) -> float:
+        """Get average rule priority.
+
+        Returns:
+            Average priority.
+        """
+        if not self._rules:
+            return 0.0
+        return round(sum(r.priority for r in self._rules) / len(self._rules), 2)
