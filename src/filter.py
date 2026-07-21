@@ -526,3 +526,62 @@ class LogFilter:
         total = len(self.entries)
         warnings = self.get_level_count(LogLevel.WARN)
         return round(warnings / total * 100, 2)
+
+    def get_info_rate(self) -> float:
+        """Get info rate as percentage.
+
+        Returns:
+            Info rate percentage.
+        """
+        if not self.entries:
+            return 0.0
+        total = len(self.entries)
+        infos = self.get_level_count(LogLevel.INFO)
+        return round(infos / total * 100, 2)
+
+    def get_debug_rate(self) -> float:
+        """Get debug rate as percentage.
+
+        Returns:
+            Debug rate percentage.
+        """
+        if not self.entries:
+            return 0.0
+        total = len(self.entries)
+        debugs = self.get_level_count(LogLevel.DEBUG)
+        return round(debugs / total * 100, 2)
+
+    def get_critical_rate(self) -> float:
+        """Get critical rate as percentage.
+
+        Returns:
+            Critical rate percentage.
+        """
+        if not self.entries:
+            return 0.0
+        total = len(self.entries)
+        criticals = self.get_level_count(LogLevel.CRITICAL)
+        return round(criticals / total * 100, 2)
+
+    def get_non_error_rate(self) -> float:
+        """Get non-error rate as percentage.
+
+        Returns:
+            Non-error rate percentage.
+        """
+        if not self.entries:
+            return 0.0
+        total = len(self.entries)
+        errors = self.get_level_count(LogLevel.ERROR) + self.get_level_count(LogLevel.CRITICAL)
+        return round((total - errors) / total * 100, 2)
+
+    def get_least_common_source(self) -> Optional[str]:
+        """Get the least common source.
+
+        Returns:
+            Least common source string, or None.
+        """
+        counts = self.get_source_counts()
+        if not counts:
+            return None
+        return min(counts, key=counts.get)
