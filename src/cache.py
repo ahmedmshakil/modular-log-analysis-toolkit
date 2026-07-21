@@ -419,3 +419,45 @@ class QueryCache:
             True if results exist.
         """
         return self._cache.size > 0
+
+    def get_cache_usage_percent(self) -> float:
+        """Get cache usage as percentage.
+
+        Returns:
+            Cache usage percentage.
+        """
+        if self._cache.max_size == 0:
+            return 0.0
+        return round(self._cache.size / self._cache.max_size * 100, 2)
+
+    def get_cache_usage_formatted(self) -> str:
+        """Get formatted cache usage string.
+
+        Returns:
+            Formatted cache usage string.
+        """
+        return f"{self.get_cache_usage_percent():.1f}%"
+
+    def get_popular_queries_dict(self) -> Dict[str, int]:
+        """Get popular queries as dictionary.
+
+        Returns:
+            Dictionary mapping queries to counts.
+        """
+        return dict(self._popular_queries)
+
+    def get_query_count_formatted(self) -> str:
+        """Get formatted query count string.
+
+        Returns:
+            Formatted query count string.
+        """
+        return f"{self.query_count} queries"
+
+    def get_cache_size_formatted(self) -> str:
+        """Get formatted cache size string.
+
+        Returns:
+            Formatted cache size string.
+        """
+        return f"{self._cache.size}/{self._cache.max_size}"
