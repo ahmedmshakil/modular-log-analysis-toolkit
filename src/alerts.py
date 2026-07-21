@@ -411,3 +411,46 @@ class AlertManager:
         total = len(self.alerts)
         counts = self.get_alert_severity_counts()
         return {sev: round(count / total * 100, 2) for sev, count in counts.items()}
+
+    def get_least_common_severity(self) -> Optional[str]:
+        """Get the least common alert severity.
+
+        Returns:
+            Least common severity string, or None.
+        """
+        counts = self.get_alert_severity_counts()
+        if not counts:
+            return None
+        return min(counts, key=counts.get)
+
+    def get_alert_rate_formatted(self) -> str:
+        """Get formatted alert rate string.
+
+        Returns:
+            Formatted alert rate string.
+        """
+        return f"{self.get_alert_rate():.1f}%"
+
+    def get_active_rate_formatted(self) -> str:
+        """Get formatted active rate string.
+
+        Returns:
+            Formatted active rate string.
+        """
+        return f"{self.get_active_rate():.1f}%"
+
+    def get_high_severity_count(self) -> int:
+        """Get count of high and critical severity alerts.
+
+        Returns:
+            Count of high/critical alerts.
+        """
+        return sum(1 for a in self.alerts if a.severity.value in ("high", "critical"))
+
+    def get_low_severity_count(self) -> int:
+        """Get count of low and medium severity alerts.
+
+        Returns:
+            Count of low/medium alerts.
+        """
+        return sum(1 for a in self.alerts if a.severity.value in ("low", "medium"))
