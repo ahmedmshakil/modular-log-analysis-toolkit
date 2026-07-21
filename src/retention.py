@@ -415,3 +415,51 @@ class RetentionManager:
             return 0.0
         total_mb = sum(f.get("size_mb", 0) for f in files)
         return round(total_mb / len(files), 2)
+
+    def get_average_file_size_formatted(self) -> str:
+        """Get formatted average file size string.
+
+        Returns:
+            Formatted average file size string.
+        """
+        return f"{self.get_average_file_size():.2f} MB"
+
+    def get_compressed_count_formatted(self) -> str:
+        """Get formatted compressed count string.
+
+        Returns:
+            Formatted compressed count string.
+        """
+        return f"{self.get_compressed_count()} compressed"
+
+    def get_uncompressed_count_formatted(self) -> str:
+        """Get formatted uncompressed count string.
+
+        Returns:
+            Formatted uncompressed count string.
+        """
+        return f"{self.get_uncompressed_count()} uncompressed"
+
+    def get_file_count_formatted(self) -> str:
+        """Get formatted file count string.
+
+        Returns:
+            Formatted file count string.
+        """
+        return f"{self.get_file_count()} files"
+
+    def get_actions_count_formatted(self) -> str:
+        """Get formatted actions count string.
+
+        Returns:
+            Formatted actions count string.
+        """
+        return f"{self.get_actions_count()} actions"
+
+    def get_policy_count_formatted(self) -> str:
+        """Get formatted policy count string.
+
+        Returns:
+            Formatted policy count string.
+        """
+        return f"{len(self.policies)} policies"
