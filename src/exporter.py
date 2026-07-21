@@ -411,3 +411,85 @@ class LogExporter:
         if not entries:
             return 0
         return len(set(e.source for e in entries if e.source))
+
+    @staticmethod
+    def get_warning_rate(entries: List[LogEntry]) -> float:
+        """Get warning rate as percentage.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Warning rate percentage.
+        """
+        if not entries:
+            return 0.0
+        from collections import Counter
+        total = len(entries)
+        counts = Counter(e.level.value for e in entries)
+        warnings = counts.get("WARN", 0)
+        return round(warnings / total * 100, 2)
+
+    @staticmethod
+    def get_info_rate(entries: List[LogEntry]) -> float:
+        """Get info rate as percentage.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Info rate percentage.
+        """
+        if not entries:
+            return 0.0
+        from collections import Counter
+        total = len(entries)
+        counts = Counter(e.level.value for e in entries)
+        infos = counts.get("INFO", 0)
+        return round(infos / total * 100, 2)
+
+    @staticmethod
+    def get_least_common_source(entries: List[LogEntry]) -> Optional[str]:
+        """Get the least common source.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Least common source string, or None.
+        """
+        if not entries:
+            return None
+        from collections import Counter
+        counts = Counter(e.source for e in entries if e.source)
+        return min(counts, key=counts.get) if counts else None
+
+    @staticmethod
+    def get_level_counts(entries: List[LogEntry]) -> Dict[str, int]:
+        """Get counts per level.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Dictionary mapping level names to counts.
+        """
+        if not entries:
+            return {}
+        from collections import Counter
+        return dict(Counter(e.level.value for e in entries))
+
+    @staticmethod
+    def get_source_counts(entries: List[LogEntry]) -> Dict[str, int]:
+        """Get counts per source.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Dictionary mapping source names to counts.
+        """
+        if not entries:
+            return {}
+        from collections import Counter
+        return dict(Counter(e.source for e in entries if e.source))
