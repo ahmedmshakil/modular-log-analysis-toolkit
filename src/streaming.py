@@ -381,3 +381,43 @@ class LogStream:
             True if not stopped and not paused.
         """
         return not self._stopped and not self._paused
+
+    def get_processing_rate_formatted(self) -> str:
+        """Get formatted processing rate string.
+
+        Returns:
+            Formatted processing rate string.
+        """
+        return f"{self.get_processing_rate():.1f}%"
+
+    def get_error_ratio_formatted(self) -> str:
+        """Get formatted error ratio string.
+
+        Returns:
+            Formatted error ratio string.
+        """
+        return f"{self.get_error_ratio():.2f}"
+
+    def get_total_count_formatted(self) -> str:
+        """Get formatted total count string.
+
+        Returns:
+            Formatted total count string.
+        """
+        return f"{self.get_total_count()} entries"
+
+    def get_processed_count_formatted(self) -> str:
+        """Get formatted processed count string.
+
+        Returns:
+            Formatted processed count string.
+        """
+        return f"{self._processed} processed"
+
+    def get_error_count_formatted(self) -> str:
+        """Get formatted error count string.
+
+        Returns:
+            Formatted error count string.
+        """
+        return f"{self._errors} errors"
