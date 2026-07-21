@@ -578,3 +578,83 @@ class AnalysisResult:
         if self.total_entries == 0:
             return 0.0
         return round((self.total_entries - self.error_count) / self.total_entries * 100, 2)
+
+    def get_error_rate_formatted(self) -> str:
+        """Get formatted error rate string.
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"{self.get_error_rate():.1f}%"
+
+    def get_warning_rate_formatted(self) -> str:
+        """Get formatted warning rate string.
+
+        Returns:
+            Formatted warning rate string.
+        """
+        return f"{self.get_warning_rate():.1f}%"
+
+    def get_info_rate_formatted(self) -> str:
+        """Get formatted info rate string.
+
+        Returns:
+            Formatted info rate string.
+        """
+        return f"{self.get_info_rate():.1f}%"
+
+    def get_debug_rate_formatted(self) -> str:
+        """Get formatted debug rate string.
+
+        Returns:
+            Formatted debug rate string.
+        """
+        return f"{self.get_debug_rate():.1f}%"
+
+    def get_critical_rate_formatted(self) -> str:
+        """Get formatted critical rate string.
+
+        Returns:
+            Formatted critical rate string.
+        """
+        return f"{self.get_critical_rate():.1f}%"
+
+    def get_non_error_rate_formatted(self) -> str:
+        """Get formatted non-error rate string.
+
+        Returns:
+            Formatted non-error rate string.
+        """
+        return f"{self.get_non_error_rate():.1f}%"
+
+    def get_duration_formatted(self) -> str:
+        """Get formatted duration string.
+
+        Returns:
+            Formatted duration string.
+        """
+        if self.duration_seconds < 60:
+            return f"{self.duration_seconds:.1f}s"
+        if self.duration_seconds < 3600:
+            return f"{self.duration_minutes:.1f}m"
+        return f"{self.duration_hours:.1f}h"
+
+    def get_entries_per_second(self) -> float:
+        """Get entries per second rate.
+
+        Returns:
+            Entries per second.
+        """
+        if self.duration_seconds == 0:
+            return 0.0
+        return round(self.total_entries / self.duration_seconds, 2)
+
+    def get_entries_per_minute(self) -> float:
+        """Get entries per minute rate.
+
+        Returns:
+            Entries per minute.
+        """
+        if self.duration_seconds == 0:
+            return 0.0
+        return round(self.total_entries / (self.duration_seconds / 60), 2)
