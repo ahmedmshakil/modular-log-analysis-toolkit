@@ -448,3 +448,41 @@ class PluginManager:
         if not names:
             return "none"
         return ", ".join(names)
+
+    def get_enabled_rate_formatted(self) -> str:
+        """Get formatted enabled rate string.
+
+        Returns:
+            Formatted enabled rate string.
+        """
+        return f"{self.get_enabled_rate():.1f}%"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Total: {len(self._plugins)}, Enabled: {self.get_enabled_count()}, Disabled: {self.get_disabled_count()}"
+
+    def get_enabled_plugins_formatted(self) -> str:
+        """Get formatted enabled plugins string.
+
+        Returns:
+            Formatted enabled plugins string.
+        """
+        names = [name for name, enabled in self._enabled.items() if enabled]
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_disabled_plugins_formatted(self) -> str:
+        """Get formatted disabled plugins string.
+
+        Returns:
+            Formatted disabled plugins string.
+        """
+        names = [name for name, enabled in self._enabled.items() if not enabled]
+        if not names:
+            return "none"
+        return ", ".join(names)
