@@ -526,3 +526,75 @@ class LogAggregator:
         if duration == 0:
             return 0.0
         return round(len(self.entries) / duration, 2)
+
+    def get_error_rate_formatted(self) -> str:
+        """Get formatted error rate string.
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"{self.error_rate():.1f}%"
+
+    def get_warning_rate_formatted(self) -> str:
+        """Get formatted warning rate string.
+
+        Returns:
+            Formatted warning rate string.
+        """
+        return f"{self.get_warning_rate():.1f}%"
+
+    def get_info_rate_formatted(self) -> str:
+        """Get formatted info rate string.
+
+        Returns:
+            Formatted info rate string.
+        """
+        return f"{self.get_info_rate():.1f}%"
+
+    def get_debug_rate_formatted(self) -> str:
+        """Get formatted debug rate string.
+
+        Returns:
+            Formatted debug rate string.
+        """
+        return f"{self.get_debug_rate():.1f}%"
+
+    def get_critical_rate_formatted(self) -> str:
+        """Get formatted critical rate string.
+
+        Returns:
+            Formatted critical rate string.
+        """
+        return f"{self.get_critical_rate():.1f}%"
+
+    def get_non_error_rate_formatted(self) -> str:
+        """Get formatted non-error rate string.
+
+        Returns:
+            Formatted non-error rate string.
+        """
+        return f"{self.get_non_error_rate():.1f}%"
+
+    def get_entries_per_second_formatted(self) -> str:
+        """Get formatted entries per second string.
+
+        Returns:
+            Formatted entries per second string.
+        """
+        return f"{self.get_entries_per_second():.2f} entries/s"
+
+    def get_entry_count_formatted(self) -> str:
+        """Get formatted entry count string.
+
+        Returns:
+            Formatted entry count string.
+        """
+        return f"{self.entry_count} entries"
+
+    def get_source_count_formatted(self) -> str:
+        """Get formatted source count string.
+
+        Returns:
+            Formatted source count string.
+        """
+        return f"{self.sources_count()} sources"
