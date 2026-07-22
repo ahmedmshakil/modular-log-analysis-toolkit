@@ -463,3 +463,47 @@ class RetentionManager:
             Formatted policy count string.
         """
         return f"{len(self.policies)} policies"
+
+    def get_compression_rate_formatted(self) -> str:
+        """Get formatted compression rate string.
+
+        Returns:
+            Formatted compression rate string.
+        """
+        return f"{self.get_compression_rate():.1f}%"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Files: {self.get_file_count()}, Policies: {len(self.policies)}, Actions: {self.get_actions_count()}"
+
+    def get_total_size_mb(self) -> float:
+        """Get total size in MB.
+
+        Returns:
+            Total size in MB.
+        """
+        files = self.scan_files()
+        return round(sum(f.get("size_mb", 0) for f in files), 2)
+
+    def get_total_size_mb_formatted(self) -> str:
+        """Get formatted total size MB string.
+
+        Returns:
+            Formatted total size MB string.
+        """
+        return f"{self.get_total_size_mb():.2f} MB"
+
+    def get_policy_names_formatted(self) -> str:
+        """Get formatted policy names string.
+
+        Returns:
+            Formatted policy names string.
+        """
+        names = self.get_policy_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
