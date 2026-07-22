@@ -529,6 +529,103 @@ class AuthManager:
         """
         return sum(1 for u in self._users.values() if u.role == "analyst")
 
+    def get_admin_rate(self) -> float:
+        """Get admin user rate as percentage.
+
+        Returns:
+            Admin rate percentage.
+        """
+        if not self._users:
+            return 0.0
+        return round(self.get_admin_count() / len(self._users) * 100, 2)
+
+    def get_viewer_rate(self) -> float:
+        """Get viewer user rate as percentage.
+
+        Returns:
+            Viewer rate percentage.
+        """
+        if not self._users:
+            return 0.0
+        return round(self.get_viewer_count() / len(self._users) * 100, 2)
+
+    def get_analyst_rate(self) -> float:
+        """Get analyst user rate as percentage.
+
+        Returns:
+            Analyst rate percentage.
+        """
+        if not self._users:
+            return 0.0
+        return round(self.get_analyst_count() / len(self._users) * 100, 2)
+
+    def get_admin_rate_formatted(self) -> str:
+        """Get formatted admin rate string.
+
+        Returns:
+            Formatted admin rate string.
+        """
+        return f"{self.get_admin_rate():.1f}%"
+
+    def get_viewer_rate_formatted(self) -> str:
+        """Get formatted viewer rate string.
+
+        Returns:
+            Formatted viewer rate string.
+        """
+        return f"{self.get_viewer_rate():.1f}%"
+
+    def get_analyst_rate_formatted(self) -> str:
+        """Get formatted analyst rate string.
+
+        Returns:
+            Formatted analyst rate string.
+        """
+        return f"{self.get_analyst_rate():.1f}%"
+
+    def get_user_count_formatted(self) -> str:
+        """Get formatted user count string.
+
+        Returns:
+            Formatted user count string.
+        """
+        return f"{len(self._users)} users"
+
+    def get_session_count_formatted(self) -> str:
+        """Get formatted session count string.
+
+        Returns:
+            Formatted session count string.
+        """
+        return f"{len(self._sessions)} sessions"
+
+    def get_active_user_count_formatted(self) -> str:
+        """Get formatted active user count string.
+
+        Returns:
+            Formatted active user count string.
+        """
+        return f"{self.get_active_user_count()} active"
+
+    def get_inactive_user_count_formatted(self) -> str:
+        """Get formatted inactive user count string.
+
+        Returns:
+            Formatted inactive user count string.
+        """
+        return f"{self.get_inactive_user_count()} inactive"
+
+    def get_role_counts_formatted(self) -> str:
+        """Get formatted role counts string.
+
+        Returns:
+            Formatted role counts string.
+        """
+        counts = self.get_role_counts()
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+
     def _save_users(self):
         """Save users to file."""
         data = {}
