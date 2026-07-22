@@ -493,3 +493,85 @@ class LogExporter:
             return {}
         from collections import Counter
         return dict(Counter(e.source for e in entries if e.source))
+
+    @staticmethod
+    def get_error_rate_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted error rate string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"{LogExporter.get_error_rate(entries):.1f}%"
+
+    @staticmethod
+    def get_warning_rate_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted warning rate string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted warning rate string.
+        """
+        return f"{LogExporter.get_warning_rate(entries):.1f}%"
+
+    @staticmethod
+    def get_info_rate_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted info rate string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted info rate string.
+        """
+        return f"{LogExporter.get_info_rate(entries):.1f}%"
+
+    @staticmethod
+    def get_entry_count_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted entry count string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted entry count string.
+        """
+        return f"{LogExporter.get_entry_count(entries)} entries"
+
+    @staticmethod
+    def get_source_count_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted source count string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted source count string.
+        """
+        return f"{LogExporter.get_source_count(entries)} sources"
+
+    @staticmethod
+    def get_level_count_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted level count string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted level count string.
+        """
+        counts = LogExporter.get_level_counts(entries)
+        return f"{len(counts)} levels"
+
+    @staticmethod
+    def get_format_count_formatted() -> str:
+        """Get formatted format count string.
+
+        Returns:
+            Formatted format count string.
+        """
+        return f"{LogExporter.get_format_count()} formats"
