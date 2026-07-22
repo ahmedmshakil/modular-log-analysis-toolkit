@@ -585,3 +585,75 @@ class LogFilter:
         if not counts:
             return None
         return min(counts, key=counts.get)
+
+    def get_error_rate_formatted(self) -> str:
+        """Get formatted error rate string.
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"{self.get_error_rate():.1f}%"
+
+    def get_warning_rate_formatted(self) -> str:
+        """Get formatted warning rate string.
+
+        Returns:
+            Formatted warning rate string.
+        """
+        return f"{self.get_warning_rate():.1f}%"
+
+    def get_info_rate_formatted(self) -> str:
+        """Get formatted info rate string.
+
+        Returns:
+            Formatted info rate string.
+        """
+        return f"{self.get_info_rate():.1f}%"
+
+    def get_debug_rate_formatted(self) -> str:
+        """Get formatted debug rate string.
+
+        Returns:
+            Formatted debug rate string.
+        """
+        return f"{self.get_debug_rate():.1f}%"
+
+    def get_critical_rate_formatted(self) -> str:
+        """Get formatted critical rate string.
+
+        Returns:
+            Formatted critical rate string.
+        """
+        return f"{self.get_critical_rate():.1f}%"
+
+    def get_non_error_rate_formatted(self) -> str:
+        """Get formatted non-error rate string.
+
+        Returns:
+            Formatted non-error rate string.
+        """
+        return f"{self.get_non_error_rate():.1f}%"
+
+    def get_entry_count_formatted(self) -> str:
+        """Get formatted entry count string.
+
+        Returns:
+            Formatted entry count string.
+        """
+        return f"{self.entry_count} entries"
+
+    def get_filter_count_formatted(self) -> str:
+        """Get formatted filter count string.
+
+        Returns:
+            Formatted filter count string.
+        """
+        return f"{self.get_filter_count()} filters"
+
+    def get_unique_source_count_formatted(self) -> str:
+        """Get formatted unique source count string.
+
+        Returns:
+            Formatted unique source count string.
+        """
+        return f"{len(self.unique_sources)} sources"
