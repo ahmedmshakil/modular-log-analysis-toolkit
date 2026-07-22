@@ -658,3 +658,83 @@ class AnalysisResult:
         if self.duration_seconds == 0:
             return 0.0
         return round(self.total_entries / (self.duration_seconds / 60), 2)
+
+    def get_entries_per_second_formatted(self) -> str:
+        """Get formatted entries per second string.
+
+        Returns:
+            Formatted entries per second string.
+        """
+        return f"{self.get_entries_per_second():.2f} entries/s"
+
+    def get_entries_per_minute_formatted(self) -> str:
+        """Get formatted entries per minute string.
+
+        Returns:
+            Formatted entries per minute string.
+        """
+        return f"{self.get_entries_per_minute():.2f} entries/m"
+
+    def get_error_count_formatted(self) -> str:
+        """Get formatted error count string.
+
+        Returns:
+            Formatted error count string.
+        """
+        return f"{self.error_count} errors"
+
+    def get_warning_count_formatted(self) -> str:
+        """Get formatted warning count string.
+
+        Returns:
+            Formatted warning count string.
+        """
+        return f"{self.warn_count} warnings"
+
+    def get_info_count_formatted(self) -> str:
+        """Get formatted info count string.
+
+        Returns:
+            Formatted info count string.
+        """
+        return f"{self.info_count} info"
+
+    def get_debug_count_formatted(self) -> str:
+        """Get formatted debug count string.
+
+        Returns:
+            Formatted debug count string.
+        """
+        return f"{self.debug_count} debug"
+
+    def get_trace_count_formatted(self) -> str:
+        """Get formatted trace count string.
+
+        Returns:
+            Formatted trace count string.
+        """
+        return f"{self.trace_count} trace"
+
+    def get_critical_count_formatted(self) -> str:
+        """Get formatted critical count string.
+
+        Returns:
+            Formatted critical count string.
+        """
+        return f"{self.level_counts.get('CRITICAL', 0)} critical"
+
+    def get_source_count_formatted(self) -> str:
+        """Get formatted source count string.
+
+        Returns:
+            Formatted source count string.
+        """
+        return f"{self.source_count} sources"
+
+    def get_total_entries_formatted(self) -> str:
+        """Get formatted total entries string.
+
+        Returns:
+            Formatted total entries string.
+        """
+        return f"{self.total_entries} entries"
