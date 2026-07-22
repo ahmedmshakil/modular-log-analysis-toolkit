@@ -421,3 +421,43 @@ class LogStream:
             Formatted error count string.
         """
         return f"{self._errors} errors"
+
+    def get_file_size_formatted(self) -> str:
+        """Get formatted file size string.
+
+        Returns:
+            Formatted file size string.
+        """
+        return f"{self.get_file_size_mb():.2f} MB"
+
+    def get_success_rate_formatted(self) -> str:
+        """Get formatted success rate string.
+
+        Returns:
+            Formatted success rate string.
+        """
+        return f"{self.get_success_rate():.1f}%"
+
+    def get_error_rate_formatted(self) -> str:
+        """Get formatted error rate string.
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"{self.error_rate:.1f}%"
+
+    def get_status_formatted(self) -> str:
+        """Get formatted status string.
+
+        Returns:
+            Formatted status string.
+        """
+        return f"Status: {self.get_status()}"
+
+    def get_file_name_formatted(self) -> str:
+        """Get formatted file name string.
+
+        Returns:
+            Formatted file name string.
+        """
+        return f"File: {self.get_file_name()}"
