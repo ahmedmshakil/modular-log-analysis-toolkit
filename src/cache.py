@@ -461,3 +461,43 @@ class QueryCache:
             Formatted cache size string.
         """
         return f"{self._cache.size}/{self._cache.max_size}"
+
+    def get_hit_rate_formatted(self) -> str:
+        """Get formatted hit rate string.
+
+        Returns:
+            Formatted hit rate string.
+        """
+        return f"{self.hit_rate:.1f}%"
+
+    def get_most_popular_count_formatted(self) -> str:
+        """Get formatted most popular count string.
+
+        Returns:
+            Formatted most popular count string.
+        """
+        return f"{self.get_most_popular_count()} hits"
+
+    def get_average_popularity_formatted(self) -> str:
+        """Get formatted average popularity string.
+
+        Returns:
+            Formatted average popularity string.
+        """
+        return f"{self.get_average_popularity():.2f} avg"
+
+    def get_total_queries_formatted(self) -> str:
+        """Get formatted total queries string.
+
+        Returns:
+            Formatted total queries string.
+        """
+        return f"{self.get_total_queries()} total"
+
+    def get_popular_query_count_formatted(self) -> str:
+        """Get formatted popular query count string.
+
+        Returns:
+            Formatted popular query count string.
+        """
+        return f"{self.get_popular_query_count()} unique"
