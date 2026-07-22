@@ -432,3 +432,51 @@ class LogDeduplicator:
             Formatted total duplicates removed string.
         """
         return f"{self.total_duplicates_removed()} duplicates"
+
+    def get_unique_count_formatted(self) -> str:
+        """Get formatted unique count string.
+
+        Returns:
+            Formatted unique count string.
+        """
+        return f"{self.unique_count} unique"
+
+    def get_total_count_formatted(self) -> str:
+        """Get formatted total count string.
+
+        Returns:
+            Formatted total count string.
+        """
+        return f"{self.total_count} total"
+
+    def get_duplicate_count_formatted(self) -> str:
+        """Get formatted duplicate count string.
+
+        Returns:
+            Formatted duplicate count string.
+        """
+        return f"{self.duplicate_count} duplicates"
+
+    def get_cache_size_formatted(self) -> str:
+        """Get formatted cache size string.
+
+        Returns:
+            Formatted cache size string.
+        """
+        return f"{self.cache_size} cached"
+
+    def get_max_duplicates_formatted(self) -> str:
+        """Get formatted max duplicates string.
+
+        Returns:
+            Formatted max duplicates string.
+        """
+        return f"max: {self.get_max_duplicates()}"
+
+    def get_min_duplicates_formatted(self) -> str:
+        """Get formatted min duplicates string.
+
+        Returns:
+            Formatted min duplicates string.
+        """
+        return f"min: {self.get_min_duplicates()}"
