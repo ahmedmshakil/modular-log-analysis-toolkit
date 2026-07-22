@@ -430,3 +430,51 @@ class LogParser:
             Pattern length.
         """
         return len(self.get_pattern_string())
+
+    def get_pattern_count_formatted(self) -> str:
+        """Get formatted pattern count string.
+
+        Returns:
+            Formatted pattern count string.
+        """
+        return f"{self.get_pattern_count()} patterns"
+
+    def get_pattern_group_count_formatted(self) -> str:
+        """Get formatted pattern group count string.
+
+        Returns:
+            Formatted pattern group count string.
+        """
+        return f"{self.get_pattern_group_count()} groups"
+
+    def get_pattern_length_formatted(self) -> str:
+        """Get formatted pattern length string.
+
+        Returns:
+            Formatted pattern length string.
+        """
+        return f"{self.get_pattern_length()} chars"
+
+    def get_pattern_type_formatted(self) -> str:
+        """Get formatted pattern type string.
+
+        Returns:
+            Formatted pattern type string.
+        """
+        return f"Type: {self.get_pattern_type()}"
+
+    def get_available_patterns_count_formatted(self) -> str:
+        """Get formatted available patterns count string.
+
+        Returns:
+            Formatted available patterns count string.
+        """
+        return f"{len(self.get_available_patterns_list())} available"
+
+    def get_pattern_name_formatted(self) -> str:
+        """Get formatted pattern name string.
+
+        Returns:
+            Formatted pattern name string.
+        """
+        return f"Pattern: {self.pattern_name}"
