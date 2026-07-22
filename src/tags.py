@@ -406,3 +406,57 @@ class TagManager:
         if not self._rules:
             return 0.0
         return round(sum(r.priority for r in self._rules) / len(self._rules), 2)
+
+    def get_average_priority_formatted(self) -> str:
+        """Get formatted average priority string.
+
+        Returns:
+            Formatted average priority string.
+        """
+        return f"avg priority: {self.get_average_priority():.2f}"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Rules: {len(self._rules)}, Manual Tags: {self.get_manual_tag_count()}, Unique Tags: {len(self.get_all_tag_names())}"
+
+    def get_rules_by_priority_formatted(self, min_priority: int = 0) -> str:
+        """Get formatted rules by priority string.
+
+        Args:
+            min_priority: Minimum priority level.
+
+        Returns:
+            Formatted rules by priority string.
+        """
+        rules = self.get_rules_by_priority(min_priority)
+        if not rules:
+            return "none"
+        return ", ".join(f"{r['name']}({r['priority']})" for r in rules)
+
+    def get_manual_tags_formatted(self) -> str:
+        """Get formatted manual tags string.
+
+        Returns:
+            Formatted manual tags string.
+        """
+        if not self._manual_tags:
+            return "none"
+        all_tags = set()
+        for tags in self._manual_tags.values():
+            all_tags.update(tags)
+        return ", ".join(sorted(all_tags)) if all_tags else "none"
+
+    def get_rule_count_by_priority(self, min_priority: int = 0) -> int:
+        """Get count of rules by minimum priority.
+
+        Args:
+            min_priority: Minimum priority level.
+
+        Returns:
+            Count of rules.
+        """
+        return len(self.get_rules_by_priority(min_priority))
