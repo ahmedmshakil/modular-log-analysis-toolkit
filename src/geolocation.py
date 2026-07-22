@@ -415,3 +415,43 @@ class GeoLookup:
         if total == 0:
             return 0.0
         return round(self._cache_hits / total * 100, 2)
+
+    def get_lookup_efficiency_formatted(self) -> str:
+        """Get formatted lookup efficiency string.
+
+        Returns:
+            Formatted lookup efficiency string.
+        """
+        return f"{self.get_lookup_efficiency():.1f}%"
+
+    def get_cache_hits_formatted(self) -> str:
+        """Get formatted cache hits string.
+
+        Returns:
+            Formatted cache hits string.
+        """
+        return f"{self._cache_hits} hits"
+
+    def get_lookup_count_formatted(self) -> str:
+        """Get formatted lookup count string.
+
+        Returns:
+            Formatted lookup count string.
+        """
+        return f"{self._lookup_count} lookups"
+
+    def get_cached_count_formatted(self) -> str:
+        """Get formatted cached count string.
+
+        Returns:
+            Formatted cached count string.
+        """
+        return f"{len(self._cache)} cached"
+
+    def get_cache_capacity_formatted(self) -> str:
+        """Get formatted cache capacity string.
+
+        Returns:
+            Formatted cache capacity string.
+        """
+        return f"capacity: {self._cache_size}"
