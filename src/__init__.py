@@ -89,3 +89,67 @@ def is_dev_version() -> bool:
         True if version contains 'dev'.
     """
     return "dev" in __version__
+
+
+def get_version_formatted() -> str:
+    """Get formatted version string.
+
+    Returns:
+        Formatted version string.
+    """
+    return f"v{__version__}"
+
+
+def get_modules_formatted() -> str:
+    """Get formatted modules string.
+
+    Returns:
+        Formatted modules string.
+    """
+    return ", ".join(__all__)
+
+
+def get_module_count_formatted() -> str:
+    """Get formatted module count string.
+
+    Returns:
+        Formatted module count string.
+    """
+    return f"{len(__all__)} modules"
+
+
+def get_package_info_formatted() -> str:
+    """Get formatted package info string.
+
+    Returns:
+        Formatted package info string.
+    """
+    return f"modular-log-analysis-toolkit v{__version__} by {__author__}"
+
+
+def get_version_info_formatted() -> str:
+    """Get formatted version info string.
+
+    Returns:
+        Formatted version info string.
+    """
+    info = get_version_info()
+    return f"v{info['version']} (major: {info['major']}, minor: {info['minor']}, patch: {info['patch']})"
+
+
+def get_author() -> str:
+    """Get package author.
+
+    Returns:
+        Author string.
+    """
+    return __author__
+
+
+def get_author_formatted() -> str:
+    """Get formatted author string.
+
+    Returns:
+        Formatted author string.
+    """
+    return f"Author: {__author__}"
