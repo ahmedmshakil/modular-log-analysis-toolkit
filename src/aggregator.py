@@ -598,3 +598,82 @@ class LogAggregator:
             Formatted source count string.
         """
         return f"{self.sources_count()} sources"
+
+    def get_level_counts_formatted(self) -> str:
+        """Get formatted level counts string.
+
+        Returns:
+            Formatted level counts string.
+        """
+        counts = self.level_counts
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+
+    def get_source_counts_formatted(self) -> str:
+        """Get formatted source counts string.
+
+        Returns:
+            Formatted source counts string.
+        """
+        counts = self.get_source_counts()
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+
+    def get_time_range_formatted(self) -> str:
+        """Get formatted time range string.
+
+        Returns:
+            Formatted time range string.
+        """
+        time_range = self.get_time_range()
+        if not time_range:
+            return "none"
+        return f"{time_range[0].isoformat()} to {time_range[1].isoformat()}"
+
+    def get_duration_formatted(self) -> str:
+        """Get formatted duration string.
+
+        Returns:
+            Formatted duration string.
+        """
+        if not self.entries or len(self.entries) < 2:
+            return "0s"
+        time_range = self.get_time_range()
+        if not time_range:
+            return "0s"
+        duration = (time_range[1] - time_range[0]).total_seconds()
+        if duration < 60:
+            return f"{duration:.1f}s"
+        if duration < 3600:
+            return f"{duration/60:.1f}m"
+        return f"{duration/3600:.1f}h"
+
+    def get_busiest_hours_formatted(self, limit: int = 5) -> str:
+        """Get formatted busiest hours string.
+
+        Args:
+            limit: Maximum number of hours.
+
+        Returns:
+            Formatted busiest hours string.
+        """
+        hours = self.busiest_hours(limit)
+        if not hours:
+            return "none"
+        return ", ".join(f"{h}:00({c})" for h, c in hours)
+
+    def get_top_sources_formatted(self, limit: int = 5) -> str:
+        """Get formatted top sources string.
+
+        Args:
+            limit: Maximum number of sources.
+
+        Returns:
+            Formatted top sources string.
+        """
+        sources = self.top_sources(limit)
+        if not sources:
+            return "none"
+        return ", ".join(f"{s}({c})" for s, c in sources)
