@@ -558,3 +558,63 @@ class QueryCache:
             Formatted stats string.
         """
         return f"Size: {self._cache.size}/{self._cache.max_size}, Hit Rate: {self.hit_rate:.1f}%, Queries: {self.query_count}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_queries_per_cache_size(self) -> float:
+        """Get queries per cache size ratio.
+
+        Returns:
+            Queries per cache size ratio.
+        """
+        if self._cache.max_size == 0:
+            return 0.0
+        return round(self.query_count / self._cache.max_size, 2)
+
+    def get_queries_per_cache_size_formatted(self) -> str:
+        """Get formatted queries per cache size string.
+
+        Returns:
+            Formatted queries per cache size string.
+        """
+        return f"{self.get_queries_per_cache_size():.2f} queries/size"
+
+    def get_popular_query_diversity(self) -> float:
+        """Get popular query diversity (unique queries / total queries).
+
+        Returns:
+            Popular query diversity percentage.
+        """
+        if self.get_total_queries() == 0:
+            return 0.0
+        return round(self.query_count / self.get_total_queries() * 100, 2)
+
+    def get_popular_query_diversity_formatted(self) -> str:
+        """Get formatted popular query diversity string.
+
+        Returns:
+            Formatted popular query diversity string.
+        """
+        return f"{self.get_popular_query_diversity():.1f}%"
+
+    def get_cache_efficiency(self) -> float:
+        """Get cache efficiency (hit rate * usage).
+
+        Returns:
+            Cache efficiency percentage.
+        """
+        return round(self.hit_rate * self.get_cache_usage_percent() / 100, 2)
+
+    def get_cache_efficiency_formatted(self) -> str:
+        """Get formatted cache efficiency string.
+
+        Returns:
+            Formatted cache efficiency string.
+        """
+        return f"{self.get_cache_efficiency():.1f}%"
