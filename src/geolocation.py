@@ -455,3 +455,85 @@ class GeoLookup:
             Formatted cache capacity string.
         """
         return f"capacity: {self._cache_size}"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Lookups: {self._lookup_count}, Cache Hits: {self._cache_hits}, Cached: {len(self._cache)}, Hit Rate: {self.cache_hit_rate:.1f}%"
+
+    def get_cache_usage_percent(self) -> float:
+        """Get cache usage as percentage.
+
+        Returns:
+            Cache usage percentage.
+        """
+        if self._cache_size == 0:
+            return 0.0
+        return round(len(self._cache) / self._cache_size * 100, 2)
+
+    def get_cache_usage_formatted(self) -> str:
+        """Get formatted cache usage string.
+
+        Returns:
+            Formatted cache usage string.
+        """
+        return f"{self.get_cache_usage_percent():.1f}%"
+
+    def get_hit_rate_formatted(self) -> str:
+        """Get formatted hit rate string.
+
+        Returns:
+            Formatted hit rate string.
+        """
+        return f"{self.cache_hit_rate:.1f}%"
+
+    def get_api_calls(self) -> int:
+        """Get number of API calls made.
+
+        Returns:
+            API call count.
+        """
+        return self._lookup_count
+
+    def get_cache_misses(self) -> int:
+        """Get number of cache misses.
+
+        Returns:
+            Cache miss count.
+        """
+        return self._lookup_count
+
+    def get_api_calls_formatted(self) -> str:
+        """Get formatted API calls string.
+
+        Returns:
+            Formatted API calls string.
+        """
+        return f"{self.get_api_calls()} API calls"
+
+    def get_cache_misses_formatted(self) -> str:
+        """Get formatted cache misses string.
+
+        Returns:
+            Formatted cache misses string.
+        """
+        return f"{self.get_cache_misses()} misses"
+
+    def get_cached_ips_count(self) -> int:
+        """Get count of cached IPs.
+
+        Returns:
+            Count of cached IPs.
+        """
+        return len(self.get_cached_ips())
+
+    def get_cached_ips_count_formatted(self) -> str:
+        """Get formatted cached IPs count string.
+
+        Returns:
+            Formatted cached IPs count string.
+        """
+        return f"{self.get_cached_ips_count()} IPs"
