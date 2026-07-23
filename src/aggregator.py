@@ -677,3 +677,85 @@ class LogAggregator:
         if not sources:
             return "none"
         return ", ".join(f"{s}({c})" for s, c in sources)
+
+    def get_level_distribution_formatted(self) -> str:
+        """Get formatted level distribution string.
+
+        Returns:
+            Formatted level distribution string.
+        """
+        dist = self.get_level_distribution()
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    def get_source_distribution_formatted(self) -> str:
+        """Get formatted source distribution string.
+
+        Returns:
+            Formatted source distribution string.
+        """
+        dist = self.get_source_distribution()
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    def get_most_common_level_formatted(self) -> str:
+        """Get formatted most common level string.
+
+        Returns:
+            Formatted most common level string.
+        """
+        level = self.get_most_common_level()
+        return level if level else "none"
+
+    def get_most_common_source_formatted(self) -> str:
+        """Get formatted most common source string.
+
+        Returns:
+            Formatted most common source string.
+        """
+        source = self.get_most_common_source()
+        return source if source else "none"
+
+    def get_least_common_level_formatted(self) -> str:
+        """Get formatted least common level string.
+
+        Returns:
+            Formatted least common level string.
+        """
+        level = self.get_least_common_level()
+        return level if level else "none"
+
+    def get_least_common_source_formatted(self) -> str:
+        """Get formatted least common source string.
+
+        Returns:
+            Formatted least common source string.
+        """
+        source = self.get_least_common_source()
+        return source if source else "none"
+
+    def get_entries_per_second_formatted(self) -> str:
+        """Get formatted entries per second string.
+
+        Returns:
+            Formatted entries per second string.
+        """
+        return f"{self.get_entries_per_second():.2f} entries/s"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Entries: {self.entry_count}, Sources: {self.sources_count()}, Error Rate: {self.error_rate():.1f}%"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
