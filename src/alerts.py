@@ -597,3 +597,55 @@ class AlertManager:
             Formatted low severity count string.
         """
         return f"{self.get_low_severity_count()} low/medium"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Thresholds: {len(self.thresholds)}, Alerts: {len(self.alerts)}, Active: {self.get_unacknowledged_count()}, Callbacks: {len(self.callbacks)}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_alerts_per_threshold(self) -> float:
+        """Get alerts per threshold ratio.
+
+        Returns:
+            Alerts per threshold ratio.
+        """
+        if len(self.thresholds) == 0:
+            return 0.0
+        return round(len(self.alerts) / len(self.thresholds), 2)
+
+    def get_alerts_per_threshold_formatted(self) -> str:
+        """Get formatted alerts per threshold string.
+
+        Returns:
+            Formatted alerts per threshold string.
+        """
+        return f"{self.get_alerts_per_threshold():.2f} alerts/threshold"
+
+    def get_acknowledgment_rate(self) -> float:
+        """Get acknowledgment rate as percentage.
+
+        Returns:
+            Acknowledgment rate percentage.
+        """
+        if len(self.alerts) == 0:
+            return 0.0
+        return round(self.get_acknowledged_count() / len(self.alerts) * 100, 2)
+
+    def get_acknowledgment_rate_formatted(self) -> str:
+        """Get formatted acknowledgment rate string.
+
+        Returns:
+            Formatted acknowledgment rate string.
+        """
+        return f"{self.get_acknowledgment_rate():.1f}%"
