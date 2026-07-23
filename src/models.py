@@ -818,3 +818,99 @@ class AnalysisResult:
             Formatted stats string.
         """
         return f"Entries: {self.total_entries}, Errors: {self.error_count}, Sources: {self.source_count}, Duration: {self.get_duration_formatted()}"
+
+    def get_error_rate_percent(self) -> float:
+        """Get error rate as percentage.
+
+        Returns:
+            Error rate percentage.
+        """
+        return self.get_error_rate()
+
+    def get_warning_rate_percent(self) -> float:
+        """Get warning rate as percentage.
+
+        Returns:
+            Warning rate percentage.
+        """
+        return self.get_warning_rate()
+
+    def get_info_rate_percent(self) -> float:
+        """Get info rate as percentage.
+
+        Returns:
+            Info rate percentage.
+        """
+        return self.get_info_rate()
+
+    def get_debug_rate_percent(self) -> float:
+        """Get debug rate as percentage.
+
+        Returns:
+            Debug rate percentage.
+        """
+        return self.get_debug_rate()
+
+    def get_critical_rate_percent(self) -> float:
+        """Get critical rate as percentage.
+
+        Returns:
+            Critical rate percentage.
+        """
+        return self.get_critical_rate()
+
+    def get_non_error_rate_percent(self) -> float:
+        """Get non-error rate as percentage.
+
+        Returns:
+            Non-error rate percentage.
+        """
+        return self.get_non_error_rate()
+
+    def get_entries_per_second_rate(self) -> float:
+        """Get entries per second rate.
+
+        Returns:
+            Entries per second rate.
+        """
+        return self.get_entries_per_second()
+
+    def get_entries_per_minute_rate(self) -> float:
+        """Get entries per minute rate.
+
+        Returns:
+            Entries per minute rate.
+        """
+        return self.get_entries_per_minute()
+
+    def get_summary_formatted(self) -> str:
+        """Get formatted summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        return self.get_summary_string()
+
+    def get_duration_seconds_formatted(self) -> str:
+        """Get formatted duration seconds string.
+
+        Returns:
+            Formatted duration seconds string.
+        """
+        return f"{self.duration_seconds:.2f}s"
+
+    def get_duration_minutes_formatted(self) -> str:
+        """Get formatted duration minutes string.
+
+        Returns:
+            Formatted duration minutes string.
+        """
+        return f"{self.duration_minutes:.2f}m"
+
+    def get_duration_hours_formatted(self) -> str:
+        """Get formatted duration hours string.
+
+        Returns:
+            Formatted duration hours string.
+        """
+        return f"{self.duration_hours:.2f}h"
