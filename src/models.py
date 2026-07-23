@@ -738,3 +738,83 @@ class AnalysisResult:
             Formatted total entries string.
         """
         return f"{self.total_entries} entries"
+
+    def get_level_counts_formatted(self) -> str:
+        """Get formatted level counts string.
+
+        Returns:
+            Formatted level counts string.
+        """
+        if not self.level_counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in self.level_counts.items())
+
+    def get_sources_formatted(self) -> str:
+        """Get formatted sources string.
+
+        Returns:
+            Formatted sources string.
+        """
+        if not self.sources:
+            return "none"
+        return ", ".join(self.sources)
+
+    def get_top_errors_formatted(self, limit: int = 5) -> str:
+        """Get formatted top errors string.
+
+        Args:
+            limit: Maximum number of errors.
+
+        Returns:
+            Formatted top errors string.
+        """
+        if not self.top_errors:
+            return "none"
+        return ", ".join(self.top_errors[:limit])
+
+    def get_time_range_formatted(self) -> str:
+        """Get formatted time range string.
+
+        Returns:
+            Formatted time range string.
+        """
+        if not self.time_range:
+            return "none"
+        return f"{self.time_range[0].isoformat()} to {self.time_range[1].isoformat()}"
+
+    def get_level_distribution_formatted(self) -> str:
+        """Get formatted level distribution string.
+
+        Returns:
+            Formatted level distribution string.
+        """
+        dist = self.get_level_distribution()
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    def get_most_common_level_formatted(self) -> str:
+        """Get formatted most common level string.
+
+        Returns:
+            Formatted most common level string.
+        """
+        level = self.get_most_common_level()
+        return level if level else "none"
+
+    def get_least_common_level_formatted(self) -> str:
+        """Get formatted least common level string.
+
+        Returns:
+            Formatted least common level string.
+        """
+        level = self.get_least_common_level()
+        return level if level else "none"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Entries: {self.total_entries}, Errors: {self.error_count}, Sources: {self.source_count}, Duration: {self.get_duration_formatted()}"
