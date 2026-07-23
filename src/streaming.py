@@ -517,3 +517,64 @@ class LogStream:
             Formatted error rate string.
         """
         return f"Error: {self.error_rate:.1f}%"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_processing_efficiency(self) -> float:
+        """Get processing efficiency (processed / total).
+
+        Returns:
+            Processing efficiency percentage.
+        """
+        total = self.get_total_count()
+        if total == 0:
+            return 0.0
+        return round(self._processed / total * 100, 2)
+
+    def get_processing_efficiency_formatted(self) -> str:
+        """Get formatted processing efficiency string.
+
+        Returns:
+            Formatted processing efficiency string.
+        """
+        return f"{self.get_processing_efficiency():.1f}%"
+
+    def get_error_impact(self) -> float:
+        """Get error impact (errors / processed).
+
+        Returns:
+            Error impact percentage.
+        """
+        if self._processed == 0:
+            return 0.0
+        return round(self._errors / self._processed * 100, 2)
+
+    def get_error_impact_formatted(self) -> str:
+        """Get formatted error impact string.
+
+        Returns:
+            Formatted error impact string.
+        """
+        return f"{self.get_error_impact():.1f}%"
+
+    def get_stream_health(self) -> float:
+        """Get stream health (success rate - error impact).
+
+        Returns:
+            Stream health percentage.
+        """
+        return round(self.get_success_rate() - self.get_error_impact(), 2)
+
+    def get_stream_health_formatted(self) -> str:
+        """Get formatted stream health string.
+
+        Returns:
+            Formatted stream health string.
+        """
+        return f"{self.get_stream_health():.1f}%"
