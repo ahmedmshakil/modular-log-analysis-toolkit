@@ -537,3 +537,75 @@ class GeoLookup:
             Formatted cached IPs count string.
         """
         return f"{self.get_cached_ips_count()} IPs"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_lookup_efficiency_percent(self) -> float:
+        """Get lookup efficiency as percentage.
+
+        Returns:
+            Lookup efficiency percentage.
+        """
+        return self.get_lookup_efficiency()
+
+    def get_cache_hit_ratio(self) -> float:
+        """Get cache hit ratio (hits / total lookups).
+
+        Returns:
+            Cache hit ratio percentage.
+        """
+        total = self.get_total_lookups()
+        if total == 0:
+            return 0.0
+        return round(self._cache_hits / total * 100, 2)
+
+    def get_cache_hit_ratio_formatted(self) -> str:
+        """Get formatted cache hit ratio string.
+
+        Returns:
+            Formatted cache hit ratio string.
+        """
+        return f"{self.get_cache_hit_ratio():.1f}%"
+
+    def get_api_call_ratio(self) -> float:
+        """Get API call ratio (API calls / total lookups).
+
+        Returns:
+            API call ratio percentage.
+        """
+        total = self.get_total_lookups()
+        if total == 0:
+            return 0.0
+        return round(self._lookup_count / total * 100, 2)
+
+    def get_api_call_ratio_formatted(self) -> str:
+        """Get formatted API call ratio string.
+
+        Returns:
+            Formatted API call ratio string.
+        """
+        return f"{self.get_api_call_ratio():.1f}%"
+
+    def get_cache_fullness(self) -> float:
+        """Get cache fullness (cached / capacity).
+
+        Returns:
+            Cache fullness percentage.
+        """
+        if self._cache_size == 0:
+            return 0.0
+        return round(len(self._cache) / self._cache_size * 100, 2)
+
+    def get_cache_fullness_formatted(self) -> str:
+        """Get formatted cache fullness string.
+
+        Returns:
+            Formatted cache fullness string.
+        """
+        return f"{self.get_cache_fullness():.1f}%"
