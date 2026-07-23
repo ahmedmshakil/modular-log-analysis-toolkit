@@ -575,3 +575,137 @@ class LogExporter:
             Formatted format count string.
         """
         return f"{LogExporter.get_format_count()} formats"
+
+    @staticmethod
+    def get_level_counts_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted level counts string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted level counts string.
+        """
+        counts = LogExporter.get_level_counts(entries)
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+
+    @staticmethod
+    def get_source_counts_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted source counts string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted source counts string.
+        """
+        counts = LogExporter.get_source_counts(entries)
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+
+    @staticmethod
+    def get_level_distribution_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted level distribution string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted level distribution string.
+        """
+        dist = LogExporter.get_level_distribution(entries)
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    @staticmethod
+    def get_source_distribution_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted source distribution string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted source distribution string.
+        """
+        dist = LogExporter.get_source_distribution(entries)
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    @staticmethod
+    def get_most_common_level_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted most common level string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted most common level string.
+        """
+        level = LogExporter.get_most_common_level(entries)
+        return level if level else "none"
+
+    @staticmethod
+    def get_most_common_source_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted most common source string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted most common source string.
+        """
+        source = LogExporter.get_most_common_source(entries)
+        return source if source else "none"
+
+    @staticmethod
+    def get_least_common_level_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted least common level string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted least common level string.
+        """
+        level = LogExporter.get_least_common_level(entries)
+        return level if level else "none"
+
+    @staticmethod
+    def get_least_common_source_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted least common source string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted least common source string.
+        """
+        source = LogExporter.get_least_common_source(entries)
+        return source if source else "none"
+
+    @staticmethod
+    def get_supported_formats_formatted() -> str:
+        """Get formatted supported formats string.
+
+        Returns:
+            Formatted supported formats string.
+        """
+        formats = LogExporter.get_supported_formats()
+        return ", ".join(formats)
+
+    @staticmethod
+    def get_stats_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted stats string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Entries: {LogExporter.get_entry_count(entries)}, Sources: {LogExporter.get_source_count(entries)}, Levels: {len(LogExporter.get_level_counts(entries))}"
