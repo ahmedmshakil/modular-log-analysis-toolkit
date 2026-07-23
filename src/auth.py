@@ -698,6 +698,77 @@ class AuthManager:
         """
         return f"{self.get_session_rate():.2f} sessions/user"
 
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Users: {len(self._users)}, Active: {self.get_active_user_count()}, Sessions: {len(self._sessions)}, Roles: {len(self.ROLES)}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_users_per_role(self) -> float:
+        """Get users per role ratio.
+
+        Returns:
+            Users per role ratio.
+        """
+        if len(self.ROLES) == 0:
+            return 0.0
+        return round(len(self._users) / len(self.ROLES), 2)
+
+    def get_users_per_role_formatted(self) -> str:
+        """Get formatted users per role string.
+
+        Returns:
+            Formatted users per role string.
+        """
+        return f"{self.get_users_per_role():.2f} users/role"
+
+    def get_sessions_per_user(self) -> float:
+        """Get sessions per user ratio.
+
+        Returns:
+            Sessions per user ratio.
+        """
+        if len(self._users) == 0:
+            return 0.0
+        return round(len(self._sessions) / len(self._users), 2)
+
+    def get_sessions_per_user_formatted(self) -> str:
+        """Get formatted sessions per user string.
+
+        Returns:
+            Formatted sessions per user string.
+        """
+        return f"{self.get_sessions_per_user():.2f} sessions/user"
+
+    def get_role_diversity(self) -> float:
+        """Get role diversity (unique roles / total roles).
+
+        Returns:
+            Role diversity percentage.
+        """
+        if len(self.ROLES) == 0:
+            return 0.0
+        unique_roles = len(set(u.role for u in self._users.values()))
+        return round(unique_roles / len(self.ROLES) * 100, 2)
+
+    def get_role_diversity_formatted(self) -> str:
+        """Get formatted role diversity string.
+
+        Returns:
+            Formatted role diversity string.
+        """
+        return f"{self.get_role_diversity():.1f}%"
+
     def _save_users(self):
         """Save users to file."""
         data = {}
