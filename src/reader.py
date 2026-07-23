@@ -526,3 +526,73 @@ def get_supported_encodings_formatted() -> str:
         Formatted supported encodings string.
     """
     return ", ".join(get_supported_encodings())
+
+
+def get_file_info_formatted(file_path: str) -> str:
+    """Get formatted file info string.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        Formatted file info string.
+
+    Raises:
+        FileNotFoundError: If file does not exist.
+    """
+    info = get_file_info_dict(file_path)
+    return f"Name: {info['name']}, Size: {info['size_formatted']}, Type: {info['extension']}"
+
+
+def get_file_summary_formatted(file_path: str) -> str:
+    """Get formatted file summary string.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        Formatted file summary string.
+
+    Raises:
+        FileNotFoundError: If file does not exist.
+    """
+    return get_file_summary_string(file_path)
+
+
+def get_text_extension_count_formatted() -> str:
+    """Get formatted text extension count string.
+
+    Returns:
+        Formatted text extension count string.
+    """
+    return f"{get_text_extension_count()} text extensions"
+
+
+def get_log_extension_count_formatted() -> str:
+    """Get formatted log extension count string.
+
+    Returns:
+        Formatted log extension count string.
+    """
+    return f"{get_log_extension_count()} log extensions"
+
+
+def get_all_extension_count_formatted() -> str:
+    """Get formatted all extension count string.
+
+    Returns:
+        Formatted all extension count string.
+    """
+    return f"{get_all_extension_count()} total extensions"
+
+
+def get_file_type_formatted(file_path: str) -> str:
+    """Get formatted file type string.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        Formatted file type string.
+    """
+    return f"Type: {get_file_type(file_path)}"
