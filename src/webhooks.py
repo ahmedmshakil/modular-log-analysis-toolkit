@@ -419,3 +419,85 @@ class WebhookRouter:
             Formatted total count string.
         """
         return f"{self.get_total_count()} total"
+
+    def get_endpoints_dict(self) -> List[Dict[str, Any]]:
+        """Get endpoints as dictionaries.
+
+        Returns:
+            List of endpoint dictionaries.
+        """
+        return [
+            {
+                "name": name,
+                "url": sender.url,
+                "stats": sender.stats,
+            }
+            for name, sender in self._senders.items()
+        ]
+
+    def get_endpoints_formatted(self) -> str:
+        """Get formatted endpoints string.
+
+        Returns:
+            Formatted endpoints string.
+        """
+        endpoints = self.get_endpoints_dict()
+        if not endpoints:
+            return "none"
+        return ", ".join(f"{e['name']}({e['url']})" for e in endpoints)
+
+    def get_success_count(self) -> int:
+        """Get success count.
+
+        Returns:
+            Success count.
+        """
+        return self.total_sent()
+
+    def get_success_count_formatted(self) -> str:
+        """Get formatted success count string.
+
+        Returns:
+            Formatted success count string.
+        """
+        return f"{self.get_success_count()} success"
+
+    def get_error_count_formatted(self) -> str:
+        """Get formatted error count string.
+
+        Returns:
+            Formatted error count string.
+        """
+        return f"{self.total_errors()} errors"
+
+    def get_endpoint_count_formatted(self) -> str:
+        """Get formatted endpoint count string.
+
+        Returns:
+            Formatted endpoint count string.
+        """
+        return f"{self.endpoint_count} endpoints"
+
+    def get_success_rate_formatted(self) -> str:
+        """Get formatted success rate string.
+
+        Returns:
+            Formatted success rate string.
+        """
+        return f"{self.get_success_rate():.1f}%"
+
+    def get_error_rate_percent(self) -> float:
+        """Get error rate as percentage.
+
+        Returns:
+            Error rate percentage.
+        """
+        return self.get_error_rate()
+
+    def get_success_rate_percent(self) -> float:
+        """Get success rate as percentage.
+
+        Returns:
+            Success rate percentage.
+        """
+        return self.get_success_rate()
