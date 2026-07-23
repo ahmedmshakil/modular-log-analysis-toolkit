@@ -536,3 +536,65 @@ class LogDeduplicator:
             Formatted duplicate summary count string.
         """
         return f"{self.get_duplicate_summary_count()} summary entries"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_duplicate_efficiency(self) -> float:
+        """Get duplicate efficiency (duplicates found / total processed).
+
+        Returns:
+            Duplicate efficiency percentage.
+        """
+        if self.total_count == 0:
+            return 0.0
+        return round(self.duplicate_count / self.total_count * 100, 2)
+
+    def get_duplicate_efficiency_formatted(self) -> str:
+        """Get formatted duplicate efficiency string.
+
+        Returns:
+            Formatted duplicate efficiency string.
+        """
+        return f"{self.get_duplicate_efficiency():.1f}%"
+
+    def get_hash_cache_efficiency(self) -> float:
+        """Get hash cache efficiency (cache size / total count).
+
+        Returns:
+            Hash cache efficiency percentage.
+        """
+        if self.total_count == 0:
+            return 0.0
+        return round(self.cache_size / self.total_count * 100, 2)
+
+    def get_hash_cache_efficiency_formatted(self) -> str:
+        """Get formatted hash cache efficiency string.
+
+        Returns:
+            Formatted hash cache efficiency string.
+        """
+        return f"{self.get_hash_cache_efficiency():.1f}%"
+
+    def get_unique_ratio(self) -> float:
+        """Get unique ratio (unique / total).
+
+        Returns:
+            Unique ratio percentage.
+        """
+        if self.total_count == 0:
+            return 0.0
+        return round(self.unique_count / self.total_count * 100, 2)
+
+    def get_unique_ratio_formatted(self) -> str:
+        """Get formatted unique ratio string.
+
+        Returns:
+            Formatted unique ratio string.
+        """
+        return f"{self.get_unique_ratio():.1f}%"
