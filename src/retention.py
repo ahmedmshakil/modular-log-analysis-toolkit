@@ -507,3 +507,91 @@ class RetentionManager:
         if not names:
             return "none"
         return ", ".join(names)
+
+    def get_policies_dict(self) -> List[Dict[str, Any]]:
+        """Get policies as dictionaries.
+
+        Returns:
+            List of policy dictionaries.
+        """
+        return [
+            {
+                "name": p.name,
+                "max_age_days": p.max_age_days,
+                "compress_after_days": p.compress_after_days,
+                "delete_after_days": p.delete_after_days,
+                "max_size_mb": p.max_size_mb,
+            }
+            for p in self.policies
+        ]
+
+    def get_policies_formatted(self) -> str:
+        """Get formatted policies string.
+
+        Returns:
+            Formatted policies string.
+        """
+        policies = self.get_policies_dict()
+        if not policies:
+            return "none"
+        return ", ".join(f"{p['name']}({p['max_age_days']}d)" for p in policies)
+
+    def get_compressed_count_formatted(self) -> str:
+        """Get formatted compressed count string.
+
+        Returns:
+            Formatted compressed count string.
+        """
+        return f"{self.get_compressed_count()} compressed"
+
+    def get_uncompressed_count_formatted(self) -> str:
+        """Get formatted uncompressed count string.
+
+        Returns:
+            Formatted uncompressed count string.
+        """
+        return f"{self.get_uncompressed_count()} uncompressed"
+
+    def get_file_count_formatted(self) -> str:
+        """Get formatted file count string.
+
+        Returns:
+            Formatted file count string.
+        """
+        return f"{self.get_file_count()} files"
+
+    def get_actions_count_formatted(self) -> str:
+        """Get formatted actions count string.
+
+        Returns:
+            Formatted actions count string.
+        """
+        return f"{self.get_actions_count()} actions"
+
+    def get_policy_count_formatted(self) -> str:
+        """Get formatted policy count string.
+
+        Returns:
+            Formatted policy count string.
+        """
+        return f"{len(self.policies)} policies"
+
+    def get_average_file_size(self) -> float:
+        """Get average file size in MB.
+
+        Returns:
+            Average file size in MB.
+        """
+        files = self.scan_files()
+        if not files:
+            return 0.0
+        total_mb = sum(f.get("size_mb", 0) for f in files)
+        return round(total_mb / len(files), 2)
+
+    def get_average_file_size_formatted(self) -> str:
+        """Get formatted average file size string.
+
+        Returns:
+            Formatted average file size string.
+        """
+        return f"{self.get_average_file_size():.2f} MB"
