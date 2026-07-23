@@ -591,3 +591,91 @@ class LogSearchIndex:
             Formatted unique level count string.
         """
         return f"{len(self.get_unique_levels())} unique levels"
+
+    def get_level_distribution_formatted(self) -> str:
+        """Get formatted level distribution string.
+
+        Returns:
+            Formatted level distribution string.
+        """
+        dist = self.get_level_distribution()
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    def get_source_distribution_formatted(self) -> str:
+        """Get formatted source distribution string.
+
+        Returns:
+            Formatted source distribution string.
+        """
+        dist = self.get_source_distribution()
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    def get_most_common_level_formatted(self) -> str:
+        """Get formatted most common level string.
+
+        Returns:
+            Formatted most common level string.
+        """
+        level = self.get_most_common_level()
+        return level if level else "none"
+
+    def get_most_common_source_formatted(self) -> str:
+        """Get formatted most common source string.
+
+        Returns:
+            Formatted most common source string.
+        """
+        source = self.get_most_common_source()
+        return source if source else "none"
+
+    def get_least_common_level_formatted(self) -> str:
+        """Get formatted least common level string.
+
+        Returns:
+            Formatted least common level string.
+        """
+        level = self.get_least_common_level()
+        return level if level else "none"
+
+    def get_least_common_source_formatted(self) -> str:
+        """Get formatted least common source string.
+
+        Returns:
+            Formatted least common source string.
+        """
+        source = self.get_least_common_source()
+        return source if source else "none"
+
+    def get_unique_sources_formatted(self) -> str:
+        """Get formatted unique sources string.
+
+        Returns:
+            Formatted unique sources string.
+        """
+        sources = self.get_unique_sources()
+        if not sources:
+            return "none"
+        return ", ".join(sources)
+
+    def get_unique_levels_formatted(self) -> str:
+        """Get formatted unique levels string.
+
+        Returns:
+            Formatted unique levels string.
+        """
+        levels = self.get_unique_levels()
+        if not levels:
+            return "none"
+        return ", ".join(levels)
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Entries: {len(self._entries)}, Words: {len(self._index)}, Sources: {len(self._field_index['source'])}, Levels: {len(self._field_index['level'])}"
