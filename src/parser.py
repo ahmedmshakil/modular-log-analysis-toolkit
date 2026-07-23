@@ -478,3 +478,52 @@ class LogParser:
             Formatted pattern name string.
         """
         return f"Pattern: {self.pattern_name}"
+
+    def get_available_patterns_formatted(self) -> str:
+        """Get formatted available patterns string.
+
+        Returns:
+            Formatted available patterns string.
+        """
+        patterns = self.get_available_patterns_list()
+        if not patterns:
+            return "none"
+        return ", ".join(patterns)
+
+    def get_pattern_groups_list(self) -> List[str]:
+        """Get pattern groups as list.
+
+        Returns:
+            List of pattern group names.
+        """
+        return self.get_pattern_groups()
+
+    def get_pattern_groups_list_formatted(self) -> str:
+        """Get formatted pattern groups list string.
+
+        Returns:
+            Formatted pattern groups list string.
+        """
+        groups = self.get_pattern_groups_list()
+        if not groups:
+            return "none"
+        return ", ".join(groups)
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Pattern: {self.pattern_name}, Groups: {self.get_pattern_group_count()}, Custom: {self.has_custom_pattern()}"
+
+    def get_pattern_string_formatted(self) -> str:
+        """Get formatted pattern string.
+
+        Returns:
+            Formatted pattern string.
+        """
+        pattern = self.get_pattern_string()
+        if not pattern:
+            return "none"
+        return pattern[:50] + "..." if len(pattern) > 50 else pattern
