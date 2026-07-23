@@ -530,3 +530,70 @@ class AlertManager:
             Formatted acknowledged count string.
         """
         return f"{self.get_acknowledged_count()} acknowledged"
+
+    def get_severity_counts_formatted(self) -> str:
+        """Get formatted severity counts string.
+
+        Returns:
+            Formatted severity counts string.
+        """
+        counts = self.get_alert_severity_counts()
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+
+    def get_threshold_names_formatted(self) -> str:
+        """Get formatted threshold names string.
+
+        Returns:
+            Formatted threshold names string.
+        """
+        names = self.get_threshold_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_severity_distribution_formatted(self) -> str:
+        """Get formatted severity distribution string.
+
+        Returns:
+            Formatted severity distribution string.
+        """
+        dist = self.get_severity_distribution()
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    def get_most_common_severity_formatted(self) -> str:
+        """Get formatted most common severity string.
+
+        Returns:
+            Formatted most common severity string.
+        """
+        sev = self.get_most_common_severity()
+        return sev if sev else "none"
+
+    def get_least_common_severity_formatted(self) -> str:
+        """Get formatted least common severity string.
+
+        Returns:
+            Formatted least common severity string.
+        """
+        sev = self.get_least_common_severity()
+        return sev if sev else "none"
+
+    def get_high_severity_count_formatted(self) -> str:
+        """Get formatted high severity count string.
+
+        Returns:
+            Formatted high severity count string.
+        """
+        return f"{self.get_high_severity_count()} high/critical"
+
+    def get_low_severity_count_formatted(self) -> str:
+        """Get formatted low severity count string.
+
+        Returns:
+            Formatted low severity count string.
+        """
+        return f"{self.get_low_severity_count()} low/medium"
