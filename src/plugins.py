@@ -573,3 +573,68 @@ class PluginManager:
             List of disabled plugin names.
         """
         return [name for name, enabled in self._enabled.items() if not enabled]
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_plugin_diversity(self) -> float:
+        """Get plugin diversity (unique versions / total plugins).
+
+        Returns:
+            Plugin diversity percentage.
+        """
+        if not self._plugins:
+            return 0.0
+        versions = set(plugin.version for plugin in self._plugins.values())
+        return round(len(versions) / len(self._plugins) * 100, 2)
+
+    def get_plugin_diversity_formatted(self) -> str:
+        """Get formatted plugin diversity string.
+
+        Returns:
+            Formatted plugin diversity string.
+        """
+        return f"{self.get_plugin_diversity():.1f}%"
+
+    def get_enabled_to_disabled_ratio(self) -> float:
+        """Get enabled to disabled ratio.
+
+        Returns:
+            Enabled to disabled ratio.
+        """
+        disabled = self.get_disabled_count()
+        if disabled == 0:
+            return float('inf') if self.get_enabled_count() > 0 else 0.0
+        return round(self.get_enabled_count() / disabled, 2)
+
+    def get_enabled_to_disabled_ratio_formatted(self) -> str:
+        """Get formatted enabled to disabled ratio string.
+
+        Returns:
+            Formatted enabled to disabled ratio string.
+        """
+        ratio = self.get_enabled_to_disabled_ratio()
+        if ratio == float('inf'):
+            return "inf"
+        return f"{ratio:.2f}"
+
+    def get_plugin_health(self) -> float:
+        """Get plugin health (enabled rate).
+
+        Returns:
+            Plugin health percentage.
+        """
+        return self.get_enabled_rate_percent()
+
+    def get_plugin_health_formatted(self) -> str:
+        """Get formatted plugin health string.
+
+        Returns:
+            Formatted plugin health string.
+        """
+        return f"{self.get_plugin_health():.1f}%"
