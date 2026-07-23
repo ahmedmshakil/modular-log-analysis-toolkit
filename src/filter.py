@@ -657,3 +657,94 @@ class LogFilter:
             Formatted unique source count string.
         """
         return f"{len(self.unique_sources)} sources"
+
+    def get_level_counts_formatted(self) -> str:
+        """Get formatted level counts string.
+
+        Returns:
+            Formatted level counts string.
+        """
+        counts = self.count_by_level()
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+
+    def get_source_counts_formatted(self) -> str:
+        """Get formatted source counts string.
+
+        Returns:
+            Formatted source counts string.
+        """
+        counts = self.get_source_counts()
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+
+    def get_level_distribution_formatted(self) -> str:
+        """Get formatted level distribution string.
+
+        Returns:
+            Formatted level distribution string.
+        """
+        dist = self.get_level_distribution()
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    def get_source_distribution_formatted(self) -> str:
+        """Get formatted source distribution string.
+
+        Returns:
+            Formatted source distribution string.
+        """
+        dist = self.get_source_distribution()
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    def get_unique_sources_formatted(self) -> str:
+        """Get formatted unique sources string.
+
+        Returns:
+            Formatted unique sources string.
+        """
+        sources = self.unique_sources
+        if not sources:
+            return "none"
+        return ", ".join(sources)
+
+    def get_most_common_level_formatted(self) -> str:
+        """Get formatted most common level string.
+
+        Returns:
+            Formatted most common level string.
+        """
+        level = self.get_most_common_level()
+        return level if level else "none"
+
+    def get_most_common_source_formatted(self) -> str:
+        """Get formatted most common source string.
+
+        Returns:
+            Formatted most common source string.
+        """
+        source = self.get_most_common_source()
+        return source if source else "none"
+
+    def get_least_common_level_formatted(self) -> str:
+        """Get formatted least common level string.
+
+        Returns:
+            Formatted least common level string.
+        """
+        level = self.get_least_common_level()
+        return level if level else "none"
+
+    def get_least_common_source_formatted(self) -> str:
+        """Get formatted least common source string.
+
+        Returns:
+            Formatted least common source string.
+        """
+        source = self.get_least_common_source()
+        return source if source else "none"
