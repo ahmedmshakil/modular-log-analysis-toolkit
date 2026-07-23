@@ -748,3 +748,55 @@ class LogFilter:
         """
         source = self.get_least_common_source()
         return source if source else "none"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Entries: {self.entry_count}, Filters: {self.get_filter_count()}, Sources: {len(self.unique_sources)}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_entries_per_filter(self) -> float:
+        """Get entries per filter ratio.
+
+        Returns:
+            Entries per filter ratio.
+        """
+        if self.get_filter_count() == 0:
+            return 0.0
+        return round(self.entry_count / self.get_filter_count(), 2)
+
+    def get_entries_per_filter_formatted(self) -> str:
+        """Get formatted entries per filter string.
+
+        Returns:
+            Formatted entries per filter string.
+        """
+        return f"{self.get_entries_per_filter():.2f} entries/filter"
+
+    def get_filter_density(self) -> float:
+        """Get filter density (filters per entry).
+
+        Returns:
+            Filter density percentage.
+        """
+        if self.entry_count == 0:
+            return 0.0
+        return round(self.get_filter_count() / self.entry_count * 100, 2)
+
+    def get_filter_density_formatted(self) -> str:
+        """Get formatted filter density string.
+
+        Returns:
+            Formatted filter density string.
+        """
+        return f"{self.get_filter_density():.2f}%"
