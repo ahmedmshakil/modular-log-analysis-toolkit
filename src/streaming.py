@@ -461,3 +461,59 @@ class LogStream:
             Formatted file name string.
         """
         return f"File: {self.get_file_name()}"
+
+    def get_file_path_formatted(self) -> str:
+        """Get formatted file path string.
+
+        Returns:
+            Formatted file path string.
+        """
+        return f"Path: {self.get_file_path()}"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"File: {self.get_file_name()}, Processed: {self._processed}, Errors: {self._errors}, Status: {self.get_status()}"
+
+    def get_processing_rate_formatted(self) -> str:
+        """Get formatted processing rate string.
+
+        Returns:
+            Formatted processing rate string.
+        """
+        return f"{self.get_processing_rate():.1f}%"
+
+    def get_error_ratio_formatted(self) -> str:
+        """Get formatted error ratio string.
+
+        Returns:
+            Formatted error ratio string.
+        """
+        return f"{self.get_error_ratio():.2f}"
+
+    def get_total_count_formatted(self) -> str:
+        """Get formatted total count string.
+
+        Returns:
+            Formatted total count string.
+        """
+        return f"{self.get_total_count()} entries"
+
+    def get_success_rate_formatted_string(self) -> str:
+        """Get formatted success rate string (alias).
+
+        Returns:
+            Formatted success rate string.
+        """
+        return f"Success: {self.get_success_rate():.1f}%"
+
+    def get_error_rate_formatted_string(self) -> str:
+        """Get formatted error rate string (alias).
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"Error: {self.error_rate:.1f}%"
