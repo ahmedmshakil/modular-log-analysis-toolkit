@@ -536,62 +536,82 @@ class RetentionManager:
             return "none"
         return ", ".join(f"{p['name']}({p['max_age_days']}d)" for p in policies)
 
-    def get_compressed_count_formatted(self) -> str:
-        """Get formatted compressed count string.
+    def get_summary_string(self) -> str:
+        """Get summary string.
 
         Returns:
-            Formatted compressed count string.
+            Summary string.
         """
-        return f"{self.get_compressed_count()} compressed"
+        return self.get_stats_formatted()
 
-    def get_uncompressed_count_formatted(self) -> str:
-        """Get formatted uncompressed count string.
-
-        Returns:
-            Formatted uncompressed count string.
-        """
-        return f"{self.get_uncompressed_count()} uncompressed"
-
-    def get_file_count_formatted(self) -> str:
-        """Get formatted file count string.
+    def get_compression_ratio(self) -> float:
+        """Get compression ratio (compressed / total files).
 
         Returns:
-            Formatted file count string.
-        """
-        return f"{self.get_file_count()} files"
-
-    def get_actions_count_formatted(self) -> str:
-        """Get formatted actions count string.
-
-        Returns:
-            Formatted actions count string.
-        """
-        return f"{self.get_actions_count()} actions"
-
-    def get_policy_count_formatted(self) -> str:
-        """Get formatted policy count string.
-
-        Returns:
-            Formatted policy count string.
-        """
-        return f"{len(self.policies)} policies"
-
-    def get_average_file_size(self) -> float:
-        """Get average file size in MB.
-
-        Returns:
-            Average file size in MB.
+            Compression ratio percentage.
         """
         files = self.scan_files()
         if not files:
             return 0.0
-        total_mb = sum(f.get("size_mb", 0) for f in files)
-        return round(total_mb / len(files), 2)
+        compressed = sum(1 for f in files if f["path"].endswith(".gz"))
+        return round(compressed / len(files) * 100, 2)
 
-    def get_average_file_size_formatted(self) -> str:
-        """Get formatted average file size string.
+    def get_compression_ratio_formatted(self) -> str:
+        """Get formatted compression ratio string.
 
         Returns:
-            Formatted average file size string.
+            Formatted compression ratio string.
         """
-        return f"{self.get_average_file_size():.2f} MB"
+        return f"{self.get_compression_ratio():.1f}%"
+
+    def get_actions_per_policy(self) -> float:
+        """Get actions per policy ratio.
+
+        Returns:
+            Actions per policy ratio.
+        """
+        if len(self.policies) == 0:
+            return 0.0
+        return round(self.get_actions_count() / len(self.policies), 2)
+
+    def get_actions_per_policy_formatted(self) -> str:
+        """Get formatted actions per policy string.
+
+        Returns:
+            Formatted actions per policy string.
+        """
+        return f"{self.get_actions_per_policy():.2f} actions/policy"
+
+    def get_file_density(self) -> float:
+        """Get file density (files per policy).
+
+        Returns:
+            File density ratio.
+        """
+        if len(self.policies) == 0:
+            return 0.0
+        return round(self.get_file_count() / len(self.policies), 2)
+
+    def get_file_density_formatted(self) -> str:
+        """Get formatted file density string.
+
+        Returns:
+            Formatted file density string.
+        """
+        return f"{self.get_file_density():.2f} files/policy"
+
+    def get_retention_health(self) -> float:
+        """Get retention health (compression ratio).
+
+        Returns:
+            Retention health percentage.
+        """
+        return self.get_compression_ratio()
+
+    def get_retention_health_formatted(self) -> str:
+        """Get formatted retention health string.
+
+        Returns:
+            Formatted retention health string.
+        """
+        return f"{self.get_retention_health():.1f}%"
