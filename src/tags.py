@@ -460,3 +460,91 @@ class TagManager:
             Count of rules.
         """
         return len(self.get_rules_by_priority(min_priority))
+
+    def get_rules_dict(self) -> List[Dict[str, Any]]:
+        """Get rules as dictionaries.
+
+        Returns:
+            List of rule dictionaries.
+        """
+        return [
+            {
+                "name": r.name,
+                "tag": r.tag,
+                "conditions": r.conditions,
+                "color": r.color,
+                "priority": r.priority,
+            }
+            for r in self._rules
+        ]
+
+    def get_rules_formatted(self) -> str:
+        """Get formatted rules string.
+
+        Returns:
+            Formatted rules string.
+        """
+        rules = self.get_rules_dict()
+        if not rules:
+            return "none"
+        return ", ".join(f"{r['name']}({r['tag']})" for r in rules)
+
+    def get_rule_count_formatted(self) -> str:
+        """Get formatted rule count string.
+
+        Returns:
+            Formatted rule count string.
+        """
+        return f"{self.get_rule_count()} rules"
+
+    def get_manual_tag_count_formatted(self) -> str:
+        """Get formatted manual tag count string.
+
+        Returns:
+            Formatted manual tag count string.
+        """
+        return f"{self.get_manual_tag_count()} manual tags"
+
+    def get_unique_tag_count_formatted(self) -> str:
+        """Get formatted unique tag count string.
+
+        Returns:
+            Formatted unique tag count string.
+        """
+        return f"{len(self.get_all_tag_names())} unique tags"
+
+    def get_tag_names_formatted(self) -> str:
+        """Get formatted tag names string.
+
+        Returns:
+            Formatted tag names string.
+        """
+        names = self.get_all_tag_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_rule_names_formatted(self) -> str:
+        """Get formatted rule names string.
+
+        Returns:
+            Formatted rule names string.
+        """
+        names = [r.name for r in self._rules]
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_tags_for_entry_formatted(self, entry_dict: Dict) -> str:
+        """Get formatted tags for entry string.
+
+        Args:
+            entry_dict: Entry dictionary.
+
+        Returns:
+            Formatted tags string.
+        """
+        tags = self.get_tags_for_entry(entry_dict)
+        if not tags:
+            return "none"
+        return ", ".join(tags)
