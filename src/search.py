@@ -679,3 +679,63 @@ class LogSearchIndex:
             Formatted stats string.
         """
         return f"Entries: {len(self._entries)}, Words: {len(self._index)}, Sources: {len(self._field_index['source'])}, Levels: {len(self._field_index['level'])}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_words_per_entry(self) -> float:
+        """Get words per entry ratio.
+
+        Returns:
+            Words per entry ratio.
+        """
+        if len(self._entries) == 0:
+            return 0.0
+        return round(len(self._index) / len(self._entries), 2)
+
+    def get_words_per_entry_formatted(self) -> str:
+        """Get formatted words per entry string.
+
+        Returns:
+            Formatted words per entry string.
+        """
+        return f"{self.get_words_per_entry():.2f} words/entry"
+
+    def get_index_sparsity(self) -> float:
+        """Get index sparsity (1 - density).
+
+        Returns:
+            Index sparsity percentage.
+        """
+        return round(100 - self.get_index_density(), 2)
+
+    def get_index_sparsity_formatted(self) -> str:
+        """Get formatted index sparsity string.
+
+        Returns:
+            Formatted index sparsity string.
+        """
+        return f"{self.get_index_sparsity():.1f}%"
+
+    def get_source_diversity(self) -> float:
+        """Get source diversity (unique sources / entries).
+
+        Returns:
+            Source diversity percentage.
+        """
+        if len(self._entries) == 0:
+            return 0.0
+        return round(len(self._field_index['source']) / len(self._entries) * 100, 2)
+
+    def get_source_diversity_formatted(self) -> str:
+        """Get formatted source diversity string.
+
+        Returns:
+            Formatted source diversity string.
+        """
+        return f"{self.get_source_diversity():.1f}%"
