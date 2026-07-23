@@ -798,6 +798,72 @@ def get_dashboard_info(host: str = "localhost", port: int = 8080) -> Dict[str, A
     }
 
 
+def get_dashboard_info_formatted(host: str = "localhost", port: int = 8080) -> str:
+    """Get formatted dashboard info string.
+
+    Args:
+        host: Dashboard host.
+        port: Dashboard port.
+
+    Returns:
+        Formatted dashboard info string.
+    """
+    info = get_dashboard_info(host, port)
+    return f"URL: {info['url']}, Endpoints: {info['endpoints']}"
+
+
+def get_api_endpoints_list() -> List[str]:
+    """Get API endpoints as list.
+
+    Returns:
+        List of endpoint paths.
+    """
+    return list(get_api_endpoints().keys())
+
+
+def get_api_endpoints_descriptions() -> Dict[str, str]:
+    """Get API endpoints with descriptions.
+
+    Returns:
+        Dictionary mapping endpoints to descriptions.
+    """
+    return get_api_endpoints()
+
+
+def get_api_endpoints_descriptions_formatted() -> str:
+    """Get formatted API endpoints descriptions string.
+
+    Returns:
+        Formatted API endpoints descriptions string.
+    """
+    endpoints = get_api_endpoints_descriptions()
+    return ", ".join(f"{k}: {v}" for k, v in endpoints.items())
+
+
+def get_entries_count_formatted(entries: List[LogEntry]) -> str:
+    """Get formatted entries count string.
+
+    Args:
+        entries: List of log entries.
+
+    Returns:
+        Formatted entries count string.
+    """
+    return f"{get_entries_count(entries)} entries"
+
+
+def has_entries_formatted(entries: List[LogEntry]) -> str:
+    """Get formatted has entries string.
+
+    Args:
+        entries: List of log entries.
+
+    Returns:
+        Formatted has entries string.
+    """
+    return "yes" if has_entries(entries) else "no"
+
+
 if __name__ == "__main__":
     from .parser import LogParser
     from .reader import read_log_lines
