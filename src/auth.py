@@ -626,6 +626,78 @@ class AuthManager:
             return "none"
         return ", ".join(f"{k}:{v}" for k, v in counts.items())
 
+    def get_role_distribution_formatted(self) -> str:
+        """Get formatted role distribution string.
+
+        Returns:
+            Formatted role distribution string.
+        """
+        dist = self.get_role_distribution()
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    def get_most_common_role_formatted(self) -> str:
+        """Get formatted most common role string.
+
+        Returns:
+            Formatted most common role string.
+        """
+        role = self.get_most_common_role()
+        return role if role else "none"
+
+    def get_least_common_role_formatted(self) -> str:
+        """Get formatted least common role string.
+
+        Returns:
+            Formatted least common role string.
+        """
+        role = self.get_least_common_role()
+        return role if role else "none"
+
+    def get_roles_formatted(self) -> str:
+        """Get formatted roles string.
+
+        Returns:
+            Formatted roles string.
+        """
+        roles = self.get_roles()
+        if not roles:
+            return "none"
+        return ", ".join(roles)
+
+    def get_admin_count_formatted(self) -> str:
+        """Get formatted admin count string.
+
+        Returns:
+            Formatted admin count string.
+        """
+        return f"{self.get_admin_count()} admins"
+
+    def get_viewer_count_formatted(self) -> str:
+        """Get formatted viewer count string.
+
+        Returns:
+            Formatted viewer count string.
+        """
+        return f"{self.get_viewer_count()} viewers"
+
+    def get_analyst_count_formatted(self) -> str:
+        """Get formatted analyst count string.
+
+        Returns:
+            Formatted analyst count string.
+        """
+        return f"{self.get_analyst_count()} analysts"
+
+    def get_session_rate_formatted(self) -> str:
+        """Get formatted session rate string.
+
+        Returns:
+            Formatted session rate string.
+        """
+        return f"{self.get_session_rate():.2f} sessions/user"
+
     def _save_users(self):
         """Save users to file."""
         data = {}
