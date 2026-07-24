@@ -609,3 +609,67 @@ class GeoLookup:
             Formatted cache fullness string.
         """
         return f"{self.get_cache_fullness():.1f}%"
+
+    def get_lookup_count_formatted(self) -> str:
+        """Get formatted lookup count string.
+
+        Returns:
+            Formatted lookup count string.
+        """
+        return f"{self._lookup_count} lookups"
+
+    def get_cache_hits_formatted(self) -> str:
+        """Get formatted cache hits string.
+
+        Returns:
+            Formatted cache hits string.
+        """
+        return f"{self._cache_hits} hits"
+
+    def get_cached_count_formatted(self) -> str:
+        """Get formatted cached count string.
+
+        Returns:
+            Formatted cached count string.
+        """
+        return f"{len(self._cache)} cached"
+
+    def get_cache_size_formatted(self) -> str:
+        """Get formatted cache size string.
+
+        Returns:
+            Formatted cache size string.
+        """
+        return f"{len(self._cache)}/{self._cache_size}"
+
+    def get_total_lookups_formatted(self) -> str:
+        """Get formatted total lookups string.
+
+        Returns:
+            Formatted total lookups string.
+        """
+        return f"{self.get_total_lookups()} total"
+
+    def get_api_calls_formatted(self) -> str:
+        """Get formatted API calls string.
+
+        Returns:
+            Formatted API calls string.
+        """
+        return f"{self.get_api_calls()} API calls"
+
+    def get_cache_misses_formatted(self) -> str:
+        """Get formatted cache misses string.
+
+        Returns:
+            Formatted cache misses string.
+        """
+        return f"{self.get_cache_misses()} misses"
+
+    def get_hit_rate_formatted(self) -> str:
+        """Get formatted hit rate string.
+
+        Returns:
+            Formatted hit rate string.
+        """
+        return f"{self.cache_hit_rate:.1f}%"
