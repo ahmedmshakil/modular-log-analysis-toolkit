@@ -800,3 +800,67 @@ class LogFilter:
             Formatted filter density string.
         """
         return f"{self.get_filter_density():.2f}%"
+
+    def get_error_count_formatted(self) -> str:
+        """Get formatted error count string.
+
+        Returns:
+            Formatted error count string.
+        """
+        return f"{self.get_level_count(LogLevel.ERROR)} errors"
+
+    def get_warning_count_formatted(self) -> str:
+        """Get formatted warning count string.
+
+        Returns:
+            Formatted warning count string.
+        """
+        return f"{self.get_level_count(LogLevel.WARN)} warnings"
+
+    def get_info_count_formatted(self) -> str:
+        """Get formatted info count string.
+
+        Returns:
+            Formatted info count string.
+        """
+        return f"{self.get_level_count(LogLevel.INFO)} info"
+
+    def get_debug_count_formatted(self) -> str:
+        """Get formatted debug count string.
+
+        Returns:
+            Formatted debug count string.
+        """
+        return f"{self.get_level_count(LogLevel.DEBUG)} debug"
+
+    def get_critical_count_formatted(self) -> str:
+        """Get formatted critical count string.
+
+        Returns:
+            Formatted critical count string.
+        """
+        return f"{self.get_level_count(LogLevel.CRITICAL)} critical"
+
+    def get_trace_count_formatted(self) -> str:
+        """Get formatted trace count string.
+
+        Returns:
+            Formatted trace count string.
+        """
+        return f"{self.get_level_count(LogLevel.TRACE)} trace"
+
+    def get_source_count_formatted(self) -> str:
+        """Get formatted source count string.
+
+        Returns:
+            Formatted source count string.
+        """
+        return f"{len(self.unique_sources)} sources"
+
+    def get_filter_count_formatted(self) -> str:
+        """Get formatted filter count string.
+
+        Returns:
+            Formatted filter count string.
+        """
+        return f"{self.get_filter_count()} filters"
