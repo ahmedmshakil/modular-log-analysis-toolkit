@@ -769,6 +769,62 @@ class AuthManager:
         """
         return f"{self.get_role_diversity():.1f}%"
 
+    def get_user_count_formatted(self) -> str:
+        """Get formatted user count string.
+
+        Returns:
+            Formatted user count string.
+        """
+        return f"{len(self._users)} users"
+
+    def get_session_count_formatted(self) -> str:
+        """Get formatted session count string.
+
+        Returns:
+            Formatted session count string.
+        """
+        return f"{len(self._sessions)} sessions"
+
+    def get_active_user_count_formatted(self) -> str:
+        """Get formatted active user count string.
+
+        Returns:
+            Formatted active user count string.
+        """
+        return f"{self.get_active_user_count()} active"
+
+    def get_inactive_user_count_formatted(self) -> str:
+        """Get formatted inactive user count string.
+
+        Returns:
+            Formatted inactive user count string.
+        """
+        return f"{self.get_inactive_user_count()} inactive"
+
+    def get_admin_count_formatted(self) -> str:
+        """Get formatted admin count string.
+
+        Returns:
+            Formatted admin count string.
+        """
+        return f"{self.get_admin_count()} admins"
+
+    def get_viewer_count_formatted(self) -> str:
+        """Get formatted viewer count string.
+
+        Returns:
+            Formatted viewer count string.
+        """
+        return f"{self.get_viewer_count()} viewers"
+
+    def get_analyst_count_formatted(self) -> str:
+        """Get formatted analyst count string.
+
+        Returns:
+            Formatted analyst count string.
+        """
+        return f"{self.get_analyst_count()} analysts"
+
     def _save_users(self):
         """Save users to file."""
         data = {}
