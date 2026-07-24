@@ -638,3 +638,43 @@ class PluginManager:
             Formatted plugin health string.
         """
         return f"{self.get_plugin_health():.1f}%"
+
+    def get_total_count_formatted(self) -> str:
+        """Get formatted total count string.
+
+        Returns:
+            Formatted total count string.
+        """
+        return f"{len(self._plugins)} plugins"
+
+    def get_enabled_count_formatted(self) -> str:
+        """Get formatted enabled count string.
+
+        Returns:
+            Formatted enabled count string.
+        """
+        return f"{self.get_enabled_count()} enabled"
+
+    def get_disabled_count_formatted(self) -> str:
+        """Get formatted disabled count string.
+
+        Returns:
+            Formatted disabled count string.
+        """
+        return f"{self.get_disabled_count()} disabled"
+
+    def get_enabled_rate_formatted(self) -> str:
+        """Get formatted enabled rate string.
+
+        Returns:
+            Formatted enabled rate string.
+        """
+        return f"{self.get_enabled_rate_percent():.1f}%"
+
+    def get_disabled_rate_formatted(self) -> str:
+        """Get formatted disabled rate string.
+
+        Returns:
+            Formatted disabled rate string.
+        """
+        return f"{self.get_disabled_rate_percent():.1f}%"
