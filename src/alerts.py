@@ -649,3 +649,59 @@ class AlertManager:
             Formatted acknowledgment rate string.
         """
         return f"{self.get_acknowledgment_rate():.1f}%"
+
+    def get_alert_count_formatted(self) -> str:
+        """Get formatted alert count string.
+
+        Returns:
+            Formatted alert count string.
+        """
+        return f"{len(self.alerts)} alerts"
+
+    def get_threshold_count_formatted(self) -> str:
+        """Get formatted threshold count string.
+
+        Returns:
+            Formatted threshold count string.
+        """
+        return f"{len(self.thresholds)} thresholds"
+
+    def get_active_count_formatted(self) -> str:
+        """Get formatted active count string.
+
+        Returns:
+            Formatted active count string.
+        """
+        return f"{self.get_unacknowledged_count()} active"
+
+    def get_acknowledged_count_formatted(self) -> str:
+        """Get formatted acknowledged count string.
+
+        Returns:
+            Formatted acknowledged count string.
+        """
+        return f"{self.get_acknowledged_count()} acknowledged"
+
+    def get_callback_count_formatted(self) -> str:
+        """Get formatted callback count string.
+
+        Returns:
+            Formatted callback count string.
+        """
+        return f"{len(self.callbacks)} callbacks"
+
+    def get_high_severity_count_formatted(self) -> str:
+        """Get formatted high severity count string.
+
+        Returns:
+            Formatted high severity count string.
+        """
+        return f"{self.get_high_severity_count()} high/critical"
+
+    def get_low_severity_count_formatted(self) -> str:
+        """Get formatted low severity count string.
+
+        Returns:
+            Formatted low severity count string.
+        """
+        return f"{self.get_low_severity_count()} low/medium"
