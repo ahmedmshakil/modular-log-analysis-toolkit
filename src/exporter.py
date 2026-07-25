@@ -709,3 +709,51 @@ class LogExporter:
             Formatted stats string.
         """
         return f"Entries: {LogExporter.get_entry_count(entries)}, Sources: {LogExporter.get_source_count(entries)}, Levels: {len(LogExporter.get_level_counts(entries))}"
+
+    @staticmethod
+    def get_summary_string(entries: List[LogEntry]) -> str:
+        """Get summary string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Summary string.
+        """
+        return LogExporter.get_stats_formatted(entries)
+
+    @staticmethod
+    def get_error_rate_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted error rate string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"{LogExporter.get_error_rate(entries):.1f}%"
+
+    @staticmethod
+    def get_warning_rate_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted warning rate string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted warning rate string.
+        """
+        return f"{LogExporter.get_warning_rate(entries):.1f}%"
+
+    @staticmethod
+    def get_info_rate_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted info rate string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted info rate string.
+        """
+        return f"{LogExporter.get_info_rate(entries):.1f}%"
