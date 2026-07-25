@@ -548,3 +548,27 @@ class TagManager:
         if not tags:
             return "none"
         return ", ".join(tags)
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Rules: {len(self._rules)}, Manual Tags: {self.get_manual_tag_count()}, Unique Tags: {len(self.get_all_tag_names())}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_average_priority_formatted(self) -> str:
+        """Get formatted average priority string.
+
+        Returns:
+            Formatted average priority string.
+        """
+        return f"avg priority: {self.get_average_priority():.2f}"
