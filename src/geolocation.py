@@ -673,3 +673,35 @@ class GeoLookup:
             Formatted hit rate string.
         """
         return f"{self.cache_hit_rate:.1f}%"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Lookups: {self._lookup_count}, Cache Hits: {self._cache_hits}, Cached: {len(self._cache)}, Hit Rate: {self.cache_hit_rate:.1f}%"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_cached_ips_count(self) -> int:
+        """Get count of cached IPs.
+
+        Returns:
+            Count of cached IPs.
+        """
+        return len(self.get_cached_ips())
+
+    def get_cached_ips_count_formatted(self) -> str:
+        """Get formatted cached IPs count string.
+
+        Returns:
+            Formatted cached IPs count string.
+        """
+        return f"{self.get_cached_ips_count()} IPs"
