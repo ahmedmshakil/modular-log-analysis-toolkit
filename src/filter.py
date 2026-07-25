@@ -865,93 +865,54 @@ class LogFilter:
         """
         return f"{self.get_filter_count()} filters"
 
-    def get_level_counts_formatted(self) -> str:
-        """Get formatted level counts string.
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
 
         Returns:
-            Formatted level counts string.
+            Formatted stats string.
         """
-        counts = self.count_by_level()
-        if not counts:
-            return "none"
-        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+        return f"Entries: {self.entry_count}, Filters: {self.get_filter_count()}, Sources: {len(self.unique_sources)}"
 
-    def get_source_counts_formatted(self) -> str:
-        """Get formatted source counts string.
+    def get_summary_string(self) -> str:
+        """Get summary string.
 
         Returns:
-            Formatted source counts string.
+            Summary string.
         """
-        counts = self.get_source_counts()
-        if not counts:
-            return "none"
-        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+        return self.get_stats_formatted()
 
-    def get_level_distribution_formatted(self) -> str:
-        """Get formatted level distribution string.
+    def get_entries_per_filter(self) -> float:
+        """Get entries per filter ratio.
 
         Returns:
-            Formatted level distribution string.
+            Entries per filter ratio.
         """
-        dist = self.get_level_distribution()
-        if not dist:
-            return "none"
-        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+        if self.get_filter_count() == 0:
+            return 0.0
+        return round(self.entry_count / self.get_filter_count(), 2)
 
-    def get_source_distribution_formatted(self) -> str:
-        """Get formatted source distribution string.
+    def get_entries_per_filter_formatted(self) -> str:
+        """Get formatted entries per filter string.
 
         Returns:
-            Formatted source distribution string.
+            Formatted entries per filter string.
         """
-        dist = self.get_source_distribution()
-        if not dist:
-            return "none"
-        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+        return f"{self.get_entries_per_filter():.2f} entries/filter"
 
-    def get_unique_sources_formatted(self) -> str:
-        """Get formatted unique sources string.
+    def get_filter_density(self) -> float:
+        """Get filter density (filters per entry).
 
         Returns:
-            Formatted unique sources string.
+            Filter density percentage.
         """
-        sources = self.unique_sources
-        if not sources:
-            return "none"
-        return ", ".join(sources)
+        if self.entry_count == 0:
+            return 0.0
+        return round(self.get_filter_count() / self.entry_count * 100, 2)
 
-    def get_most_common_level_formatted(self) -> str:
-        """Get formatted most common level string.
+    def get_filter_density_formatted(self) -> str:
+        """Get formatted filter density string.
 
         Returns:
-            Formatted most common level string.
+            Formatted filter density string.
         """
-        level = self.get_most_common_level()
-        return level if level else "none"
-
-    def get_most_common_source_formatted(self) -> str:
-        """Get formatted most common source string.
-
-        Returns:
-            Formatted most common source string.
-        """
-        source = self.get_most_common_source()
-        return source if source else "none"
-
-    def get_least_common_level_formatted(self) -> str:
-        """Get formatted least common level string.
-
-        Returns:
-            Formatted least common level string.
-        """
-        level = self.get_least_common_level()
-        return level if level else "none"
-
-    def get_least_common_source_formatted(self) -> str:
-        """Get formatted least common source string.
-
-        Returns:
-            Formatted least common source string.
-        """
-        source = self.get_least_common_source()
-        return source if source else "none"
+        return f"{self.get_filter_density():.2f}%"
