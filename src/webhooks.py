@@ -501,3 +501,22 @@ class WebhookRouter:
             Success rate percentage.
         """
         return self.get_success_rate()
+
+    def get_endpoint_names_formatted(self) -> str:
+        """Get formatted endpoint names string.
+
+        Returns:
+            Formatted endpoint names string.
+        """
+        names = self.get_endpoint_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Endpoints: {self.endpoint_count}, Sent: {self.total_sent()}, Errors: {self.total_errors()}"
