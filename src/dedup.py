@@ -662,3 +662,51 @@ class LogDeduplicator:
             Formatted total duplicates removed string.
         """
         return f"{self.total_duplicates_removed()} removed"
+
+    def get_duplicate_hashes_count(self) -> int:
+        """Get count of duplicate hashes.
+
+        Returns:
+            Count of duplicate hashes.
+        """
+        return len(self.get_duplicate_hashes())
+
+    def get_unique_hashes_count(self) -> int:
+        """Get count of unique hashes.
+
+        Returns:
+            Count of unique hashes.
+        """
+        return len(self.get_unique_hashes())
+
+    def get_duplicate_hashes_count_formatted(self) -> str:
+        """Get formatted duplicate hashes count string.
+
+        Returns:
+            Formatted duplicate hashes count string.
+        """
+        return f"{self.get_duplicate_hashes_count()} duplicate hashes"
+
+    def get_unique_hashes_count_formatted(self) -> str:
+        """Get formatted unique hashes count string.
+
+        Returns:
+            Formatted unique hashes count string.
+        """
+        return f"{self.get_unique_hashes_count()} unique hashes"
+
+    def get_duplicate_summary_count(self) -> int:
+        """Get count of duplicate summary entries.
+
+        Returns:
+            Count of duplicate summary entries.
+        """
+        return len(self.get_duplicate_summary())
+
+    def get_duplicate_summary_count_formatted(self) -> str:
+        """Get formatted duplicate summary count string.
+
+        Returns:
+            Formatted duplicate summary count string.
+        """
+        return f"{self.get_duplicate_summary_count()} summary entries"
