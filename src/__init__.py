@@ -153,3 +153,48 @@ def get_author_formatted() -> str:
         Formatted author string.
     """
     return f"Author: {__author__}"
+
+
+def get_package_name() -> str:
+    """Get package name.
+
+    Returns:
+        Package name string.
+    """
+    return "modular-log-analysis-toolkit"
+
+
+def get_package_name_formatted() -> str:
+    """Get formatted package name string.
+
+    Returns:
+        Formatted package name string.
+    """
+    return f"Package: {get_package_name()}"
+
+
+def get_version_major() -> int:
+    """Get major version number.
+
+    Returns:
+        Major version number.
+    """
+    return get_version_info()["major"]
+
+
+def get_version_minor() -> int:
+    """Get minor version number.
+
+    Returns:
+        Minor version number.
+    """
+    return get_version_info()["minor"]
+
+
+def get_version_patch() -> str:
+    """Get patch version string.
+
+    Returns:
+        Patch version string.
+    """
+    return get_version_info()["patch"]
