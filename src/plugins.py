@@ -678,3 +678,55 @@ class PluginManager:
             Formatted disabled rate string.
         """
         return f"{self.get_disabled_rate_percent():.1f}%"
+
+    def get_plugin_versions_formatted(self) -> str:
+        """Get formatted plugin versions string.
+
+        Returns:
+            Formatted plugin versions string.
+        """
+        versions = self.get_plugin_versions()
+        if not versions:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in versions.items())
+
+    def get_plugin_names_formatted(self) -> str:
+        """Get formatted plugin names string.
+
+        Returns:
+            Formatted plugin names string.
+        """
+        names = self.get_plugin_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_enabled_plugins_formatted(self) -> str:
+        """Get formatted enabled plugins string.
+
+        Returns:
+            Formatted enabled plugins string.
+        """
+        names = self.get_enabled_plugins_list()
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_disabled_plugins_formatted(self) -> str:
+        """Get formatted disabled plugins string.
+
+        Returns:
+            Formatted disabled plugins string.
+        """
+        names = self.get_disabled_plugins_list()
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Total: {len(self._plugins)}, Enabled: {self.get_enabled_count()}, Disabled: {self.get_disabled_count()}"
