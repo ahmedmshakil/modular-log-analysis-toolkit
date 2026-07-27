@@ -757,3 +757,59 @@ class LogExporter:
             Formatted info rate string.
         """
         return f"{LogExporter.get_info_rate(entries):.1f}%"
+
+    @staticmethod
+    def get_entry_count_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted entry count string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted entry count string.
+        """
+        return f"{LogExporter.get_entry_count(entries)} entries"
+
+    @staticmethod
+    def get_source_count_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted source count string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted source count string.
+        """
+        return f"{LogExporter.get_source_count(entries)} sources"
+
+    @staticmethod
+    def get_level_count_formatted(entries: List[LogEntry]) -> str:
+        """Get formatted level count string.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Formatted level count string.
+        """
+        counts = LogExporter.get_level_counts(entries)
+        return f"{len(counts)} levels"
+
+    @staticmethod
+    def get_format_count_formatted() -> str:
+        """Get formatted format count string.
+
+        Returns:
+            Formatted format count string.
+        """
+        return f"{LogExporter.get_format_count()} formats"
+
+    @staticmethod
+    def get_supported_formats_formatted() -> str:
+        """Get formatted supported formats string.
+
+        Returns:
+            Formatted supported formats string.
+        """
+        formats = LogExporter.get_supported_formats()
+        return ", ".join(formats)
