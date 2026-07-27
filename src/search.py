@@ -796,104 +796,70 @@ class LogSearchIndex:
         """
         return f"{len(self._entries)} entries, {len(self._index)} words"
 
-    def get_level_counts_formatted(self) -> str:
-        """Get formatted level counts string.
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
 
         Returns:
-            Formatted level counts string.
+            Formatted stats string.
         """
-        counts = self.get_level_counts()
-        if not counts:
-            return "none"
-        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+        return f"Entries: {len(self._entries)}, Words: {len(self._index)}, Sources: {len(self._field_index['source'])}, Levels: {len(self._field_index['level'])}"
 
-    def get_source_counts_formatted(self) -> str:
-        """Get formatted source counts string.
+    def get_summary_string(self) -> str:
+        """Get summary string.
 
         Returns:
-            Formatted source counts string.
+            Summary string.
         """
-        counts = self.get_source_counts()
-        if not counts:
-            return "none"
-        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+        return self.get_stats_formatted()
 
-    def get_level_distribution_formatted(self) -> str:
-        """Get formatted level distribution string.
+    def get_words_per_entry(self) -> float:
+        """Get words per entry ratio.
 
         Returns:
-            Formatted level distribution string.
+            Words per entry ratio.
         """
-        dist = self.get_level_distribution()
-        if not dist:
-            return "none"
-        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+        if len(self._entries) == 0:
+            return 0.0
+        return round(len(self._index) / len(self._entries), 2)
 
-    def get_source_distribution_formatted(self) -> str:
-        """Get formatted source distribution string.
+    def get_words_per_entry_formatted(self) -> str:
+        """Get formatted words per entry string.
 
         Returns:
-            Formatted source distribution string.
+            Formatted words per entry string.
         """
-        dist = self.get_source_distribution()
-        if not dist:
-            return "none"
-        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+        return f"{self.get_words_per_entry():.2f} words/entry"
 
-    def get_most_common_level_formatted(self) -> str:
-        """Get formatted most common level string.
+    def get_index_sparsity(self) -> float:
+        """Get index sparsity (1 - density).
 
         Returns:
-            Formatted most common level string.
+            Index sparsity percentage.
         """
-        level = self.get_most_common_level()
-        return level if level else "none"
+        return round(100 - self.get_index_density(), 2)
 
-    def get_most_common_source_formatted(self) -> str:
-        """Get formatted most common source string.
+    def get_index_sparsity_formatted(self) -> str:
+        """Get formatted index sparsity string.
 
         Returns:
-            Formatted most common source string.
+            Formatted index sparsity string.
         """
-        source = self.get_most_common_source()
-        return source if source else "none"
+        return f"{self.get_index_sparsity():.1f}%"
 
-    def get_least_common_level_formatted(self) -> str:
-        """Get formatted least common level string.
+    def get_source_diversity(self) -> float:
+        """Get source diversity (unique sources / entries).
 
         Returns:
-            Formatted least common level string.
+            Source diversity percentage.
         """
-        level = self.get_least_common_level()
-        return level if level else "none"
+        if len(self._entries) == 0:
+            return 0.0
+        return round(len(self._field_index['source']) / len(self._entries) * 100, 2)
 
-    def get_least_common_source_formatted(self) -> str:
-        """Get formatted least common source string.
+    def get_source_diversity_formatted(self) -> str:
+        """Get formatted source diversity string.
 
         Returns:
-            Formatted least common source string.
+            Formatted source diversity string.
         """
-        source = self.get_least_common_source()
-        return source if source else "none"
-
-    def get_unique_sources_formatted(self) -> str:
-        """Get formatted unique sources string.
-
-        Returns:
-            Formatted unique sources string.
-        """
-        sources = self.get_unique_sources()
-        if not sources:
-            return "none"
-        return ", ".join(sources)
-
-    def get_unique_levels_formatted(self) -> str:
-        """Get formatted unique levels string.
-
-        Returns:
-            Formatted unique levels string.
-        """
-        levels = self.get_unique_levels()
-        if not levels:
-            return "none"
-        return ", ".join(levels)
+        return f"{self.get_source_diversity():.1f}%"
