@@ -726,3 +726,75 @@ class RetentionManager:
             Formatted stats string.
         """
         return f"Files: {self.get_file_count()}, Policies: {len(self.policies)}, Actions: {self.get_actions_count()}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_file_count_formatted(self) -> str:
+        """Get formatted file count string.
+
+        Returns:
+            Formatted file count string.
+        """
+        return f"{self.get_file_count()} files"
+
+    def get_policy_count_formatted(self) -> str:
+        """Get formatted policy count string.
+
+        Returns:
+            Formatted policy count string.
+        """
+        return f"{len(self.policies)} policies"
+
+    def get_actions_count_formatted(self) -> str:
+        """Get formatted actions count string.
+
+        Returns:
+            Formatted actions count string.
+        """
+        return f"{self.get_actions_count()} actions"
+
+    def get_compressed_count_formatted(self) -> str:
+        """Get formatted compressed count string.
+
+        Returns:
+            Formatted compressed count string.
+        """
+        return f"{self.get_compressed_count()} compressed"
+
+    def get_uncompressed_count_formatted(self) -> str:
+        """Get formatted uncompressed count string.
+
+        Returns:
+            Formatted uncompressed count string.
+        """
+        return f"{self.get_uncompressed_count()} uncompressed"
+
+    def get_total_size_mb_formatted(self) -> str:
+        """Get formatted total size MB string.
+
+        Returns:
+            Formatted total size MB string.
+        """
+        return f"{self.get_total_size_mb():.2f} MB"
+
+    def get_average_file_size_formatted(self) -> str:
+        """Get formatted average file size string.
+
+        Returns:
+            Formatted average file size string.
+        """
+        return f"{self.get_average_file_size():.2f} MB"
+
+    def get_compression_rate_formatted(self) -> str:
+        """Get formatted compression rate string.
+
+        Returns:
+            Formatted compression rate string.
+        """
+        return f"{self.get_compression_rate():.1f}%"
