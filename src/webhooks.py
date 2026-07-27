@@ -520,3 +520,51 @@ class WebhookRouter:
             Formatted stats string.
         """
         return f"Endpoints: {self.endpoint_count}, Sent: {self.total_sent()}, Errors: {self.total_errors()}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_total_sent_formatted(self) -> str:
+        """Get formatted total sent string.
+
+        Returns:
+            Formatted total sent string.
+        """
+        return f"{self.total_sent()} sent"
+
+    def get_total_errors_formatted(self) -> str:
+        """Get formatted total errors string.
+
+        Returns:
+            Formatted total errors string.
+        """
+        return f"{self.total_errors()} errors"
+
+    def get_endpoint_count_formatted(self) -> str:
+        """Get formatted endpoint count string.
+
+        Returns:
+            Formatted endpoint count string.
+        """
+        return f"{self.endpoint_count} endpoints"
+
+    def get_success_rate_formatted(self) -> str:
+        """Get formatted success rate string.
+
+        Returns:
+            Formatted success rate string.
+        """
+        return f"{self.get_success_rate():.1f}%"
+
+    def get_error_rate_formatted(self) -> str:
+        """Get formatted error rate string.
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"{self.get_error_rate():.1f}%"
