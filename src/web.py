@@ -883,6 +883,32 @@ def get_api_endpoints_formatted() -> str:
     return ", ".join(endpoints.keys())
 
 
+def get_dashboard_info_formatted(host: str = "localhost", port: int = 8080) -> str:
+    """Get formatted dashboard info string.
+
+    Args:
+        host: Dashboard host.
+        port: Dashboard port.
+
+    Returns:
+        Formatted dashboard info string.
+    """
+    info = get_dashboard_info(host, port)
+    return f"URL: {info['url']}, Endpoints: {info['endpoints']}"
+
+
+def get_entries_count_formatted(entries: List[LogEntry]) -> str:
+    """Get formatted entries count string.
+
+    Args:
+        entries: List of log entries.
+
+    Returns:
+        Formatted entries count string.
+    """
+    return f"{get_entries_count(entries)} entries"
+
+
 if __name__ == "__main__":
     from .parser import LogParser
     from .reader import read_log_lines
