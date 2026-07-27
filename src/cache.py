@@ -618,3 +618,100 @@ class QueryCache:
             Formatted cache efficiency string.
         """
         return f"{self.get_cache_efficiency():.1f}%"
+
+    def get_cache_size_formatted(self) -> str:
+        """Get formatted cache size string.
+
+        Returns:
+            Formatted cache size string.
+        """
+        return f"{self._cache.size}/{self._cache.max_size}"
+
+    def get_hit_rate_formatted(self) -> str:
+        """Get formatted hit rate string.
+
+        Returns:
+            Formatted hit rate string.
+        """
+        return f"{self.hit_rate:.1f}%"
+
+    def get_query_count_formatted(self) -> str:
+        """Get formatted query count string.
+
+        Returns:
+            Formatted query count string.
+        """
+        return f"{self.query_count} queries"
+
+    def get_popular_query_count_formatted(self) -> str:
+        """Get formatted popular query count string.
+
+        Returns:
+            Formatted popular query count string.
+        """
+        return f"{self.get_popular_query_count()} unique"
+
+    def get_total_queries_formatted(self) -> str:
+        """Get formatted total queries string.
+
+        Returns:
+            Formatted total queries string.
+        """
+        return f"{self.get_total_queries()} total"
+
+    def get_most_popular_count_formatted(self) -> str:
+        """Get formatted most popular count string.
+
+        Returns:
+            Formatted most popular count string.
+        """
+        return f"{self.get_most_popular_count()} hits"
+
+    def get_average_popularity_formatted(self) -> str:
+        """Get formatted average popularity string.
+
+        Returns:
+            Formatted average popularity string.
+        """
+        return f"{self.get_average_popularity():.2f} avg"
+
+    def get_popular_queries_formatted(self, limit: int = 5) -> str:
+        """Get formatted popular queries string.
+
+        Args:
+            limit: Maximum number of queries.
+
+        Returns:
+            Formatted popular queries string.
+        """
+        queries = self.popular_queries(limit)
+        if not queries:
+            return "none"
+        return ", ".join(f"{q}({c})" for q, c in queries)
+
+    def get_most_popular_formatted(self) -> str:
+        """Get formatted most popular query string.
+
+        Returns:
+            Formatted most popular query string.
+        """
+        query = self.get_most_popular()
+        return query if query else "none"
+
+    def get_cache_usage_percent(self) -> float:
+        """Get cache usage as percentage.
+
+        Returns:
+            Cache usage percentage.
+        """
+        if self._cache.max_size == 0:
+            return 0.0
+        return round(self._cache.size / self._cache.max_size * 100, 2)
+
+    def get_cache_usage_formatted(self) -> str:
+        """Get formatted cache usage string.
+
+        Returns:
+            Formatted cache usage string.
+        """
+        return f"{self.get_cache_usage_percent():.1f}%"
