@@ -798,3 +798,107 @@ class RetentionManager:
             Formatted compression rate string.
         """
         return f"{self.get_compression_rate():.1f}%"
+
+    def get_policies_dict(self) -> List[Dict[str, Any]]:
+        """Get policies as dictionaries.
+
+        Returns:
+            List of policy dictionaries.
+        """
+        return [
+            {
+                "name": p.name,
+                "max_age_days": p.max_age_days,
+                "compress_after_days": p.compress_after_days,
+                "delete_after_days": p.delete_after_days,
+                "max_size_mb": p.max_size_mb,
+            }
+            for p in self.policies
+        ]
+
+    def get_policies_formatted(self) -> str:
+        """Get formatted policies string.
+
+        Returns:
+            Formatted policies string.
+        """
+        policies = self.get_policies_dict()
+        if not policies:
+            return "none"
+        return ", ".join(f"{p['name']}({p['max_age_days']}d)" for p in policies)
+
+    def get_policy_names_formatted(self) -> str:
+        """Get formatted policy names string.
+
+        Returns:
+            Formatted policy names string.
+        """
+        names = self.get_policy_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_file_count(self) -> int:
+        """Get total number of log files.
+
+        Returns:
+            Count of files found.
+        """
+        return len(self.scan_files())
+
+    def get_actions_count(self) -> int:
+        """Get number of retention actions taken.
+
+        Returns:
+            Count of actions.
+        """
+        return len(self._actions_log)
+
+    def get_compressed_count(self) -> int:
+        """Get count of compressed files.
+
+        Returns:
+            Count of compressed files.
+        """
+        return len(self.get_compressed_files())
+
+    def get_uncompressed_count(self) -> int:
+        """Get count of uncompressed files.
+
+        Returns:
+            Count of uncompressed files.
+        """
+        return len(self.get_uncompressed_files())
+
+    def get_total_size_mb(self) -> float:
+        """Get total size in MB.
+
+        Returns:
+            Total size in MB.
+        """
+        files = self.scan_files()
+        return round(sum(f.get("size_mb", 0) for f in files), 2)
+
+    def get_average_file_size(self) -> float:
+        """Get average file size in MB.
+
+        Returns:
+            Average file size in MB.
+        """
+        files = self.scan_files()
+        if not files:
+            return 0.0
+        total_mb = sum(f.get("size_mb", 0) for f in files)
+        return round(total_mb / len(files), 2)
+
+    def get_compression_rate(self) -> float:
+        """Get compression rate as percentage.
+
+        Returns:
+            Compression rate percentage.
+        """
+        files = self.scan_files()
+        if not files:
+            return 0.0
+        compressed = sum(1 for f in files if f["path"].endswith(".gz"))
+        return round(compressed / len(files) * 100, 2)
