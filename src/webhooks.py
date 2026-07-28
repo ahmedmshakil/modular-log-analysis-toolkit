@@ -568,3 +568,86 @@ class WebhookRouter:
             Formatted error rate string.
         """
         return f"{self.get_error_rate():.1f}%"
+
+    def get_endpoint_names_formatted(self) -> str:
+        """Get formatted endpoint names string.
+
+        Returns:
+            Formatted endpoint names string.
+        """
+        names = self.get_endpoint_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_endpoints_dict(self) -> List[Dict[str, Any]]:
+        """Get endpoints as dictionaries.
+
+        Returns:
+            List of endpoint dictionaries.
+        """
+        return [
+            {
+                "name": name,
+                "url": sender.url,
+                "stats": sender.stats,
+            }
+            for name, sender in self._senders.items()
+        ]
+
+    def get_endpoints_formatted(self) -> str:
+        """Get formatted endpoints string.
+
+        Returns:
+            Formatted endpoints string.
+        """
+        endpoints = self.get_endpoints_dict()
+        if not endpoints:
+            return "none"
+        return ", ".join(f"{e['name']}({e['url']})" for e in endpoints)
+
+    def get_total_sent(self) -> int:
+        """Get total messages sent across all endpoints.
+
+        Returns:
+            Total sent count.
+        """
+        return sum(sender.stats["sent"] for sender in self._senders.values())
+
+    def get_total_errors(self) -> int:
+        """Get total errors across all endpoints.
+
+        Returns:
+            Total error count.
+        """
+        return sum(sender.stats["errors"] for sender in self._senders.values())
+
+    def get_success_rate(self) -> float:
+        """Get success rate as percentage.
+
+        Returns:
+            Success rate percentage.
+        """
+        total = self.get_total_sent() + self.get_total_errors()
+        if total == 0:
+            return 0.0
+        return round(self.get_total_sent() / total * 100, 2)
+
+    def get_error_rate(self) -> float:
+        """Get error rate as percentage.
+
+        Returns:
+            Error rate percentage.
+        """
+        total = self.get_total_sent() + self.get_total_errors()
+        if total == 0:
+            return 0.0
+        return round(self.get_total_errors() / total * 100, 2)
+
+    def get_endpoint_names(self) -> List[str]:
+        """Get list of endpoint names.
+
+        Returns:
+            List of endpoint name strings.
+        """
+        return list(self._senders.keys())
