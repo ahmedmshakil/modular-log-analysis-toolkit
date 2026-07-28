@@ -706,6 +706,86 @@ class AlertManager:
         """
         return f"{self.get_low_severity_count()} low/medium"
 
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Thresholds: {len(self.thresholds)}, Alerts: {len(self.alerts)}, Active: {self.get_unacknowledged_count()}, Callbacks: {len(self.callbacks)}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_alert_rate_formatted(self) -> str:
+        """Get formatted alert rate string.
+
+        Returns:
+            Formatted alert rate string.
+        """
+        return f"{self.get_alert_rate():.1f}%"
+
+    def get_active_rate_formatted(self) -> str:
+        """Get formatted active rate string.
+
+        Returns:
+            Formatted active rate string.
+        """
+        return f"{self.get_active_rate():.1f}%"
+
+    def get_acknowledgment_rate_formatted(self) -> str:
+        """Get formatted acknowledgment rate string.
+
+        Returns:
+            Formatted acknowledgment rate string.
+        """
+        return f"{self.get_acknowledgment_rate():.1f}%"
+
+    def get_alert_count_formatted(self) -> str:
+        """Get formatted alert count string.
+
+        Returns:
+            Formatted alert count string.
+        """
+        return f"{len(self.alerts)} alerts"
+
+    def get_threshold_count_formatted(self) -> str:
+        """Get formatted threshold count string.
+
+        Returns:
+            Formatted threshold count string.
+        """
+        return f"{len(self.thresholds)} thresholds"
+
+    def get_active_count_formatted(self) -> str:
+        """Get formatted active count string.
+
+        Returns:
+            Formatted active count string.
+        """
+        return f"{self.get_unacknowledged_count()} active"
+
+    def get_acknowledged_count_formatted(self) -> str:
+        """Get formatted acknowledged count string.
+
+        Returns:
+            Formatted acknowledged count string.
+        """
+        return f"{self.get_acknowledged_count()} acknowledged"
+
+    def get_callback_count_formatted(self) -> str:
+        """Get formatted callback count string.
+
+        Returns:
+            Formatted callback count string.
+        """
+        return f"{len(self.callbacks)} callbacks"
+
     def get_severity_counts_formatted(self) -> str:
         """Get formatted severity counts string.
 
