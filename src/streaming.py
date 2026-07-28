@@ -658,3 +658,120 @@ class LogStream:
             Formatted stats string.
         """
         return f"File: {self.get_file_name()}, Processed: {self._processed}, Errors: {self._errors}, Status: {self.get_status()}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_processing_rate_formatted(self) -> str:
+        """Get formatted processing rate string.
+
+        Returns:
+            Formatted processing rate string.
+        """
+        return f"{self.get_processing_rate():.1f}%"
+
+    def get_error_ratio_formatted(self) -> str:
+        """Get formatted error ratio string.
+
+        Returns:
+            Formatted error ratio string.
+        """
+        return f"{self.get_error_ratio():.2f}"
+
+    def get_stream_health_formatted(self) -> str:
+        """Get formatted stream health string.
+
+        Returns:
+            Formatted stream health string.
+        """
+        return f"{self.get_stream_health():.1f}%"
+
+    def get_processed_count(self) -> int:
+        """Get number of processed entries.
+
+        Returns:
+            Count of processed entries.
+        """
+        return self._processed
+
+    def get_error_count(self) -> int:
+        """Get number of errors.
+
+        Returns:
+            Count of errors.
+        """
+        return self._errors
+
+    def get_total_count(self) -> int:
+        """Get total count of processed and errors.
+
+        Returns:
+            Total count.
+        """
+        return self._processed + self._errors
+
+    def get_file_size_mb(self) -> float:
+        """Get file size in megabytes.
+
+        Returns:
+            File size in MB, or 0.0 if unknown.
+        """
+        try:
+            return round(self.file_path.stat().st_size / (1024 * 1024), 2)
+        except (OSError, ValueError):
+            return 0.0
+
+    def get_success_rate(self) -> float:
+        """Get success rate as percentage.
+
+        Returns:
+            Success rate percentage.
+        """
+        total = self.get_total_count()
+        if total == 0:
+            return 0.0
+        return round(self._processed / total * 100, 2)
+
+    def get_processing_rate(self) -> float:
+        """Get processing rate (processed / total).
+
+        Returns:
+            Processing rate percentage.
+        """
+        total = self.get_total_count()
+        if total == 0:
+            return 0.0
+        return round(self._processed / total * 100, 2)
+
+    def get_error_ratio(self) -> float:
+        """Get error to processed ratio.
+
+        Returns:
+            Error ratio.
+        """
+        if self._processed == 0:
+            return 0.0
+        return round(self._errors / self._processed, 2)
+
+    def get_stream_health(self) -> float:
+        """Get stream health (success rate - error impact).
+
+        Returns:
+            Stream health percentage.
+        """
+        return round(self.get_success_rate() - self.get_error_impact(), 2)
+
+    def get_error_impact(self) -> float:
+        """Get error impact (errors / processed).
+
+        Returns:
+            Error impact percentage.
+        """
+        if self._processed == 0:
+            return 0.0
+        return round(self._errors / self._processed * 100, 2)
