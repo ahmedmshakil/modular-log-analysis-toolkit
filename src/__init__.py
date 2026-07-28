@@ -200,37 +200,55 @@ def get_version_patch() -> str:
     return get_version_info()["patch"]
 
 
-def get_package_name_formatted() -> str:
-    """Get formatted package name string.
+def get_package_info_dict() -> dict:
+    """Get package information as dictionary.
 
     Returns:
-        Formatted package name string.
+        Dictionary with package info.
     """
-    return f"Package: {get_package_name()}"
+    return get_package_info()
 
 
-def get_version_major() -> int:
-    """Get major version number.
+def get_version_info_dict() -> dict:
+    """Get version information as dictionary.
 
     Returns:
-        Major version number.
+        Dictionary with version info.
     """
-    return get_version_info()["major"]
+    return get_version_info()
 
 
-def get_version_minor() -> int:
-    """Get minor version number.
+def get_modules_list() -> list:
+    """Get modules as list.
 
     Returns:
-        Minor version number.
+        List of module names.
     """
-    return get_version_info()["minor"]
+    return get_modules()
 
 
-def get_version_patch() -> str:
-    """Get patch version string.
+def get_author_name() -> str:
+    """Get author name.
 
     Returns:
-        Patch version string.
+        Author name string.
     """
-    return get_version_info()["patch"]
+    return __author__
+
+
+def get_version_string() -> str:
+    """Get version string.
+
+    Returns:
+        Version string.
+    """
+    return __version__
+
+
+def get_package_title() -> str:
+    """Get package title.
+
+    Returns:
+        Package title string.
+    """
+    return "modular-log-analysis-toolkit"
