@@ -557,3 +557,87 @@ def get_file_summary_formatted(file_path: str) -> str:
         FileNotFoundError: If file does not exist.
     """
     return get_file_summary_string(file_path)
+
+
+def get_text_extension_count_formatted() -> str:
+    """Get formatted text extension count string.
+
+    Returns:
+        Formatted text extension count string.
+    """
+    return f"{get_text_extension_count()} text extensions"
+
+
+def get_log_extension_count_formatted() -> str:
+    """Get formatted log extension count string.
+
+    Returns:
+        Formatted log extension count string.
+    """
+    return f"{get_log_extension_count()} log extensions"
+
+
+def get_all_extension_count_formatted() -> str:
+    """Get formatted all extension count string.
+
+    Returns:
+        Formatted all extension count string.
+    """
+    return f"{get_all_extension_count()} total extensions"
+
+
+def get_file_type_formatted(file_path: str) -> str:
+    """Get formatted file type string.
+
+    Args:
+        file_path: Path to the file.
+
+    Returns:
+        Formatted file type string.
+    """
+    return f"Type: {get_file_type(file_path)}"
+
+
+def get_supported_text_extensions_formatted() -> str:
+    """Get formatted text extensions string.
+
+    Returns:
+        Formatted text extensions string.
+    """
+    return ", ".join(get_supported_text_extensions())
+
+
+def get_supported_log_extensions_formatted() -> str:
+    """Get formatted log extensions string.
+
+    Returns:
+        Formatted log extensions string.
+    """
+    return ", ".join(get_supported_log_extensions())
+
+
+def get_all_extensions_formatted() -> str:
+    """Get formatted all extensions string.
+
+    Returns:
+        Formatted all extensions string.
+    """
+    return ", ".join(sorted(get_all_supported_extensions()))
+
+
+def get_encoding_count_formatted() -> str:
+    """Get formatted encoding count string.
+
+    Returns:
+        Formatted encoding count string.
+    """
+    return f"{get_encoding_count()} encodings"
+
+
+def get_supported_encodings_formatted() -> str:
+    """Get formatted supported encodings string.
+
+    Returns:
+        Formatted supported encodings string.
+    """
+    return ", ".join(get_supported_encodings())
