@@ -643,3 +643,92 @@ class TagManager:
         if not rules:
             return "none"
         return ", ".join(f"{r['name']}({r['tag']})" for r in rules)
+
+    def get_rules_dict(self) -> List[Dict[str, Any]]:
+        """Get rules as dictionaries.
+
+        Returns:
+            List of rule dictionaries.
+        """
+        return [
+            {
+                "name": r.name,
+                "tag": r.tag,
+                "conditions": r.conditions,
+                "color": r.color,
+                "priority": r.priority,
+            }
+            for r in self._rules
+        ]
+
+    def get_rule_count(self) -> int:
+        """Get number of rules.
+
+        Returns:
+            Count of rules.
+        """
+        return len(self._rules)
+
+    def get_manual_tag_count(self) -> int:
+        """Get number of manual tags.
+
+        Returns:
+            Count of manual tags.
+        """
+        return sum(len(tags) for tags in self._manual_tags.values())
+
+    def get_unique_tag_count(self) -> int:
+        """Get number of unique tags.
+
+        Returns:
+            Count of unique tags.
+        """
+        return len(self.get_all_tag_names())
+
+    def get_tags_for_entry(self, entry_dict: Dict) -> List[str]:
+        """Get all matching tags for an entry.
+
+        Args:
+            entry_dict: Entry dictionary to check.
+
+        Returns:
+            List of matching tag names.
+        """
+        tags = []
+        for rule in self._rules:
+            if rule.matches(entry_dict):
+                tags.append(rule.tag)
+        return tags
+
+    def get_all_tag_names(self) -> List[str]:
+        """Get list of all unique tag names from rules.
+
+        Returns:
+            List of tag names.
+        """
+        return list(set(r.tag for r in self._rules))
+
+    def get_rules_by_priority(self, min_priority: int = 0) -> List[Dict]:
+        """Get rules filtered by minimum priority.
+
+        Args:
+            min_priority: Minimum priority level.
+
+        Returns:
+            List of rule dictionaries.
+        """
+        return [
+            {"name": r.name, "tag": r.tag, "conditions": r.conditions,
+             "color": r.color, "priority": r.priority}
+            for r in self._rules if r.priority >= min_priority
+        ]
+
+    def get_average_priority(self) -> float:
+        """Get average rule priority.
+
+        Returns:
+            Average priority.
+        """
+        if not self._rules:
+            return 0.0
+        return round(sum(r.priority for r in self._rules) / len(self._rules), 2)
