@@ -909,6 +909,25 @@ def get_entries_count_formatted(entries: List[LogEntry]) -> str:
     return f"{get_entries_count(entries)} entries"
 
 
+def get_endpoint_count_formatted() -> str:
+    """Get formatted endpoint count string.
+
+    Returns:
+        Formatted endpoint count string.
+    """
+    return f"{get_endpoint_count()} endpoints"
+
+
+def get_api_endpoints_formatted() -> str:
+    """Get formatted API endpoints string.
+
+    Returns:
+        Formatted API endpoints string.
+    """
+    endpoints = get_api_endpoints()
+    return ", ".join(endpoints.keys())
+
+
 if __name__ == "__main__":
     from .parser import LogParser
     from .reader import read_log_lines
