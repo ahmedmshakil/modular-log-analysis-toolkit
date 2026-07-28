@@ -635,6 +635,22 @@ class QueryCache:
         """
         return f"{self.hit_rate:.1f}%"
 
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Size: {self._cache.size}/{self._cache.max_size}, Hit Rate: {self.hit_rate:.1f}%, Queries: {self.query_count}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
     def get_query_count_formatted(self) -> str:
         """Get formatted query count string.
 
@@ -698,20 +714,18 @@ class QueryCache:
         query = self.get_most_popular()
         return query if query else "none"
 
-    def get_cache_usage_percent(self) -> float:
-        """Get cache usage as percentage.
+    def get_cache_efficiency(self) -> float:
+        """Get cache efficiency (hit rate * usage).
 
         Returns:
-            Cache usage percentage.
+            Cache efficiency percentage.
         """
-        if self._cache.max_size == 0:
-            return 0.0
-        return round(self._cache.size / self._cache.max_size * 100, 2)
+        return round(self.hit_rate * self.get_cache_usage_percent() / 100, 2)
 
-    def get_cache_usage_formatted(self) -> str:
-        """Get formatted cache usage string.
+    def get_cache_efficiency_formatted(self) -> str:
+        """Get formatted cache efficiency string.
 
         Returns:
-            Formatted cache usage string.
+            Formatted cache efficiency string.
         """
-        return f"{self.get_cache_usage_percent():.1f}%"
+        return f"{self.get_cache_efficiency():.1f}%"
