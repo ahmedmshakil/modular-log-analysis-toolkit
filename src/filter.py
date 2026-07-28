@@ -917,93 +917,130 @@ class LogFilter:
         """
         return f"{self.get_filter_density():.2f}%"
 
-    def get_level_counts_formatted(self) -> str:
-        """Get formatted level counts string.
+    def get_error_count_formatted(self) -> str:
+        """Get formatted error count string.
 
         Returns:
-            Formatted level counts string.
+            Formatted error count string.
         """
-        counts = self.count_by_level()
-        if not counts:
-            return "none"
-        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+        return f"{self.get_level_count(LogLevel.ERROR)} errors"
 
-    def get_source_counts_formatted(self) -> str:
-        """Get formatted source counts string.
+    def get_warning_count_formatted(self) -> str:
+        """Get formatted warning count string.
 
         Returns:
-            Formatted source counts string.
+            Formatted warning count string.
         """
-        counts = self.get_source_counts()
-        if not counts:
-            return "none"
-        return ", ".join(f"{k}:{v}" for k, v in counts.items())
+        return f"{self.get_level_count(LogLevel.WARN)} warnings"
 
-    def get_level_distribution_formatted(self) -> str:
-        """Get formatted level distribution string.
+    def get_info_count_formatted(self) -> str:
+        """Get formatted info count string.
 
         Returns:
-            Formatted level distribution string.
+            Formatted info count string.
         """
-        dist = self.get_level_distribution()
-        if not dist:
-            return "none"
-        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+        return f"{self.get_level_count(LogLevel.INFO)} info"
 
-    def get_source_distribution_formatted(self) -> str:
-        """Get formatted source distribution string.
+    def get_debug_count_formatted(self) -> str:
+        """Get formatted debug count string.
 
         Returns:
-            Formatted source distribution string.
+            Formatted debug count string.
         """
-        dist = self.get_source_distribution()
-        if not dist:
-            return "none"
-        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+        return f"{self.get_level_count(LogLevel.DEBUG)} debug"
 
-    def get_unique_sources_formatted(self) -> str:
-        """Get formatted unique sources string.
+    def get_critical_count_formatted(self) -> str:
+        """Get formatted critical count string.
 
         Returns:
-            Formatted unique sources string.
+            Formatted critical count string.
         """
-        sources = self.unique_sources
-        if not sources:
-            return "none"
-        return ", ".join(sources)
+        return f"{self.get_level_count(LogLevel.CRITICAL)} critical"
 
-    def get_most_common_level_formatted(self) -> str:
-        """Get formatted most common level string.
+    def get_trace_count_formatted(self) -> str:
+        """Get formatted trace count string.
 
         Returns:
-            Formatted most common level string.
+            Formatted trace count string.
         """
-        level = self.get_most_common_level()
-        return level if level else "none"
+        return f"{self.get_level_count(LogLevel.TRACE)} trace"
 
-    def get_most_common_source_formatted(self) -> str:
-        """Get formatted most common source string.
+    def get_source_count_formatted(self) -> str:
+        """Get formatted source count string.
 
         Returns:
-            Formatted most common source string.
+            Formatted source count string.
         """
-        source = self.get_most_common_source()
-        return source if source else "none"
+        return f"{len(self.unique_sources)} sources"
 
-    def get_least_common_level_formatted(self) -> str:
-        """Get formatted least common level string.
+    def get_filter_count_formatted(self) -> str:
+        """Get formatted filter count string.
 
         Returns:
-            Formatted least common level string.
+            Formatted filter count string.
         """
-        level = self.get_least_common_level()
-        return level if level else "none"
+        return f"{self.get_filter_count()} filters"
 
-    def get_least_common_source_formatted(self) -> str:
-        """Get formatted least common source string.
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
 
         Returns:
-            Formatted least common source string.
+            Formatted stats string.
         """
-        source = self.get_least_common_source()
-        return source if source else "none"
+        return f"Entries: {self.entry_count}, Filters: {self.get_filter_count()}, Sources: {len(self.unique_sources)}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_error_rate_formatted(self) -> str:
+        """Get formatted error rate string.
+
+        Returns:
+            Formatted error rate string.
+        """
+        return f"{self.get_error_rate():.1f}%"
+
+    def get_warning_rate_formatted(self) -> str:
+        """Get formatted warning rate string.
+
+        Returns:
+            Formatted warning rate string.
+        """
+        return f"{self.get_warning_rate():.1f}%"
+
+    def get_info_rate_formatted(self) -> str:
+        """Get formatted info rate string.
+
+        Returns:
+            Formatted info rate string.
+        """
+        return f"{self.get_info_rate():.1f}%"
+
+    def get_debug_rate_formatted(self) -> str:
+        """Get formatted debug rate string.
+
+        Returns:
+            Formatted debug rate string.
+        """
+        return f"{self.get_debug_rate():.1f}%"
+
+    def get_critical_rate_formatted(self) -> str:
+        """Get formatted critical rate string.
+
+        Returns:
+            Formatted critical rate string.
+        """
+        return f"{self.get_critical_rate():.1f}%"
+
+    def get_non_error_rate_formatted(self) -> str:
+        """Get formatted non-error rate string.
+
+        Returns:
+            Formatted non-error rate string.
+        """
+        return f"{self.get_non_error_rate():.1f}%"
