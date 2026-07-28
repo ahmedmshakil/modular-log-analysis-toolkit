@@ -689,3 +689,160 @@ class GeoLookup:
             Summary string.
         """
         return self.get_stats_formatted()
+
+    def get_lookup_count_formatted(self) -> str:
+        """Get formatted lookup count string.
+
+        Returns:
+            Formatted lookup count string.
+        """
+        return f"{self._lookup_count} lookups"
+
+    def get_cache_hits_formatted(self) -> str:
+        """Get formatted cache hits string.
+
+        Returns:
+            Formatted cache hits string.
+        """
+        return f"{self._cache_hits} hits"
+
+    def get_cached_count_formatted(self) -> str:
+        """Get formatted cached count string.
+
+        Returns:
+            Formatted cached count string.
+        """
+        return f"{len(self._cache)} cached"
+
+    def get_cache_size_formatted(self) -> str:
+        """Get formatted cache size string.
+
+        Returns:
+            Formatted cache size string.
+        """
+        return f"{len(self._cache)}/{self._cache_size}"
+
+    def get_total_lookups_formatted(self) -> str:
+        """Get formatted total lookups string.
+
+        Returns:
+            Formatted total lookups string.
+        """
+        return f"{self.get_total_lookups()} total"
+
+    def get_api_calls_formatted(self) -> str:
+        """Get formatted API calls string.
+
+        Returns:
+            Formatted API calls string.
+        """
+        return f"{self.get_api_calls()} API calls"
+
+    def get_cache_misses_formatted(self) -> str:
+        """Get formatted cache misses string.
+
+        Returns:
+            Formatted cache misses string.
+        """
+        return f"{self.get_cache_misses()} misses"
+
+    def get_hit_rate_formatted(self) -> str:
+        """Get formatted hit rate string.
+
+        Returns:
+            Formatted hit rate string.
+        """
+        return f"{self.cache_hit_rate:.1f}%"
+
+    def get_cached_ips_count(self) -> int:
+        """Get count of cached IPs.
+
+        Returns:
+            Count of cached IPs.
+        """
+        return len(self.get_cached_ips())
+
+    def get_cached_ips_count_formatted(self) -> str:
+        """Get formatted cached IPs count string.
+
+        Returns:
+            Formatted cached IPs count string.
+        """
+        return f"{self.get_cached_ips_count()} IPs"
+
+    def get_lookup_count(self) -> int:
+        """Get number of API lookups performed.
+
+        Returns:
+            Lookup count.
+        """
+        return self._lookup_count
+
+    def get_cache_hits(self) -> int:
+        """Get number of cache hits.
+
+        Returns:
+            Cache hit count.
+        """
+        return self._cache_hits
+
+    def get_total_lookups(self) -> int:
+        """Get total lookups (API + cache).
+
+        Returns:
+            Total lookup count.
+        """
+        return self._lookup_count + self._cache_hits
+
+    def get_api_calls(self) -> int:
+        """Get number of API calls made.
+
+        Returns:
+            API call count.
+        """
+        return self._lookup_count
+
+    def get_cache_misses(self) -> int:
+        """Get number of cache misses.
+
+        Returns:
+            Cache miss count.
+        """
+        return self._lookup_count
+
+    def get_cache_usage_percent(self) -> float:
+        """Get cache usage as percentage.
+
+        Returns:
+            Cache usage percentage.
+        """
+        if self._cache_size == 0:
+            return 0.0
+        return round(len(self._cache) / self._cache_size * 100, 2)
+
+    def get_cache_usage_formatted(self) -> str:
+        """Get formatted cache usage string.
+
+        Returns:
+            Formatted cache usage string.
+        """
+        return f"{self.get_cache_usage_percent():.1f}%"
+
+    def get_lookup_efficiency(self) -> float:
+        """Get lookup efficiency (cache hits per total lookups).
+
+        Returns:
+            Lookup efficiency percentage.
+        """
+        total = self.get_total_lookups()
+        if total == 0:
+            return 0.0
+        return round(self._cache_hits / total * 100, 2)
+
+    def get_lookup_efficiency_formatted(self) -> str:
+        """Get formatted lookup efficiency string.
+
+        Returns:
+            Formatted lookup efficiency string.
+        """
+        return f"{self.get_lookup_efficiency():.1f}%"
