@@ -714,6 +714,24 @@ class QueryCache:
         query = self.get_most_popular()
         return query if query else "none"
 
+    def get_cache_usage_percent(self) -> float:
+        """Get cache usage as percentage.
+
+        Returns:
+            Cache usage percentage.
+        """
+        if self._cache.max_size == 0:
+            return 0.0
+        return round(self._cache.size / self._cache.max_size * 100, 2)
+
+    def get_cache_usage_formatted(self) -> str:
+        """Get formatted cache usage string.
+
+        Returns:
+            Formatted cache usage string.
+        """
+        return f"{self.get_cache_usage_percent():.1f}%"
+
     def get_cache_efficiency(self) -> float:
         """Get cache efficiency (hit rate * usage).
 
