@@ -770,6 +770,46 @@ class GeoLookup:
         """
         return f"{self.get_cached_ips_count()} IPs"
 
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Lookups: {self._lookup_count}, Cache Hits: {self._cache_hits}, Cached: {len(self._cache)}, Hit Rate: {self.cache_hit_rate:.1f}%"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_lookup_count_formatted(self) -> str:
+        """Get formatted lookup count string.
+
+        Returns:
+            Formatted lookup count string.
+        """
+        return f"{self._lookup_count} lookups"
+
+    def get_cache_hits_formatted(self) -> str:
+        """Get formatted cache hits string.
+
+        Returns:
+            Formatted cache hits string.
+        """
+        return f"{self._cache_hits} hits"
+
+    def get_cached_count_formatted(self) -> str:
+        """Get formatted cached count string.
+
+        Returns:
+            Formatted cached count string.
+        """
+        return f"{len(self._cache)} cached"
+
     def get_lookup_count(self) -> int:
         """Get number of API lookups performed.
 
