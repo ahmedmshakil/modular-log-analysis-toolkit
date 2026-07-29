@@ -786,6 +786,22 @@ class AlertManager:
         """
         return f"{len(self.callbacks)} callbacks"
 
+    def get_high_severity_count_formatted(self) -> str:
+        """Get formatted high severity count string.
+
+        Returns:
+            Formatted high severity count string.
+        """
+        return f"{self.get_high_severity_count()} high/critical"
+
+    def get_low_severity_count_formatted(self) -> str:
+        """Get formatted low severity count string.
+
+        Returns:
+            Formatted low severity count string.
+        """
+        return f"{self.get_low_severity_count()} low/medium"
+
     def get_severity_counts_formatted(self) -> str:
         """Get formatted severity counts string.
 
@@ -836,3 +852,43 @@ class AlertManager:
         """
         sev = self.get_least_common_severity()
         return sev if sev else "none"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Thresholds: {len(self.thresholds)}, Alerts: {len(self.alerts)}, Active: {self.get_unacknowledged_count()}, Callbacks: {len(self.callbacks)}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
+    def get_alert_rate_formatted(self) -> str:
+        """Get formatted alert rate string.
+
+        Returns:
+            Formatted alert rate string.
+        """
+        return f"{self.get_alert_rate():.1f}%"
+
+    def get_active_rate_formatted(self) -> str:
+        """Get formatted active rate string.
+
+        Returns:
+            Formatted active rate string.
+        """
+        return f"{self.get_active_rate():.1f}%"
+
+    def get_acknowledgment_rate_formatted(self) -> str:
+        """Get formatted acknowledgment rate string.
+
+        Returns:
+            Formatted acknowledgment rate string.
+        """
+        return f"{self.get_acknowledgment_rate():.1f}%"
