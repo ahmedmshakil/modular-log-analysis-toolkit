@@ -839,6 +839,54 @@ class LogDeduplicator:
         """
         return f"{self.get_duplicate_summary_count()} summary entries"
 
+    def get_unique_count_formatted(self) -> str:
+        """Get formatted unique count string.
+
+        Returns:
+            Formatted unique count string.
+        """
+        return f"{self.unique_count} unique"
+
+    def get_total_count_formatted(self) -> str:
+        """Get formatted total count string.
+
+        Returns:
+            Formatted total count string.
+        """
+        return f"{self.total_count} total"
+
+    def get_duplicate_count_formatted(self) -> str:
+        """Get formatted duplicate count string.
+
+        Returns:
+            Formatted duplicate count string.
+        """
+        return f"{self.duplicate_count} duplicates"
+
+    def get_cache_size_formatted(self) -> str:
+        """Get formatted cache size string.
+
+        Returns:
+            Formatted cache size string.
+        """
+        return f"{self.cache_size} cached"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Unique: {self.unique_count}, Total: {self.total_count}, Duplicates: {self.duplicate_count}, Rate: {self.dedup_rate:.1f}%"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
     def get_duplicate_rate_formatted(self) -> str:
         """Get formatted duplicate rate string.
 
