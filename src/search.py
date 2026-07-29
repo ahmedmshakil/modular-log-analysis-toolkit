@@ -912,6 +912,30 @@ class LogSearchIndex:
         """
         return f"{len(self.get_unique_levels())} unique levels"
 
+    def get_index_size_formatted(self) -> str:
+        """Get formatted index size string.
+
+        Returns:
+            Formatted index size string.
+        """
+        return f"{len(self._entries)} entries, {len(self._index)} words"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Entries: {len(self._entries)}, Words: {len(self._index)}, Sources: {len(self._field_index['source'])}, Levels: {len(self._field_index['level'])}"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
     def get_level_counts_formatted(self) -> str:
         """Get formatted level counts string.
 
@@ -1013,3 +1037,27 @@ class LogSearchIndex:
         if not levels:
             return "none"
         return ", ".join(levels)
+
+    def get_words_per_entry_formatted(self) -> str:
+        """Get formatted words per entry string.
+
+        Returns:
+            Formatted words per entry string.
+        """
+        return f"{self.get_words_per_entry():.2f} words/entry"
+
+    def get_index_sparsity_formatted(self) -> str:
+        """Get formatted index sparsity string.
+
+        Returns:
+            Formatted index sparsity string.
+        """
+        return f"{self.get_index_sparsity():.1f}%"
+
+    def get_source_diversity_formatted(self) -> str:
+        """Get formatted source diversity string.
+
+        Returns:
+            Formatted source diversity string.
+        """
+        return f"{self.get_source_diversity():.1f}%"
