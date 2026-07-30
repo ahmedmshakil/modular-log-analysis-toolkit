@@ -823,73 +823,27 @@ class PluginManager:
             return "none"
         return ", ".join(names)
 
-    def get_enabled_count(self) -> int:
-        """Get number of enabled plugins.
+    def get_plugin_versions_formatted(self) -> str:
+        """Get formatted plugin versions string.
 
         Returns:
-            Count of enabled plugins.
+            Formatted plugin versions string.
         """
-        return sum(1 for v in self._enabled.values() if v)
+        versions = self.get_plugin_versions()
+        if not versions:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in versions.items())
 
-    def get_disabled_count(self) -> int:
-        """Get number of disabled plugins.
+    def get_plugin_names_formatted(self) -> str:
+        """Get formatted plugin names string.
 
         Returns:
-            Count of disabled plugins.
+            Formatted plugin names string.
         """
-        return sum(1 for v in self._enabled.values() if not v)
-
-    def get_enabled_rate_percent(self) -> float:
-        """Get enabled rate as percentage.
-
-        Returns:
-            Enabled rate percentage.
-        """
-        if not self._plugins:
-            return 0.0
-        return round(self.get_enabled_count() / len(self._plugins) * 100, 2)
-
-    def get_disabled_rate_percent(self) -> float:
-        """Get disabled rate as percentage.
-
-        Returns:
-            Disabled rate percentage.
-        """
-        if not self._plugins:
-            return 0.0
-        return round(self.get_disabled_count() / len(self._plugins) * 100, 2)
-
-    def get_plugin_versions(self) -> Dict[str, str]:
-        """Get plugin versions as dictionary.
-
-        Returns:
-            Dictionary mapping plugin names to versions.
-        """
-        return {name: plugin.version for name, plugin in self._plugins.items()}
-
-    def get_plugin_names(self) -> List[str]:
-        """Get list of all registered plugin names.
-
-        Returns:
-            List of plugin names.
-        """
-        return list(self._plugins.keys())
-
-    def get_enabled_plugins_list(self) -> List[str]:
-        """Get list of enabled plugin names.
-
-        Returns:
-            List of enabled plugin names.
-        """
-        return [name for name, enabled in self._enabled.items() if enabled]
-
-    def get_disabled_plugins_list(self) -> List[str]:
-        """Get list of disabled plugin names.
-
-        Returns:
-            List of disabled plugin names.
-        """
-        return [name for name, enabled in self._enabled.items() if not enabled]
+        names = self.get_plugin_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
 
     def get_stats_formatted(self) -> str:
         """Get formatted stats string.
@@ -938,3 +892,11 @@ class PluginManager:
             Formatted enabled rate string.
         """
         return f"{self.get_enabled_rate_percent():.1f}%"
+
+    def get_disabled_rate_formatted(self) -> str:
+        """Get formatted disabled rate string.
+
+        Returns:
+            Formatted disabled rate string.
+        """
+        return f"{self.get_disabled_rate_percent():.1f}%"
