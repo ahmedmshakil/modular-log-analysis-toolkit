@@ -974,3 +974,50 @@ class RetentionManager:
             Formatted average file size string.
         """
         return f"{self.get_average_file_size():.2f} MB"
+
+    def get_compression_rate_formatted(self) -> str:
+        """Get formatted compression rate string.
+
+        Returns:
+            Formatted compression rate string.
+        """
+        return f"{self.get_compression_rate():.1f}%"
+
+    def get_policies_dict(self) -> List[Dict[str, Any]]:
+        """Get policies as dictionaries.
+
+        Returns:
+            List of policy dictionaries.
+        """
+        return [
+            {
+                "name": p.name,
+                "max_age_days": p.max_age_days,
+                "compress_after_days": p.compress_after_days,
+                "delete_after_days": p.delete_after_days,
+                "max_size_mb": p.max_size_mb,
+            }
+            for p in self.policies
+        ]
+
+    def get_policies_formatted(self) -> str:
+        """Get formatted policies string.
+
+        Returns:
+            Formatted policies string.
+        """
+        policies = self.get_policies_dict()
+        if not policies:
+            return "none"
+        return ", ".join(f"{p['name']}({p['max_age_days']}d)" for p in policies)
+
+    def get_policy_names_formatted(self) -> str:
+        """Get formatted policy names string.
+
+        Returns:
+            Formatted policy names string.
+        """
+        names = self.get_policy_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
