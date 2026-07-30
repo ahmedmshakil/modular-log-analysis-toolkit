@@ -707,3 +707,40 @@ class WebhookRouter:
             Formatted error rate string.
         """
         return f"{self.get_error_rate():.1f}%"
+
+    def get_endpoint_names_formatted(self) -> str:
+        """Get formatted endpoint names string.
+
+        Returns:
+            Formatted endpoint names string.
+        """
+        names = self.get_endpoint_names()
+        if not names:
+            return "none"
+        return ", ".join(names)
+
+    def get_endpoints_dict(self) -> List[Dict[str, Any]]:
+        """Get endpoints as dictionaries.
+
+        Returns:
+            List of endpoint dictionaries.
+        """
+        return [
+            {
+                "name": name,
+                "url": sender.url,
+                "stats": sender.stats,
+            }
+            for name, sender in self._senders.items()
+        ]
+
+    def get_endpoints_formatted(self) -> str:
+        """Get formatted endpoints string.
+
+        Returns:
+            Formatted endpoints string.
+        """
+        endpoints = self.get_endpoints_dict()
+        if not endpoints:
+            return "none"
+        return ", ".join(f"{e['name']}({e['url']})" for e in endpoints)
