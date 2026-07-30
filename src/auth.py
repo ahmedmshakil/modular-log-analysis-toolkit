@@ -1162,6 +1162,14 @@ class AuthManager:
         """
         return f"{self.get_inactive_rate():.1f}%"
 
+    def get_session_rate_formatted(self) -> str:
+        """Get formatted session rate string.
+
+        Returns:
+            Formatted session rate string.
+        """
+        return f"{self.get_session_rate():.2f} sessions/user"
+
     def _save_users(self):
         """Save users to file."""
         data = {}
