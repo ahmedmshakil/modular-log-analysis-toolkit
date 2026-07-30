@@ -714,6 +714,42 @@ class QueryCache:
         query = self.get_most_popular()
         return query if query else "none"
 
+    def get_queries_per_cache_size(self) -> float:
+        """Get queries per cache size ratio.
+
+        Returns:
+            Queries per cache size ratio.
+        """
+        if self._cache.max_size == 0:
+            return 0.0
+        return round(self.query_count / self._cache.max_size, 2)
+
+    def get_queries_per_cache_size_formatted(self) -> str:
+        """Get formatted queries per cache size string.
+
+        Returns:
+            Formatted queries per cache size string.
+        """
+        return f"{self.get_queries_per_cache_size():.2f} queries/size"
+
+    def get_popular_query_diversity(self) -> float:
+        """Get popular query diversity (unique queries / total queries).
+
+        Returns:
+            Popular query diversity percentage.
+        """
+        if self.get_total_queries() == 0:
+            return 0.0
+        return round(self.query_count / self.get_total_queries() * 100, 2)
+
+    def get_popular_query_diversity_formatted(self) -> str:
+        """Get formatted popular query diversity string.
+
+        Returns:
+            Formatted popular query diversity string.
+        """
+        return f"{self.get_popular_query_diversity():.1f}%"
+
     def get_cache_usage_percent(self) -> float:
         """Get cache usage as percentage.
 
