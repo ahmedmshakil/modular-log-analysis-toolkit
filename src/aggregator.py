@@ -1073,6 +1073,38 @@ class LogAggregator:
         source = self.get_least_common_source()
         return source if source else "none"
 
+    def get_entries_per_second_formatted(self) -> str:
+        """Get formatted entries per second string.
+
+        Returns:
+            Formatted entries per second string.
+        """
+        return f"{self.get_entries_per_second():.2f} entries/s"
+
+    def get_entries_per_minute_formatted(self) -> str:
+        """Get formatted entries per minute string.
+
+        Returns:
+            Formatted entries per minute string.
+        """
+        return f"{self.get_entries_per_minute():.2f} entries/m"
+
+    def get_stats_formatted(self) -> str:
+        """Get formatted stats string.
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Entries: {self.entry_count}, Sources: {self.sources_count()}, Error Rate: {self.error_rate():.1f}%"
+
+    def get_summary_string(self) -> str:
+        """Get summary string.
+
+        Returns:
+            Summary string.
+        """
+        return self.get_stats_formatted()
+
     def get_error_rate_formatted(self) -> str:
         """Get formatted error rate string.
 
@@ -1120,3 +1152,67 @@ class LogAggregator:
             Formatted non-error rate string.
         """
         return f"{self.get_non_error_rate():.1f}%"
+
+    def get_error_count_formatted(self) -> str:
+        """Get formatted error count string.
+
+        Returns:
+            Formatted error count string.
+        """
+        return f"{self.error_count()} errors"
+
+    def get_warning_count_formatted(self) -> str:
+        """Get formatted warning count string.
+
+        Returns:
+            Formatted warning count string.
+        """
+        return f"{self.warning_count()} warnings"
+
+    def get_info_count_formatted(self) -> str:
+        """Get formatted info count string.
+
+        Returns:
+            Formatted info count string.
+        """
+        return f"{self.info_count()} info"
+
+    def get_debug_count_formatted(self) -> str:
+        """Get formatted debug count string.
+
+        Returns:
+            Formatted debug count string.
+        """
+        return f"{self.debug_count()} debug"
+
+    def get_critical_count_formatted(self) -> str:
+        """Get formatted critical count string.
+
+        Returns:
+            Formatted critical count string.
+        """
+        return f"{self.critical_count()} critical"
+
+    def get_trace_count_formatted(self) -> str:
+        """Get formatted trace count string.
+
+        Returns:
+            Formatted trace count string.
+        """
+        return f"{self.trace_count()} trace"
+
+    def get_source_count_formatted(self) -> str:
+        """Get formatted source count string.
+
+        Returns:
+            Formatted source count string.
+        """
+        return f"{self.sources_count()} sources"
+
+    def get_entry_count_formatted(self) -> str:
+        """Get formatted entry count string.
+
+        Returns:
+            Formatted entry count string.
+        """
+        return f"{self.entry_count} entries"
