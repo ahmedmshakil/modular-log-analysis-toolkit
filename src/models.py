@@ -978,11 +978,3 @@ class AnalysisResult:
             Entries per minute rate.
         """
         return self.get_entries_per_minute()
-
-    def get_summary_formatted(self) -> str:
-        """Get formatted summary string.
-
-        Returns:
-            Formatted summary string.
-        """
-        return self.get_summary_string()
