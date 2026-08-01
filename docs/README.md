@@ -29,6 +29,9 @@ Welcome to the Modular Log Analysis Toolkit documentation. This directory contai
 - [Plugins](modules/plugins.md) - Plugin development
 - [Retention](modules/retention.md) - Log retention policies
 - [Geolocation](modules/geolocation.md) - IP geolocation lookup
+- [Authentication](modules/auth.md) - User authentication
+- [Cache](modules/cache.md) - Caching layer
+- [Geolocation](modules/geolocation.md) - IP geolocation lookup
 - [Authentication](modules/auth.md) - User authentication and authorization
 - [Cache](modules/cache.md) - Caching layer
 
