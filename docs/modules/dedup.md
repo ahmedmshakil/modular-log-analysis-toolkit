@@ -17,6 +17,8 @@ The dedup module provides:
 - **Content hashing** - Generate hashes based on entry content
 - **Duplicate tracking** - Track and count duplicates
 - **Summary statistics** - Get deduplication statistics
+- **Rate calculations** - Duplicate, unique, and efficiency rates
+- **Formatted output** - Pre-formatted strings for display
 
 ## LogDeduplicator Class
 
