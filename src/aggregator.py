@@ -969,7 +969,6 @@ class LogAggregator:
         """
         return f"{self.get_entries_per_minute():.2f} entries/m"
 
-    def get_stats_formatted(self) -> str:
         """Get formatted stats string.
 
         Returns:
