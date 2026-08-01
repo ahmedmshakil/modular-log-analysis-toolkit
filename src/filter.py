@@ -880,7 +880,6 @@ class LogFilter:
         """
         return self.get_stats_formatted()
 
-    def get_error_rate_formatted(self) -> str:
         """Get formatted error rate string.
 
         Returns:
