@@ -17,6 +17,9 @@ The models module provides:
 - **LogLevel** - Enumeration of log severity levels
 - **LogEntry** - Data class representing a single log entry
 - **AnalysisResult** - Data class for aggregated analysis results
+- **Rate calculations** - Error, warning, info, debug, critical rates
+- **Formatted output** - Pre-formatted strings for display
+- **Level analysis** - Most/least common levels, distributions
 
 ## LogLevel
 
