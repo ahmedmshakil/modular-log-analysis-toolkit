@@ -475,6 +475,60 @@ class AnalysisResult:
         """
         return self.total_entries > 0
 
+    def has_errors(self) -> bool:
+        """Check if analysis found any errors.
+
+        Returns:
+            True if errors exist.
+        """
+        return self.error_count > 0
+
+    def has_sources(self) -> bool:
+        """Check if analysis has sources.
+
+        Returns:
+            True if sources exist.
+        """
+        return self.source_count > 0
+
+    def get_error_rate(self) -> float:
+        """Get error rate as percentage.
+
+        Returns:
+            Error rate percentage.
+        """
+        if self.total_entries == 0:
+            return 0.0
+        return round(self.error_count / self.total_entries * 100, 2)
+
+    def get_warning_rate(self) -> float:
+        """Get warning rate as percentage.
+
+        Returns:
+            Warning rate percentage.
+        """
+        if self.total_entries == 0:
+            return 0.0
+        return round(self.warn_count / self.total_entries * 100, 2)
+
+    def get_info_rate(self) -> float:
+        """Get info rate as percentage.
+
+        Returns:
+            Info rate percentage.
+        """
+        if self.total_entries == 0:
+            return 0.0
+        return round(self.info_count / self.total_entries * 100, 2)
+
+    def has_entries(self) -> bool:
+        """Check if analysis has any entries.
+
+        Returns:
+            True if entries exist.
+        """
+        return self.total_entries > 0
+
     def get_level_distribution(self) -> Dict[str, float]:
         """Get level distribution as percentages.
 
