@@ -18,6 +18,9 @@ The aggregator module provides:
 - **Time analysis** - Time-window based grouping
 - **Error analysis** - Error rate and top errors
 - **Source analysis** - Top sources and busiest hours
+- **Rate calculations** - Error, warning, info, debug, critical rates
+- **Distribution analysis** - Level and source distributions
+- **Formatted output** - Pre-formatted strings for display
 
 ## LogAggregator Class
 
