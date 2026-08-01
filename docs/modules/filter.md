@@ -18,6 +18,9 @@ The filter module provides:
 - **Multiple filter types** - Level, time, source, keyword, regex
 - **Filter composition** - Combine multiple filters
 - **Filter merging** - Merge results from different filters
+- **Rate calculations** - Error, warning, info rates
+- **Distribution analysis** - Level and source distributions
+- **Formatted output** - Pre-formatted strings for display
 
 ## LogFilter Class
 
