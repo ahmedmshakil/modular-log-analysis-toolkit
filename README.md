@@ -242,6 +242,45 @@ pytest tests/
 
 ---
 
+## Quick Reference
+
+### Common Import Patterns
+
+```python
+# Core models
+from src.models import LogEntry, LogLevel, AnalysisResult
+
+# Parsing
+from src.parser import LogParser
+from src.reader import read_log_lines
+
+# Filtering and analysis
+from src.filter import LogFilter
+from src.aggregator import LogAggregator
+
+# Export
+from src.exporter import LogExporter
+
+# Search
+from src.search import LogSearchIndex
+
+# Streaming
+from src.streaming import LogStream
+```
+
+### Log Levels
+
+| Level | Description | Use Case |
+|-------|-------------|----------|
+| TRACE | Finest-grained debug info | Detailed tracing |
+| DEBUG | Debug information | Development debugging |
+| INFO | General information | Normal operations |
+| WARN | Warning messages | Potential issues |
+| ERROR | Error messages | Failures |
+| CRITICAL | Critical failures | System-breaking issues |
+
+---
+
 ## License
 
 MIT
