@@ -18,6 +18,8 @@ The search module provides:
 - **Field indexing** - Index by level and source
 - **Regex search** - Pattern-based search
 - **Suggestions** - Auto-complete functionality
+- **Distribution analysis** - Level and source distributions
+- **Formatted output** - Pre-formatted strings for display
 
 ## LogSearchIndex Class
 
