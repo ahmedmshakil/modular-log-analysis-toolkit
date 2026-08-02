@@ -220,6 +220,95 @@ class LogEntry:
         }
         return ranks.get(self.level, 2)
 
+    def has_tag(self, key: str) -> bool:
+        """Check if entry has a specific tag.
+
+        Args:
+            key: Tag key to check.
+
+        Returns:
+            True if tag exists.
+        """
+        return key in self.tags
+
+    def has_metadata(self) -> bool:
+        """Check if entry has any metadata.
+
+        Returns:
+            True if metadata exists.
+        """
+        return len(self.metadata) > 0
+
+    def get_tags_as_string(self) -> str:
+        """Get tags as formatted string.
+
+        Returns:
+            Formatted tags string.
+        """
+        if not self.tags:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in self.tags.items())
+
+    def get_metadata_as_string(self) -> str:
+        """Get metadata as formatted string.
+
+        Returns:
+            Formatted metadata string.
+        """
+        if not self.metadata:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in self.metadata.items())
+
+    def get_level_formatted(self) -> str:
+        """Get formatted level string.
+
+        Returns:
+            Formatted level string.
+        """
+        return f"[{self.level.value}]"
+
+    def get_timestamp_formatted(self) -> str:
+        """Get formatted timestamp string.
+
+        Returns:
+            Formatted timestamp string.
+        """
+        return self.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+
+    def get_source_formatted(self) -> str:
+        """Get formatted source string.
+
+        Returns:
+            Formatted source string.
+        """
+        return self.source if self.source else "unknown"
+
+    def get_message_preview(self, max_length: int = 50) -> str:
+        """Get message preview with max length.
+
+        Args:
+            max_length: Maximum length of preview.
+
+        Returns:
+            Message preview string.
+        """
+        if not self.message:
+            return ""
+        if len(self.message) <= max_length:
+            return self.message
+        return self.message[:max_length] + "..."
+
+    def get_entry_summary(self) -> str:
+        """Get entry summary string.
+
+        Returns:
+            Entry summary string.
+        """
+        return (
+            f"{self.get_level_formatted()} {self.get_timestamp_formatted()} "
+            f"[{self.get_source_formatted()}] {self.get_message_preview()}"
+        )
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "LogEntry":
         """Create a LogEntry from a dictionary."""
