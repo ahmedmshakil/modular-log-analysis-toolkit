@@ -18,6 +18,8 @@ The alerts module provides:
 - **Alert** - Individual alert instance
 - **AlertManager** - Manage thresholds and notifications
 - **Callbacks** - Custom notification handlers
+- **Severity analysis** - Distribution and counts by severity
+- **Formatted output** - Pre-formatted strings for display
 
 ## AlertSeverity
 
