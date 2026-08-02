@@ -610,62 +610,6 @@ class AnalysisResult:
             return 0.0
         return round(self.info_count / self.total_entries * 100, 2)
 
-        """Check if analysis has any entries.
-
-        Returns:
-            True if entries exist.
-        """
-        return self.total_entries > 0
-
-    def get_level_distribution(self) -> Dict[str, float]:
-        """Get level distribution as percentages.
-
-        Returns:
-            Dictionary mapping level names to percentages.
-        """
-        if self.total_entries == 0:
-            return {}
-        return {
-            level: round(count / self.total_entries * 100, 2)
-            for level, count in self.level_counts.items()
-        }
-
-    def get_most_common_level(self) -> Optional[str]:
-        """Get the most common log level.
-
-        Returns:
-            Most common level string, or None.
-        """
-        if not self.level_counts:
-            return None
-        return max(self.level_counts, key=self.level_counts.get)
-
-    def get_least_common_level(self) -> Optional[str]:
-        """Get the least common log level.
-
-        Returns:
-            Least common level string, or None.
-        """
-        if not self.level_counts:
-            return None
-        return min(self.level_counts, key=self.level_counts.get)
-
-    def has_level(self, level: str) -> bool:
-        """Check if a specific level exists.
-
-        Args:
-            level: Level string to check.
-
-        Returns:
-            True if level exists.
-        """
-        return level.upper() in self.level_counts
-
-        """Get formatted error rate string.
-
-        Returns:
-            Formatted error rate string.
-        """
         return f"{self.get_error_rate():.1f}%"
 
     def get_warning_rate_formatted(self) -> str:
