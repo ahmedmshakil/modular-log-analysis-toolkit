@@ -18,6 +18,8 @@ The streaming module provides:
 - **Batch processing** - Process entries in batches
 - **Filtered streaming** - Stream with filters applied
 - **Control flow** - Pause, resume, and stop streaming
+- **Health monitoring** - Success rate, error impact, stream health
+- **Formatted output** - Pre-formatted strings for display
 
 ## LogStream Class
 
