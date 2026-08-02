@@ -17,6 +17,8 @@ The cache module provides:
 - **LRUCache** - Thread-safe LRU cache with TTL
 - **QueryCache** - Cache for search queries
 - **cached** - Decorator for function result caching
+- **Popularity tracking** - Track query popularity
+- **Formatted output** - Pre-formatted strings for display
 
 ## LRUCache Class
 
