@@ -266,6 +266,12 @@ from src.search import LogSearchIndex
 
 # Streaming
 from src.streaming import LogStream
+
+# Deduplication
+from src.dedup import LogDeduplicator
+
+# Caching
+from src.cache import LRUCache, QueryCache
 ```
 
 ### Log Levels
