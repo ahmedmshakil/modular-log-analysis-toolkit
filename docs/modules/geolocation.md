@@ -17,6 +17,8 @@ The geolocation module provides:
 - **GeoLookup** - IP address lookup with caching
 - **IP extraction** - Extract IPs from log messages
 - **Batch lookup** - Look up multiple IPs at once
+- **Cache management** - Track and manage lookup cache
+- **Formatted output** - Pre-formatted strings for display
 
 ## GeoLocation Class
 
