@@ -699,6 +699,12 @@ class AnalysisResult:
             return 0.0
         return round(self.info_count / self.total_entries * 100, 2)
 
+    def get_error_rate_formatted(self) -> str:
+        """Get formatted error rate string.
+
+        Returns:
+            Formatted error rate string.
+        """
         return f"{self.get_error_rate():.1f}%"
 
     def get_warning_rate_formatted(self) -> str:
