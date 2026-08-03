@@ -816,34 +816,3 @@ class LogAggregator:
         """
         return f"{self.sources_count()} sources"
 
-        """Get formatted level counts string.
-
-        Returns:
-            Formatted level counts string.
-        """
-        counts = self.level_counts
-        if not counts:
-            return "none"
-        return ", ".join(f"{k}:{v}" for k, v in counts.items())
-
-    def get_source_counts_formatted(self) -> str:
-        """Get formatted source counts string.
-
-        Returns:
-            Formatted source counts string.
-        """
-        counts = self.get_source_counts()
-        if not counts:
-            return "none"
-        return ", ".join(f"{k}:{v}" for k, v in counts.items())
-
-    def get_time_range_formatted(self) -> str:
-        """Get formatted time range string.
-
-        Returns:
-            Formatted time range string.
-        """
-        time_range = self.get_time_range()
-        if not time_range:
-            return "none"
-        return f"{self.get_entries_per_minute():.2f} entries/m"
