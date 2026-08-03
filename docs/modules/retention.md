@@ -18,6 +18,8 @@ The retention module provides:
 - **Compression** - Automatic gzip compression
 - **Rotation** - File rotation by size
 - **Cleanup** - Delete old files
+- **File analysis** - Size and age tracking
+- **Formatted output** - Pre-formatted strings for display
 
 ## RetentionPolicy Class
 
