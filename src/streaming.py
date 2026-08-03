@@ -438,7 +438,6 @@ class LogStream:
         """
         return f"{self.get_success_rate():.1f}%"
 
-    def get_error_rate_formatted(self) -> str:
         """Get formatted error rate string.
 
         Returns:
