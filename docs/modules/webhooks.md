@@ -16,6 +16,8 @@ The webhooks module provides:
 - **WebhookSender** - Send HTTP POST requests with JSON payloads
 - **WebhookRouter** - Route webhooks to multiple endpoints
 - **Statistics** - Track send success/failure rates
+- **Endpoint management** - Add, remove, and list endpoints
+- **Formatted output** - Pre-formatted strings for display
 
 ## WebhookSender Class
 
