@@ -816,7 +816,6 @@ class LogAggregator:
         """
         return f"{self.sources_count()} sources"
 
-    def get_level_counts_formatted(self) -> str:
         """Get formatted level counts string.
 
         Returns:
