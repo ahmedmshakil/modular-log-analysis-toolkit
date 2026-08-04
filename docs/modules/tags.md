@@ -17,6 +17,8 @@ The tags module provides:
 - **TagManager** - Manage rules and manual tags
 - **Color coding** - Associate colors with tags
 - **Import/Export** - Save and load rules
+- **Rule management** - Add, remove, and query rules
+- **Formatted output** - Pre-formatted strings for display
 
 ## TagRule Class
 
