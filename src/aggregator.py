@@ -816,3 +816,82 @@ class LogAggregator:
         """
         return f"{self.sources_count()} sources"
 
+    def get_level_summary(self) -> str:
+        """Get level summary string.
+
+        Returns:
+            Formatted level summary.
+        """
+        counts = self.level_counts
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in sorted(counts.items(), key=lambda x: x[1], reverse=True))
+
+    def get_source_summary(self, limit: int = 5) -> str:
+        """Get source summary string.
+
+        Args:
+            limit: Maximum number of sources.
+
+        Returns:
+            Formatted source summary.
+        """
+        sources = self.top_sources(limit)
+        if not sources:
+            return "none"
+        return ", ".join(f"{s}({c})" for s, c in sources)
+
+    def get_time_span_formatted(self) -> str:
+        """Get time span formatted string.
+
+        Returns:
+            Formatted time span string.
+        """
+        span = self.time_span_hours()
+        if span < 1:
+            return f"{span * 60:.1f}m"
+        if span < 24:
+            return f"{span:.1f}h"
+        return f"{span / 24:.1f}d"
+
+    def get_entries_per_hour(self) -> float:
+        """Get entries per hour rate.
+
+        Returns:
+            Entries per hour.
+        """
+        span = self.time_span_hours()
+        if span == 0:
+            return 0.0
+        return round(self.entry_count / span, 2)
+
+    def get_entries_per_hour_formatted(self) -> str:
+        """Get formatted entries per hour string.
+
+        Returns:
+            Formatted entries per hour string.
+        """
+        return f"{self.get_entries_per_hour():.2f} entries/h"
+
+    def get_error_to_warning_ratio(self) -> float:
+        """Get error to warning ratio.
+
+        Returns:
+            Error to warning ratio.
+        """
+        warnings = self.warning_count()
+        if warnings == 0:
+            return float('inf') if self.error_count() > 0 else 0.0
+        return round(self.error_count() / warnings, 2)
+
+    def get_error_to_warning_ratio_formatted(self) -> str:
+        """Get formatted error to warning ratio string.
+
+        Returns:
+            Formatted ratio string.
+        """
+        ratio = self.get_error_to_warning_ratio()
+        if ratio == float('inf'):
+            return "inf"
+        return f"{ratio:.2f}"
+
