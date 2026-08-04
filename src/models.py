@@ -1035,3 +1035,107 @@ class AnalysisResult:
         """
         return f"{self.duration_hours:.2f}h"
 
+    def get_entries_per_hour(self) -> float:
+        """Get entries per hour rate.
+
+        Returns:
+            Entries per hour.
+        """
+        if self.duration_seconds == 0:
+            return 0.0
+        return round(self.total_entries / (self.duration_seconds / 3600), 2)
+
+    def get_entries_per_hour_formatted(self) -> str:
+        """Get formatted entries per hour string.
+
+        Returns:
+            Formatted entries per hour string.
+        """
+        return f"{self.get_entries_per_hour():.2f} entries/h"
+
+    def get_error_to_warning_ratio(self) -> float:
+        """Get error to warning ratio.
+
+        Returns:
+            Error to warning ratio.
+        """
+        if self.warn_count == 0:
+            return float('inf') if self.error_count > 0 else 0.0
+        return round(self.error_count / self.warn_count, 2)
+
+    def get_error_to_warning_ratio_formatted(self) -> str:
+        """Get formatted error to warning ratio string.
+
+        Returns:
+            Formatted ratio string.
+        """
+        ratio = self.get_error_to_warning_ratio()
+        if ratio == float('inf'):
+            return "inf"
+        return f"{ratio:.2f}"
+
+    def has_debug_entries(self) -> bool:
+        """Check if analysis has debug entries.
+
+        Returns:
+            True if debug entries exist.
+        """
+        return self.debug_count > 0
+
+    def has_trace_entries(self) -> bool:
+        """Check if analysis has trace entries.
+
+        Returns:
+            True if trace entries exist.
+        """
+        return self.trace_count > 0
+
+    def has_info_entries(self) -> bool:
+        """Check if analysis has info entries.
+
+        Returns:
+            True if info entries exist.
+        """
+        return self.info_count > 0
+
+    def has_warn_entries(self) -> bool:
+        """Check if analysis has warning entries.
+
+        Returns:
+            True if warning entries exist.
+        """
+        return self.warn_count > 0
+
+    def get_level_summary(self) -> str:
+        """Get level summary string.
+
+        Returns:
+            Formatted level summary.
+        """
+        parts = []
+        if self.trace_count > 0:
+            parts.append(f"TRACE:{self.trace_count}")
+        if self.debug_count > 0:
+            parts.append(f"DEBUG:{self.debug_count}")
+        if self.info_count > 0:
+            parts.append(f"INFO:{self.info_count}")
+        if self.warn_count > 0:
+            parts.append(f"WARN:{self.warn_count}")
+        if self.error_count > 0:
+            parts.append(f"ERROR:{self.error_count}")
+        if self.level_counts.get("CRITICAL", 0) > 0:
+            parts.append(f"CRITICAL:{self.level_counts.get('CRITICAL', 0)}")
+        return ", ".join(parts) if parts else "none"
+
+    def get_sources_summary(self) -> str:
+        """Get sources summary string.
+
+        Returns:
+            Formatted sources summary.
+        """
+        if not self.sources:
+            return "none"
+        if len(self.sources) <= 3:
+            return ", ".join(self.sources)
+        return f"{', '.join(self.sources[:3])} (+{len(self.sources) - 3} more)"
+
