@@ -272,18 +272,33 @@ from src.dedup import LogDeduplicator
 
 # Caching
 from src.cache import LRUCache, QueryCache
+
+# Alerts
+from src.alerts import AlertManager, AlertSeverity
+
+# Tags
+from src.tags import TagManager, TagRule
+
+# Webhooks
+from src.webhooks import WebhookSender, WebhookRouter
+
+# Auth
+from src.auth import AuthManager
+
+# Retention
+from src.retention import RetentionManager, RetentionPolicy
 ```
 
 ### Log Levels
 
-| Level | Description | Use Case |
-|-------|-------------|----------|
-| TRACE | Finest-grained debug info | Detailed tracing |
-| DEBUG | Debug information | Development debugging |
-| INFO | General information | Normal operations |
-| WARN | Warning messages | Potential issues |
-| ERROR | Error messages | Failures |
-| CRITICAL | Critical failures | System-breaking issues |
+| Level    | Description              | Use Case               |
+| -------- | ------------------------ | ---------------------- |
+| TRACE    | Finest-grained debug info | Detailed tracing       |
+| DEBUG    | Debug information        | Development debugging  |
+| INFO     | General information      | Normal operations      |
+| WARN     | Warning messages         | Potential issues       |
+| ERROR    | Error messages           | Failures               |
+| CRITICAL | Critical failures        | System-breaking issues |
 
 ---
 
