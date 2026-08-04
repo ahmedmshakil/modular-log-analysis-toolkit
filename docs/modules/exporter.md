@@ -17,6 +17,9 @@ The exporter module provides:
 - **Analysis export** - Export analysis results
 - **Batch export** - Export to all formats at once
 - **Encoding support** - Configurable character encoding
+- **String conversion** - Convert entries to formatted strings
+- **Statistics** - Entry counts and distribution analysis
+- **Formatted output** - Pre-formatted strings for display
 
 ## LogExporter Class
 
