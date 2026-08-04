@@ -865,3 +865,64 @@ class LogFilter:
         """
         return f"{self.get_filter_count()} filters"
 
+    def get_level_summary(self) -> str:
+        """Get level summary string.
+
+        Returns:
+            Formatted level summary.
+        """
+        counts = self.count_by_level()
+        if not counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in sorted(counts.items(), key=lambda x: x[1], reverse=True))
+
+    def get_source_summary(self, limit: int = 5) -> str:
+        """Get source summary string.
+
+        Args:
+            limit: Maximum number of sources.
+
+        Returns:
+            Formatted source summary.
+        """
+        counts = self.get_source_counts()
+        if not counts:
+            return "none"
+        sorted_sources = sorted(counts.items(), key=lambda x: x[1], reverse=True)[:limit]
+        return ", ".join(f"{s}({c})" for s, c in sorted_sources)
+
+    def get_entries_per_source(self) -> float:
+        """Get entries per source ratio.
+
+        Returns:
+            Entries per source ratio.
+        """
+        sources = len(self.unique_sources)
+        if sources == 0:
+            return 0.0
+        return round(self.entry_count / sources, 2)
+
+    def get_entries_per_source_formatted(self) -> str:
+        """Get formatted entries per source string.
+
+        Returns:
+            Formatted entries per source string.
+        """
+        return f"{self.get_entries_per_source():.2f} entries/source"
+
+    def has_errors(self) -> bool:
+        """Check if entries contain errors.
+
+        Returns:
+            True if ERROR or CRITICAL entries exist.
+        """
+        return self.get_level_count(LogLevel.ERROR) > 0 or self.get_level_count(LogLevel.CRITICAL) > 0
+
+    def has_warnings(self) -> bool:
+        """Check if entries contain warnings.
+
+        Returns:
+            True if WARN entries exist.
+        """
+        return self.get_level_count(LogLevel.WARN) > 0
+
