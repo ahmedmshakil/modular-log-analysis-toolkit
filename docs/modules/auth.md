@@ -17,6 +17,8 @@ The auth module provides:
 - **AuthManager** - User authentication and session management
 - **Role-based access** - viewer, analyst, admin roles
 - **Session management** - Token-based sessions with expiration
+- **User management** - Create, activate, deactivate users
+- **Formatted output** - Pre-formatted strings for display
 
 ## User Class
 
