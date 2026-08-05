@@ -17,6 +17,8 @@ The plugins module provides:
 - **PluginManager** - Manage plugin lifecycle
 - **Dynamic loading** - Load plugins from directory
 - **Enable/disable** - Control plugin execution
+- **Plugin statistics** - Track enabled/disabled counts
+- **Formatted output** - Pre-formatted strings for display
 
 ## LogPlugin Class
 
