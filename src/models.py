@@ -1139,3 +1139,374 @@ class AnalysisResult:
             return ", ".join(self.sources)
         return f"{', '.join(self.sources[:3])} (+{len(self.sources) - 3} more)"
 
+    def get_error_percentage_formatted(self) -> str:
+        """Get formatted error percentage string.
+
+        Returns:
+            Formatted error percentage string.
+        """
+        return f"{self.get_error_rate():.1f}%"
+
+    def get_warning_percentage_formatted(self) -> str:
+        """Get formatted warning percentage string.
+
+        Returns:
+            Formatted warning percentage string.
+        """
+        return f"{self.get_warning_rate():.1f}%"
+
+    def get_info_percentage_formatted(self) -> str:
+        """Get formatted info percentage string.
+
+        Returns:
+            Formatted info percentage string.
+        """
+        return f"{self.get_info_rate():.1f}%"
+
+    def get_debug_percentage_formatted(self) -> str:
+        """Get formatted debug percentage string.
+
+        Returns:
+            Formatted debug percentage string.
+        """
+        return f"{self.get_debug_rate():.1f}%"
+
+    def get_critical_percentage_formatted(self) -> str:
+        """Get formatted critical percentage string.
+
+        Returns:
+            Formatted critical percentage string.
+        """
+        return f"{self.get_critical_rate():.1f}%"
+
+    def get_non_error_percentage_formatted(self) -> str:
+        """Get formatted non-error percentage string.
+
+        Returns:
+            Formatted non-error percentage string.
+        """
+        return f"{self.get_non_error_rate():.1f}%"
+
+    def get_duration_in_seconds_formatted(self) -> str:
+        """Get formatted duration in seconds string.
+
+        Returns:
+            Formatted duration in seconds string.
+        """
+        return f"{self.duration_seconds:.2f}s"
+
+    def get_duration_in_minutes_formatted(self) -> str:
+        """Get formatted duration in minutes string.
+
+        Returns:
+            Formatted duration in minutes string.
+        """
+        return f"{self.duration_minutes:.2f}m"
+
+    def get_duration_in_hours_formatted(self) -> str:
+        """Get formatted duration in hours string.
+
+        Returns:
+            Formatted duration in hours string.
+        """
+        return f"{self.duration_hours:.2f}h"
+
+    def get_entries_per_second_formatted_alt(self) -> str:
+        """Get formatted entries per second string (alternative).
+
+        Returns:
+            Formatted entries per second string.
+        """
+        return f"{self.get_entries_per_second():.2f}/s"
+
+    def get_entries_per_minute_formatted_alt(self) -> str:
+        """Get formatted entries per minute string (alternative).
+
+        Returns:
+            Formatted entries per minute string.
+        """
+        return f"{self.get_entries_per_minute():.2f}/m"
+
+    def get_entries_per_hour_formatted_alt(self) -> str:
+        """Get formatted entries per hour string (alternative).
+
+        Returns:
+            Formatted entries per hour string.
+        """
+        return f"{self.get_entries_per_hour():.2f}/h"
+
+    def get_error_to_warning_ratio_formatted_alt(self) -> str:
+        """Get formatted error to warning ratio string (alternative).
+
+        Returns:
+            Formatted ratio string.
+        """
+        ratio = self.get_error_to_warning_ratio()
+        if ratio == float('inf'):
+            return "inf"
+        return f"{ratio:.2f}:1"
+
+    def get_level_summary_formatted(self) -> str:
+        """Get formatted level summary string.
+
+        Returns:
+            Formatted level summary string.
+        """
+        return self.get_level_summary()
+
+    def get_sources_summary_formatted(self) -> str:
+        """Get formatted sources summary string.
+
+        Returns:
+            Formatted sources summary string.
+        """
+        return self.get_sources_summary()
+
+    def get_error_count_formatted_alt(self) -> str:
+        """Get formatted error count string (alternative).
+
+        Returns:
+            Formatted error count string.
+        """
+        return f"{self.error_count} errors"
+
+    def get_warning_count_formatted_alt(self) -> str:
+        """Get formatted warning count string (alternative).
+
+        Returns:
+            Formatted warning count string.
+        """
+        return f"{self.warn_count} warnings"
+
+    def get_info_count_formatted_alt(self) -> str:
+        """Get formatted info count string (alternative).
+
+        Returns:
+            Formatted info count string.
+        """
+        return f"{self.info_count} info"
+
+    def get_debug_count_formatted_alt(self) -> str:
+        """Get formatted debug count string (alternative).
+
+        Returns:
+            Formatted debug count string.
+        """
+        return f"{self.debug_count} debug"
+
+    def get_critical_count_formatted_alt(self) -> str:
+        """Get formatted critical count string (alternative).
+
+        Returns:
+            Formatted critical count string.
+        """
+        return f"{self.level_counts.get('CRITICAL', 0)} critical"
+
+    def get_trace_count_formatted_alt(self) -> str:
+        """Get formatted trace count string (alternative).
+
+        Returns:
+            Formatted trace count string.
+        """
+        return f"{self.trace_count} trace"
+
+    def get_source_count_formatted_alt(self) -> str:
+        """Get formatted source count string (alternative).
+
+        Returns:
+            Formatted source count string.
+        """
+        return f"{self.source_count} sources"
+
+    def get_total_entries_formatted_alt(self) -> str:
+        """Get formatted total entries string (alternative).
+
+        Returns:
+            Formatted total entries string.
+        """
+        return f"{self.total_entries} entries"
+
+    def get_level_counts_formatted_alt(self) -> str:
+        """Get formatted level counts string (alternative).
+
+        Returns:
+            Formatted level counts string.
+        """
+        if not self.level_counts:
+            return "none"
+        return ", ".join(f"{k}:{v}" for k, v in self.level_counts.items())
+
+    def get_sources_formatted_alt(self) -> str:
+        """Get formatted sources string (alternative).
+
+        Returns:
+            Formatted sources string.
+        """
+        if not self.sources:
+            return "none"
+        return ", ".join(self.sources)
+
+    def get_top_errors_formatted_alt(self, limit: int = 5) -> str:
+        """Get formatted top errors string (alternative).
+
+        Args:
+            limit: Maximum number of errors.
+
+        Returns:
+            Formatted top errors string.
+        """
+        if not self.top_errors:
+            return "none"
+        return ", ".join(self.top_errors[:limit])
+
+    def get_time_range_formatted_alt(self) -> str:
+        """Get formatted time range string (alternative).
+
+        Returns:
+            Formatted time range string.
+        """
+        if not self.time_range:
+            return "none"
+        return f"{self.time_range[0].isoformat()} to {self.time_range[1].isoformat()}"
+
+    def get_level_distribution_formatted_alt(self) -> str:
+        """Get formatted level distribution string (alternative).
+
+        Returns:
+            Formatted level distribution string.
+        """
+        dist = self.get_level_distribution()
+        if not dist:
+            return "none"
+        return ", ".join(f"{k}:{v:.1f}%" for k, v in dist.items())
+
+    def get_most_common_level_formatted_alt(self) -> str:
+        """Get formatted most common level string (alternative).
+
+        Returns:
+            Formatted most common level string.
+        """
+        level = self.get_most_common_level()
+        return level if level else "none"
+
+    def get_least_common_level_formatted_alt(self) -> str:
+        """Get formatted least common level string (alternative).
+
+        Returns:
+            Formatted least common level string.
+        """
+        level = self.get_least_common_level()
+        return level if level else "none"
+
+    def get_stats_formatted_alt(self) -> str:
+        """Get formatted stats string (alternative).
+
+        Returns:
+            Formatted stats string.
+        """
+        return f"Entries: {self.total_entries}, Errors: {self.error_count}, Sources: {self.source_count}, Duration: {self.get_duration_formatted()}"
+
+    def get_error_rate_percent_alt(self) -> float:
+        """Get error rate as percentage (alternative).
+
+        Returns:
+            Error rate percentage.
+        """
+        return self.get_error_rate()
+
+    def get_warning_rate_percent_alt(self) -> float:
+        """Get warning rate as percentage (alternative).
+
+        Returns:
+            Warning rate percentage.
+        """
+        return self.get_warning_rate()
+
+    def get_info_rate_percent_alt(self) -> float:
+        """Get info rate as percentage (alternative).
+
+        Returns:
+            Info rate percentage.
+        """
+        return self.get_info_rate()
+
+    def get_debug_rate_percent_alt(self) -> float:
+        """Get debug rate as percentage (alternative).
+
+        Returns:
+            Debug rate percentage.
+        """
+        return self.get_debug_rate()
+
+    def get_critical_rate_percent_alt(self) -> float:
+        """Get critical rate as percentage (alternative).
+
+        Returns:
+            Critical rate percentage.
+        """
+        return self.get_critical_rate()
+
+    def get_non_error_rate_percent_alt(self) -> float:
+        """Get non-error rate as percentage (alternative).
+
+        Returns:
+            Non-error rate percentage.
+        """
+        return self.get_non_error_rate()
+
+    def get_entries_per_second_rate_alt(self) -> float:
+        """Get entries per second rate (alternative).
+
+        Returns:
+            Entries per second rate.
+        """
+        return self.get_entries_per_second()
+
+    def get_entries_per_minute_rate_alt(self) -> float:
+        """Get entries per minute rate (alternative).
+
+        Returns:
+            Entries per minute rate.
+        """
+        return self.get_entries_per_minute()
+
+    def get_entries_per_hour_rate_alt(self) -> float:
+        """Get entries per hour rate (alternative).
+
+        Returns:
+            Entries per hour rate.
+        """
+        return self.get_entries_per_hour()
+
+    def get_summary_formatted_alt(self) -> str:
+        """Get formatted summary string (alternative).
+
+        Returns:
+            Formatted summary string.
+        """
+        return self.get_summary_string()
+
+    def get_duration_seconds_formatted_alt(self) -> str:
+        """Get formatted duration seconds string (alternative).
+
+        Returns:
+            Formatted duration seconds string.
+        """
+        return f"{self.duration_seconds:.2f}s"
+
+    def get_duration_minutes_formatted_alt(self) -> str:
+        """Get formatted duration minutes string (alternative).
+
+        Returns:
+            Formatted duration minutes string.
+        """
+        return f"{self.duration_minutes:.2f}m"
+
+    def get_duration_hours_formatted_alt(self) -> str:
+        """Get formatted duration hours string (alternative).
+
+        Returns:
+            Formatted duration hours string.
+        """
+        return f"{self.duration_hours:.2f}h"
+
