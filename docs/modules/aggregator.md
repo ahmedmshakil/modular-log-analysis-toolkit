@@ -21,6 +21,7 @@ The aggregator module provides:
 - **Rate calculations** - Error, warning, info, debug, critical rates
 - **Distribution analysis** - Level and source distributions
 - **Formatted output** - Pre-formatted strings for display
+- **Report generation** - Full and compact analysis reports
 
 ## LogAggregator Class
 
