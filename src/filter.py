@@ -926,3 +926,45 @@ class LogFilter:
         """
         return self.get_level_count(LogLevel.WARN) > 0
 
+    def get_full_report(self) -> str:
+        """Get full filter report.
+
+        Returns:
+            Full report string.
+        """
+        lines = [
+            "=" * 50,
+            "FILTER REPORT",
+            "=" * 50,
+            f"Total Entries: {self.entry_count}",
+            f"Active Filters: {self.get_filter_count()}",
+            f"Unique Sources: {len(self.unique_sources)}",
+            "-" * 50,
+            "Level Distribution:",
+        ]
+        for level, count in sorted(self.count_by_level().items(), key=lambda x: x[1], reverse=True):
+            pct = count / self.entry_count * 100 if self.entry_count > 0 else 0
+            lines.append(f"  {level}: {count} ({pct:.1f}%)")
+        lines.append("-" * 50)
+        lines.append(f"Error Rate: {self.get_error_rate():.1f}%")
+        lines.append("=" * 50)
+        return "\n".join(lines)
+
+    def get_compact_report(self) -> str:
+        """Get compact filter report.
+
+        Returns:
+            Compact report string.
+        """
+        return f"{self.entry_count} entries, {self.get_filter_count()} filters, {self.get_error_rate():.1f}% errors"
+
+    def get_filter_report(self) -> str:
+        """Get filter configuration report.
+
+        Returns:
+            Filter report string.
+        """
+        if not self._filters:
+            return "No active filters"
+        return f"{self.get_filter_count()} active filters applied"
+
