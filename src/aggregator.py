@@ -1238,3 +1238,63 @@ class LogAggregator:
         """
         return self.get_entries_per_hour()
 
+    def get_full_report(self) -> str:
+        """Get full analysis report.
+
+        Returns:
+            Full report string.
+        """
+        lines = [
+            "=" * 50,
+            "AGGREGATOR ANALYSIS REPORT",
+            "=" * 50,
+            f"Total Entries: {self.entry_count}",
+            f"Sources: {self.sources_count()}",
+            f"Time Span: {self.get_time_span_formatted()}",
+            "-" * 50,
+            "Level Distribution:",
+        ]
+        for level, count in sorted(self.level_counts.items(), key=lambda x: x[1], reverse=True):
+            pct = count / self.entry_count * 100 if self.entry_count > 0 else 0
+            lines.append(f"  {level}: {count} ({pct:.1f}%)")
+        lines.append("-" * 50)
+        lines.append(f"Error Rate: {self.error_rate():.1f}%")
+        lines.append(f"Entries/Hour: {self.get_entries_per_hour():.2f}")
+        lines.append("=" * 50)
+        return "\n".join(lines)
+
+    def get_compact_report(self) -> str:
+        """Get compact analysis report.
+
+        Returns:
+            Compact report string.
+        """
+        return f"{self.entry_count} entries, {self.sources_count()} sources, {self.error_rate():.1f}% errors"
+
+    def get_level_report(self) -> str:
+        """Get level distribution report.
+
+        Returns:
+            Level report string.
+        """
+        parts = []
+        for level, count in sorted(self.level_counts.items(), key=lambda x: x[1], reverse=True):
+            pct = count / self.entry_count * 100 if self.entry_count > 0 else 0
+            parts.append(f"{level}: {count} ({pct:.1f}%)")
+        return ", ".join(parts) if parts else "No entries"
+
+    def get_source_report(self, limit: int = 5) -> str:
+        """Get source distribution report.
+
+        Args:
+            limit: Maximum number of sources.
+
+        Returns:
+            Source report string.
+        """
+        sources = self.top_sources(limit)
+        if not sources:
+            return "No sources"
+        parts = [f"{s}: {c}" for s, c in sources]
+        return ", ".join(parts)
+
