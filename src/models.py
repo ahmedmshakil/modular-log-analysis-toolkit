@@ -1510,3 +1510,79 @@ class AnalysisResult:
         """
         return f"{self.duration_hours:.2f}h"
 
+    def get_full_summary(self) -> str:
+        """Get full summary with all key metrics.
+
+        Returns:
+            Full summary string.
+        """
+        return (
+            f"Analysis Result:\n"
+            f"  Total Entries: {self.total_entries}\n"
+            f"  Errors: {self.error_count} ({self.get_error_rate():.1f}%)\n"
+            f"  Warnings: {self.warn_count} ({self.get_warning_rate():.1f}%)\n"
+            f"  Sources: {self.source_count}\n"
+            f"  Duration: {self.get_duration_formatted()}\n"
+            f"  Most Common Level: {self.get_most_common_level() or 'N/A'}"
+        )
+
+    def get_compact_summary(self) -> str:
+        """Get compact summary string.
+
+        Returns:
+            Compact summary string.
+        """
+        return f"{self.total_entries} entries, {self.error_count} errors, {self.source_count} sources"
+
+    def get_rates_summary(self) -> str:
+        """Get rates summary string.
+
+        Returns:
+            Rates summary string.
+        """
+        return (
+            f"Error: {self.get_error_rate():.1f}%, "
+            f"Warning: {self.get_warning_rate():.1f}%, "
+            f"Info: {self.get_info_rate():.1f}%"
+        )
+
+    def get_counts_summary(self) -> str:
+        """Get counts summary string.
+
+        Returns:
+            Counts summary string.
+        """
+        parts = []
+        if self.error_count > 0:
+            parts.append(f"Errors: {self.error_count}")
+        if self.warn_count > 0:
+            parts.append(f"Warnings: {self.warn_count}")
+        if self.info_count > 0:
+            parts.append(f"Info: {self.info_count}")
+        return ", ".join(parts) if parts else "No entries"
+
+    def get_formatted_report(self) -> str:
+        """Get formatted analysis report.
+
+        Returns:
+            Formatted report string.
+        """
+        lines = [
+            "=" * 50,
+            "LOG ANALYSIS REPORT",
+            "=" * 50,
+            f"Total Entries: {self.total_entries}",
+            f"Duration: {self.get_duration_formatted()}",
+            f"Sources: {self.source_count}",
+            "-" * 50,
+            "Level Distribution:",
+        ]
+        for level, count in sorted(self.level_counts.items(), key=lambda x: x[1], reverse=True):
+            pct = count / self.total_entries * 100 if self.total_entries > 0 else 0
+            lines.append(f"  {level}: {count} ({pct:.1f}%)")
+        lines.append("-" * 50)
+        lines.append(f"Error Rate: {self.get_error_rate():.1f}%")
+        lines.append(f"Entries/Second: {self.get_entries_per_second():.2f}")
+        lines.append("=" * 50)
+        return "\n".join(lines)
+
