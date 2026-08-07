@@ -21,6 +21,7 @@ The filter module provides:
 - **Rate calculations** - Error, warning, info rates
 - **Distribution analysis** - Level and source distributions
 - **Formatted output** - Pre-formatted strings for display
+- **Report generation** - Full and compact filter reports
 
 ## LogFilter Class
 
