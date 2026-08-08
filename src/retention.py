@@ -616,115 +616,140 @@ class RetentionManager:
         """
         return f"{self.get_retention_health():.1f}%"
 
-    def get_file_count_formatted(self) -> str:
-        """Get formatted file count string.
+    def rotate_log(self, file_path: str, max_rotations: int = 5) -> Dict[str, Any]:
+        """Rotate a log file.
+
+        Args:
+            file_path: Path to log file.
+            max_rotations: Maximum number of rotations to keep.
 
         Returns:
-            Formatted file count string.
+            Dictionary with rotation result.
         """
-        return f"{self.get_file_count()} files"
+        file_path = Path(file_path)
+        if not file_path.exists():
+            return {"success": False, "error": "File not found"}
 
-    def get_policy_count_formatted(self) -> str:
-        """Get formatted policy count string.
+        try:
+            # Rotate existing backups
+            for i in range(max_rotations - 1, 0, -1):
+                src = file_path.with_suffix(f".{i}.log")
+                dst = file_path.with_suffix(f".{i + 1}.log")
+                if src.exists():
+                    if i + 1 >= max_rotations:
+                        src.unlink()
+                    else:
+                        src.rename(dst)
 
-        Returns:
-            Formatted policy count string.
-        """
-        return f"{len(self.policies)} policies"
+            # Rotate current file
+            backup = file_path.with_suffix(".1.log")
+            file_path.rename(backup)
 
-    def get_actions_count_formatted(self) -> str:
-        """Get formatted actions count string.
+            # Create new empty file
+            file_path.touch()
 
-        Returns:
-            Formatted actions count string.
-        """
-        return f"{self.get_actions_count()} actions"
-
-    def get_compressed_count_formatted(self) -> str:
-        """Get formatted compressed count string.
-
-        Returns:
-            Formatted compressed count string.
-        """
-        return f"{self.get_compressed_count()} compressed"
-
-    def get_uncompressed_count_formatted(self) -> str:
-        """Get formatted uncompressed count string.
-
-        Returns:
-            Formatted uncompressed count string.
-        """
-        return f"{self.get_uncompressed_count()} uncompressed"
-
-    def get_total_size_mb_formatted(self) -> str:
-        """Get formatted total size MB string.
-
-        Returns:
-            Formatted total size MB string.
-        """
-        return f"{self.get_total_size_mb():.2f} MB"
-
-    def get_average_file_size_formatted(self) -> str:
-        """Get formatted average file size string.
-
-        Returns:
-            Formatted average file size string.
-        """
-        return f"{self.get_average_file_size():.2f} MB"
-
-    def get_compression_rate_formatted(self) -> str:
-        """Get formatted compression rate string.
-
-        Returns:
-            Formatted compression rate string.
-        """
-        return f"{self.get_compression_rate():.1f}%"
-
-    def get_policies_dict(self) -> List[Dict[str, Any]]:
-        """Get policies as dictionaries.
-
-        Returns:
-            List of policy dictionaries.
-        """
-        return [
-            {
-                "name": p.name,
-                "max_age_days": p.max_age_days,
-                "compress_after_days": p.compress_after_days,
-                "delete_after_days": p.delete_after_days,
-                "max_size_mb": p.max_size_mb,
+            return {
+                "success": True,
+                "rotated_to": str(backup),
+                "max_rotations": max_rotations,
             }
-            for p in self.policies
-        ]
+        except Exception as e:
+            return {"success": False, "error": str(e)}
 
-    def get_policies_formatted(self) -> str:
-        """Get formatted policies string.
+    def rotate_logs_by_pattern(self, pattern: str = "*.log", max_rotations: int = 5) -> Dict[str, Any]:
+        """Rotate all log files matching pattern.
 
-        Returns:
-            Formatted policies string.
-        """
-        policies = self.get_policies_dict()
-        if not policies:
-            return "none"
-        return ", ".join(f"{p['name']}({p['max_age_days']}d)" for p in policies)
-
-    def get_policy_names_formatted(self) -> str:
-        """Get formatted policy names string.
+        Args:
+            pattern: File pattern to match.
+            max_rotations: Maximum rotations per file.
 
         Returns:
-            Formatted policy names string.
+            Dictionary with rotation results.
         """
-        names = self.get_policy_names()
-        if not names:
-            return "none"
-        return ", ".join(names)
+        results = {
+            "total": 0,
+            "rotated": 0,
+            "failed": 0,
+            "details": [],
+        }
 
-        """Get formatted stats string.
+        for file_path in self.log_directory.glob(pattern):
+            if file_path.is_file():
+                results["total"] += 1
+                result = self.rotate_log(str(file_path), max_rotations)
+                if result["success"]:
+                    results["rotated"] += 1
+                else:
+                    results["failed"] += 1
+                results["details"].append({
+                    "file": str(file_path),
+                    "result": result,
+                })
+
+        return results
+
+    def get_rotation_status(self, file_path: str) -> Dict[str, Any]:
+        """Get rotation status for a file.
+
+        Args:
+            file_path: Path to log file.
 
         Returns:
-            Formatted stats string.
+            Dictionary with rotation status.
         """
-        return f"Files: {self.get_file_count()}, Policies: {len(self.policies)}, Actions: {self.get_actions_count()}"
+        file_path = Path(file_path)
+        rotations = []
+
+        # Check for rotation backups
+        i = 1
+        while True:
+            backup = file_path.with_suffix(f".{i}.log")
+            if backup.exists():
+                rotations.append({
+                    "number": i,
+                    "path": str(backup),
+                    "size_mb": round(backup.stat().st_size / (1024 * 1024), 2),
+                })
+                i += 1
+            else:
+                break
+
+        return {
+            "file": str(file_path),
+            "exists": file_path.exists(),
+            "rotation_count": len(rotations),
+            "rotations": rotations,
+        }
+
+    def cleanup_old_rotations(self, max_age_days: int = 30) -> Dict[str, Any]:
+        """Clean up old rotation backups.
+
+        Args:
+            max_age_days: Maximum age in days.
+
+        Returns:
+            Dictionary with cleanup results.
+        """
+        results = {
+            "total": 0,
+            "deleted": 0,
+            "failed": 0,
+        }
+
+        cutoff = datetime.now() - timedelta(days=max_age_days)
+
+        for file_path in self.log_directory.glob("*.log.*"):
+            if file_path.is_file():
+                results["total"] += 1
+                try:
+                    mtime = datetime.fromtimestamp(file_path.stat().st_mtime)
+                    if mtime < cutoff:
+                        file_path.unlink()
+                        results["deleted"] += 1
+                except Exception:
+                    results["failed"] += 1
+
+        return results
 
     def get_summary_string(self) -> str:
         """Get summary string.
@@ -733,106 +758,3 @@ class RetentionManager:
             Summary string.
         """
         return self.get_stats_formatted()
-
-    def get_file_count_formatted(self) -> str:
-        """Get formatted file count string.
-
-        Returns:
-            Formatted file count string.
-        """
-        return f"{self.get_file_count()} files"
-
-    def get_policy_count_formatted(self) -> str:
-        """Get formatted policy count string.
-
-        Returns:
-            Formatted policy count string.
-        """
-        return f"{len(self.policies)} policies"
-
-    def get_actions_count_formatted(self) -> str:
-        """Get formatted actions count string.
-
-        Returns:
-            Formatted actions count string.
-        """
-        return f"{self.get_actions_count()} actions"
-
-    def get_compressed_count_formatted(self) -> str:
-        """Get formatted compressed count string.
-
-        Returns:
-            Formatted compressed count string.
-        """
-        return f"{self.get_compressed_count()} compressed"
-
-    def get_uncompressed_count_formatted(self) -> str:
-        """Get formatted uncompressed count string.
-
-        Returns:
-            Formatted uncompressed count string.
-        """
-        return f"{self.get_uncompressed_count()} uncompressed"
-
-    def get_total_size_mb_formatted(self) -> str:
-        """Get formatted total size MB string.
-
-        Returns:
-            Formatted total size MB string.
-        """
-        return f"{self.get_total_size_mb():.2f} MB"
-
-    def get_average_file_size_formatted(self) -> str:
-        """Get formatted average file size string.
-
-        Returns:
-            Formatted average file size string.
-        """
-        return f"{self.get_average_file_size():.2f} MB"
-
-    def get_compression_rate_formatted(self) -> str:
-        """Get formatted compression rate string.
-
-        Returns:
-            Formatted compression rate string.
-        """
-        return f"{self.get_compression_rate():.1f}%"
-
-    def get_policies_dict(self) -> List[Dict[str, Any]]:
-        """Get policies as dictionaries.
-
-        Returns:
-            List of policy dictionaries.
-        """
-        return [
-            {
-                "name": p.name,
-                "max_age_days": p.max_age_days,
-                "compress_after_days": p.compress_after_days,
-                "delete_after_days": p.delete_after_days,
-                "max_size_mb": p.max_size_mb,
-            }
-            for p in self.policies
-        ]
-
-    def get_policies_formatted(self) -> str:
-        """Get formatted policies string.
-
-        Returns:
-            Formatted policies string.
-        """
-        policies = self.get_policies_dict()
-        if not policies:
-            return "none"
-        return ", ".join(f"{p['name']}({p['max_age_days']}d)" for p in policies)
-
-    def get_policy_names_formatted(self) -> str:
-        """Get formatted policy names string.
-
-        Returns:
-            Formatted policy names string.
-        """
-        names = self.get_policy_names()
-        if not names:
-            return "none"
-        return ", ".join(names)
