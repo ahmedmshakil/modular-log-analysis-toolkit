@@ -367,6 +367,61 @@ count1 = index.search_count("timeout")
 count2 = index.search_count("database")
 ```
 
+### Cached Search
+
+```python
+# Search with result caching for repeated queries
+results = index.search_with_cache("error", max_results=100)
+
+# Second call returns cached results (faster)
+results2 = index.search_with_cache("error", max_results=100)
+
+# Get cache statistics
+cache_stats = index.get_cache_stats()
+print(f"Cached queries: {cache_stats['size']}")
+print(f"Cached keys: {cache_stats['keys']}")
+
+# Clear cache when needed
+index.clear_cache()
+
+# Get cache size
+print(f"Cache size: {index.get_cache_size()}")
+```
+
+### Batch Search
+
+```python
+# Search multiple queries at once
+queries = ["error", "timeout", "database"]
+results = index.search_batch(queries, max_results=50)
+
+for query, entries in results.items():
+    print(f"Query '{query}': {len(entries)} results")
+
+# Get counts for multiple queries
+counts = index.search_batch_count(queries)
+for query, count in counts.items():
+    print(f"Query '{query}': {count} matches")
+```
+
+### Performance Tips
+
+```python
+# Use cached search for repeated queries
+results = index.search_with_cache("common_error")
+
+# Use batch search for multiple related queries
+all_results = index.search_batch(["error", "warning", "critical"])
+
+# Clear cache periodically to free memory
+index.clear_cache()
+
+# Monitor cache performance
+stats = index.get_cache_stats()
+if stats['size'] > 100:
+    index.clear_cache()
+```
+
 ## See Also
 
 - [Models](models.md) - LogEntry structure
