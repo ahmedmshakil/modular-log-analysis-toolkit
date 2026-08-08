@@ -145,6 +145,79 @@ class LRUCache:
         for key, value in items.items():
             self.put(key, value)
 
+    def get_memory_usage(self) -> Dict[str, Any]:
+        """Get estimated memory usage of cache.
+
+        Returns:
+            Dictionary with memory usage info.
+        """
+        import sys
+
+        total_size = 0
+        key_sizes = []
+        value_sizes = []
+
+        with self._lock:
+            for key, entry in self._cache.items():
+                key_size = sys.getsizeof(key)
+                value_size = sys.getsizeof(entry["value"])
+                total_size += key_size + value_size + sys.getsizeof(entry["time"])
+                key_sizes.append(key_size)
+                value_sizes.append(value_size)
+
+        return {
+            "total_bytes": total_size,
+            "total_kb": round(total_size / 1024, 2),
+            "total_mb": round(total_size / (1024 * 1024), 2),
+            "avg_key_size": round(sum(key_sizes) / len(key_sizes), 2) if key_sizes else 0,
+            "avg_value_size": round(sum(value_sizes) / len(value_sizes), 2) if value_sizes else 0,
+            "entry_count": len(self._cache),
+        }
+
+    def get_memory_usage_formatted(self) -> str:
+        """Get formatted memory usage string.
+
+        Returns:
+            Formatted memory usage string.
+        """
+        usage = self.get_memory_usage()
+        if usage["total_mb"] >= 1:
+            return f"{usage['total_mb']:.2f} MB"
+        return f"{usage['total_kb']:.2f} KB"
+
+    def get_memory_per_entry(self) -> float:
+        """Get average memory per cache entry.
+
+        Returns:
+            Average bytes per entry.
+        """
+        usage = self.get_memory_usage()
+        if usage["entry_count"] == 0:
+            return 0.0
+        return round(usage["total_bytes"] / usage["entry_count"], 2)
+
+    def get_memory_per_entry_formatted(self) -> str:
+        """Get formatted memory per entry string.
+
+        Returns:
+            Formatted memory per entry string.
+        """
+        per_entry = self.get_memory_per_entry()
+        return f"{per_entry:.2f} bytes"
+
+    def get_memory_stats(self) -> Dict[str, Any]:
+        """Get comprehensive memory statistics.
+
+        Returns:
+            Dictionary with memory stats.
+        """
+        usage = self.get_memory_usage()
+        return {
+            "memory": usage,
+            "per_entry": self.get_memory_per_entry(),
+            "cache_stats": self.stats,
+        }
+
 
 # Global cache instance
 _global_cache = LRUCache()
