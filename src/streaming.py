@@ -430,21 +430,6 @@ class LogStream:
         """
         return f"{self.get_file_size_mb():.2f} MB"
 
-    def get_success_rate_formatted(self) -> str:
-        """Get formatted success rate string.
-
-        Returns:
-            Formatted success rate string.
-        """
-        return f"{self.get_success_rate():.1f}%"
-
-        """Get formatted error rate string.
-
-        Returns:
-            Formatted error rate string.
-        """
-        return f"{self.error_rate:.1f}%"
-
     def get_status_formatted(self) -> str:
         """Get formatted status string.
 
@@ -477,30 +462,6 @@ class LogStream:
         """
         return f"File: {self.get_file_name()}, Processed: {self._processed}, Errors: {self._errors}, Status: {self.get_status()}"
 
-    def get_processing_rate_formatted(self) -> str:
-        """Get formatted processing rate string.
-
-        Returns:
-            Formatted processing rate string.
-        """
-        return f"{self.get_processing_rate():.1f}%"
-
-    def get_error_ratio_formatted(self) -> str:
-        """Get formatted error ratio string.
-
-        Returns:
-            Formatted error ratio string.
-        """
-        return f"{self.get_error_ratio():.2f}"
-
-    def get_total_count_formatted(self) -> str:
-        """Get formatted total count string.
-
-        Returns:
-            Formatted total count string.
-        """
-        return f"{self.get_total_count()} entries"
-
     def get_success_rate_formatted_string(self) -> str:
         """Get formatted success rate string (alias).
 
@@ -516,14 +477,6 @@ class LogStream:
             Formatted error rate string.
         """
         return f"Error: {self.error_rate:.1f}%"
-
-    def get_summary_string(self) -> str:
-        """Get summary string.
-
-        Returns:
-            Summary string.
-        """
-        return self.get_stats_formatted()
 
     def get_processing_efficiency(self) -> float:
         """Get processing efficiency (processed / total).
@@ -577,4 +530,78 @@ class LogStream:
             Formatted stream health string.
         """
         return f"{self.get_stream_health():.1f}%"
+
+    def get_progress_info(self) -> Dict[str, Any]:
+        """Get detailed progress information.
+
+        Returns:
+            Dictionary with progress details.
+        """
+        return {
+            "processed": self._processed,
+            "errors": self._errors,
+            "total": self.get_total_count(),
+            "success_rate": self.get_success_rate(),
+            "error_rate": self.error_rate,
+            "health": self.get_stream_health(),
+            "status": self.get_status(),
+        }
+
+    def get_progress_bar(self, width: int = 20) -> str:
+        """Get a text-based progress bar.
+
+        Args:
+            width: Width of progress bar in characters (default 20).
+
+        Returns:
+            Progress bar string.
+        """
+        success_rate = self.get_success_rate()
+        filled = int(width * success_rate / 100)
+        empty = width - filled
+        return f"[{'#' * filled}{'.' * empty}] {success_rate:.1f}%"
+
+    def get_eta_estimate(self, entries_per_second: float) -> Dict[str, Any]:
+        """Get estimated time to completion.
+
+        Args:
+            entries_per_second: Processing rate.
+
+        Returns:
+            Dictionary with ETA estimates.
+        """
+        if entries_per_second <= 0:
+            return {"eta_seconds": 0, "eta_formatted": "N/A"}
+
+        # Estimate remaining based on typical file sizes
+        file_size = self.get_file_size_mb()
+        estimated_total = max(1000, int(file_size * 1000))  # Rough estimate
+        remaining = max(0, estimated_total - self._processed)
+        eta_seconds = remaining / entries_per_second
+
+        return {
+            "eta_seconds": round(eta_seconds, 2),
+            "eta_formatted": f"{eta_seconds:.0f}s",
+            "remaining_entries": remaining,
+        }
+
+    def get_milestone_info(self, milestone: int = 1000) -> Dict[str, Any]:
+        """Get milestone progress information.
+
+        Args:
+            milestone: Milestone interval (default 1000).
+
+        Returns:
+            Dictionary with milestone info.
+        """
+        current_milestone = (self._processed // milestone) * milestone
+        next_milestone = current_milestone + milestone
+        progress_to_next = self._processed - current_milestone
+
+        return {
+            "current_milestone": current_milestone,
+            "next_milestone": next_milestone,
+            "progress_to_next": progress_to_next,
+            "percent_to_next": round(progress_to_next / milestone * 100, 2),
+        }
 
