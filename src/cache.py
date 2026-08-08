@@ -525,32 +525,6 @@ class QueryCache:
         query = self.get_most_popular()
         return query if query else "none"
 
-    def get_cache_usage_percent(self) -> float:
-        """Get cache usage as percentage.
-
-        Returns:
-            Cache usage percentage.
-        """
-        if self._cache.max_size == 0:
-            return 0.0
-        return round(self._cache.size / self._cache.max_size * 100, 2)
-
-    def get_cache_usage_formatted(self) -> str:
-        """Get formatted cache usage string.
-
-        Returns:
-            Formatted cache usage string.
-        """
-        return f"{self.get_cache_usage_percent():.1f}%"
-
-    def get_popular_queries_dict(self) -> Dict[str, int]:
-        """Get popular queries as dictionary.
-
-        Returns:
-            Dictionary mapping queries to counts.
-        """
-        return dict(self._popular_queries)
-
     def get_stats_formatted(self) -> str:
         """Get formatted stats string.
 
@@ -619,18 +593,85 @@ class QueryCache:
         """
         return f"{self.get_cache_efficiency():.1f}%"
 
-    def get_cache_size_formatted(self) -> str:
-        """Get formatted cache size string.
+    def evict_by_age(self, max_age_seconds: int) -> int:
+        """Evict entries older than specified age.
+
+        Args:
+            max_age_seconds: Maximum age in seconds.
 
         Returns:
-            Formatted cache size string.
+            Number of entries evicted.
         """
-        return f"{self._cache.size}/{self._cache.max_size}"
+        evicted = 0
+        current_time = time.time()
+        with self._cache._lock:
+            keys_to_remove = []
+            for key, entry in self._cache._cache.items():
+                if current_time - entry["time"] > max_age_seconds:
+                    keys_to_remove.append(key)
+            for key in keys_to_remove:
+                del self._cache._cache[key]
+                evicted += 1
+        return evicted
 
-    def get_hit_rate_formatted(self) -> str:
-        """Get formatted hit rate string.
+    def evict_by_popularity(self, min_popularity: int) -> int:
+        """Evict entries with popularity below threshold.
+
+        Args:
+            min_popularity: Minimum popularity count to keep.
 
         Returns:
-            Formatted hit rate string.
+            Number of entries evicted.
         """
-        return f"{self.hit_rate:.1f}%"
+        evicted = 0
+        queries_to_evict = [
+            query for query, count in self._popular_queries.items()
+            if count < min_popularity
+        ]
+        for query in queries_to_evict:
+            self._cache.invalidate(query)
+            del self._popular_queries[query]
+            evicted += 1
+        return evicted
+
+    def get_eviction_candidates(self, count: int = 10) -> List[str]:
+        """Get candidates for eviction (least popular queries).
+
+        Args:
+            count: Number of candidates to return.
+
+        Returns:
+            List of query strings that could be evicted.
+        """
+        sorted_queries = sorted(
+            self._popular_queries.items(),
+            key=lambda x: x[1]
+        )
+        return [q for q, _ in sorted_queries[:count]]
+
+    def auto_evict(self, target_usage: float = 80.0) -> int:
+        """Automatically evict entries to reach target usage.
+
+        Args:
+            target_usage: Target cache usage percentage.
+
+        Returns:
+            Number of entries evicted.
+        """
+        current_usage = self.get_cache_usage_percent()
+        if current_usage <= target_usage:
+            return 0
+
+        # Calculate how many to evict
+        target_size = int(self._cache.max_size * target_usage / 100)
+        to_evict = self._cache.size - target_size
+
+        evicted = 0
+        candidates = self.get_eviction_candidates(to_evict)
+        for query in candidates:
+            self._cache.invalidate(query)
+            if query in self._popular_queries:
+                del self._popular_queries[query]
+            evicted += 1
+
+        return evicted
