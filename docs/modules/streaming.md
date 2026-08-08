@@ -387,6 +387,90 @@ monitor_thread.start()
 stream.stream(process_entry)
 ```
 
+### Progress Tracking
+
+```python
+# Get detailed progress information
+progress = stream.get_progress_info()
+print(f"Processed: {progress['processed']}")
+print(f"Errors: {progress['errors']}")
+print(f"Total: {progress['total']}")
+print(f"Success Rate: {progress['success_rate']:.1f}%")
+print(f"Health: {progress['health']:.1f}%")
+print(f"Status: {progress['status']}")
+
+# Get text-based progress bar
+progress_bar = stream.get_progress_bar(width=30)
+print(progress_bar)  # [########################......] 80.0%
+
+# Get ETA estimate
+eta = stream.get_eta_estimate(entries_per_second=1000)
+print(f"ETA: {eta['eta_formatted']}")
+print(f"Remaining: {eta['remaining_entries']} entries")
+
+# Get milestone information
+milestone = stream.get_milestone_info(milestone=1000)
+print(f"Current milestone: {milestone['current_milestone']}")
+print(f"Next milestone: {milestone['next_milestone']}")
+print(f"Progress to next: {milestone['percent_to_next']:.1f}%")
+```
+
+### Real-time Progress Display
+
+```python
+import time
+
+def process_entry(entry):
+    # Process entry
+    pass
+
+# Stream with progress display
+start_time = time.time()
+
+def display_progress():
+    while not stream.is_stopped():
+        progress = stream.get_progress_info()
+        bar = stream.get_progress_bar(width=30)
+        eta = stream.get_eta_estimate(entries_per_second=stream.get_processed_count() / (time.time() - start_time + 0.001))
+
+        print(f"\r{bar} | "
+              f"Processed: {progress['processed']} | "
+              f"Errors: {progress['errors']} | "
+              f"ETA: {eta['eta_formatted']}", end="")
+
+        if stream.is_stopped():
+            break
+        time.sleep(0.5)
+
+import threading
+progress_thread = threading.Thread(target=display_progress)
+progress_thread.daemon = True
+progress_thread.start()
+
+stream.stream(process_entry)
+```
+
+### Health Monitoring
+
+```python
+# Monitor stream health
+while stream.is_running():
+    progress = stream.get_progress_info()
+
+    # Check for issues
+    if progress['success_rate'] < 90:
+        print(f"Warning: Low success rate ({progress['success_rate']:.1f}%)")
+
+    if progress['health'] < 80:
+        print(f"Warning: Stream health degraded ({progress['health']:.1f}%)")
+
+    if progress['errors'] > 100:
+        print(f"Warning: High error count ({progress['errors']})")
+        break
+
+    time.sleep(1)
+```
+
 ## See Also
 
 - [Models](models.md) - LogEntry structure
