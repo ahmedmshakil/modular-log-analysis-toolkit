@@ -968,3 +968,107 @@ class LogFilter:
             return "No active filters"
         return f"{self.get_filter_count()} active filters applied"
 
+    def validate_level(self, level: str) -> bool:
+        """Validate a log level string.
+
+        Args:
+            level: Level string to validate.
+
+        Returns:
+            True if valid level.
+        """
+        valid_levels = [l.value for l in LogLevel]
+        return level.upper() in valid_levels
+
+    def validate_source(self, source: str) -> bool:
+        """Validate a source string.
+
+        Args:
+            source: Source string to validate.
+
+        Returns:
+            True if valid source.
+        """
+        if not source or not isinstance(source, str):
+            return False
+        return len(source.strip()) > 0
+
+    def validate_keyword(self, keyword: str) -> bool:
+        """Validate a keyword string.
+
+        Args:
+            keyword: Keyword string to validate.
+
+        Returns:
+            True if valid keyword.
+        """
+        if not keyword or not isinstance(keyword, str):
+            return False
+        return len(keyword.strip()) > 0
+
+    def validate_regex(self, pattern: str) -> Dict[str, Any]:
+        """Validate a regex pattern.
+
+        Args:
+            pattern: Regex pattern to validate.
+
+        Returns:
+            Dictionary with validation result.
+        """
+        if not pattern or not isinstance(pattern, str):
+            return {"valid": False, "error": "Pattern must be a non-empty string"}
+        try:
+            re.compile(pattern)
+            return {"valid": True, "error": None}
+        except re.error as e:
+            return {"valid": False, "error": str(e)}
+
+    def validate_time_range(self, start: datetime, end: datetime) -> Dict[str, Any]:
+        """Validate a time range.
+
+        Args:
+            start: Start datetime.
+            end: End datetime.
+
+        Returns:
+            Dictionary with validation result.
+        """
+        if not isinstance(start, datetime) or not isinstance(end, datetime):
+            return {"valid": False, "error": "Both start and end must be datetime objects"}
+        if start > end:
+            return {"valid": False, "error": "Start time must be before end time"}
+        return {"valid": True, "error": None}
+
+    def get_validation_summary(self) -> Dict[str, Any]:
+        """Get validation summary for current filter state.
+
+        Returns:
+            Dictionary with validation info.
+        """
+        return {
+            "total_entries": self.entry_count,
+            "active_filters": self.get_filter_count(),
+            "has_entries": self.has_entries(),
+            "is_empty": self.is_empty,
+        }
+
+    def validate_entries(self) -> Dict[str, Any]:
+        """Validate all entries in the filter.
+
+        Returns:
+            Dictionary with validation results.
+        """
+        valid = 0
+        invalid = 0
+        for entry in self.entries:
+            if isinstance(entry, LogEntry) and entry.message:
+                valid += 1
+            else:
+                invalid += 1
+        return {
+            "total": self.entry_count,
+            "valid": valid,
+            "invalid": invalid,
+            "validation_rate": valid / self.entry_count * 100 if self.entry_count > 0 else 0,
+        }
+
