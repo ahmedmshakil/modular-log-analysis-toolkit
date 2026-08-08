@@ -103,7 +103,7 @@ class LogParser:
         return entries
 
     def _parse_timestamp(self, ts_str: str) -> datetime:
-        """Try multiple timestamp formats.
+        """Try multiple timestamp formats with edge case handling.
 
         Args:
             ts_str: Timestamp string to parse.
@@ -116,11 +116,26 @@ class LogParser:
         ts_str = ts_str.strip()
         if not ts_str:
             return datetime.now()
+
+        # Handle common edge cases
+        ts_str = ts_str.replace("T", " ", 1)  # ISO format with T
+        ts_str = ts_str.replace("Z", "")       # UTC timezone suffix
+        ts_str = ts_str.replace("+00:00", "")  # UTC offset
+        ts_str = ts_str.rstrip(".")            # Trailing dots
+
+        # Try each format
         for fmt in self.DEFAULT_TIMESTAMP_FORMATS:
             try:
                 return datetime.strptime(ts_str, fmt)
             except ValueError:
                 continue
+
+        # Try ISO format as fallback
+        try:
+            return datetime.fromisoformat(ts_str)
+        except (ValueError, AttributeError):
+            pass
+
         return datetime.now()
 
     def _parse_level(self, level_str: str) -> LogLevel:
