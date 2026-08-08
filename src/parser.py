@@ -528,34 +528,79 @@ class LogParser:
             return "none"
         return pattern[:50] + "..." if len(pattern) > 50 else pattern
 
-    def get_pattern_groups_count(self) -> int:
-        """Get number of pattern groups.
+    def parse_batch(self, lines: List[str], batch_size: int = 100) -> List[LogEntry]:
+        """Parse log lines in batches for better performance.
+
+        Args:
+            lines: List of log line strings.
+            batch_size: Number of lines per batch (default 100).
 
         Returns:
-            Count of pattern groups.
+            List of parsed LogEntry objects.
         """
-        return len(self.get_pattern_groups())
+        entries = []
+        for i in range(0, len(lines), batch_size):
+            batch = lines[i:i + batch_size]
+            for line in batch:
+                entry = self.parse_line(line)
+                if entry:
+                    entries.append(entry)
+        return entries
 
-    def has_custom_pattern(self) -> bool:
-        """Check if parser uses a custom pattern.
+    def parse_batch_with_stats(self, lines: List[str], batch_size: int = 100) -> Dict[str, Any]:
+        """Parse log lines in batches with statistics.
+
+        Args:
+            lines: List of log line strings.
+            batch_size: Number of lines per batch (default 100).
 
         Returns:
-            True if custom pattern is set.
+            Dictionary with parsed entries and stats.
         """
-        return self.pattern_name not in PATTERNS
+        entries = []
+        failed = 0
+        for i in range(0, len(lines), batch_size):
+            batch = lines[i:i + batch_size]
+            for line in batch:
+                entry = self.parse_line(line)
+                if entry:
+                    entries.append(entry)
+                else:
+                    failed += 1
+        return {
+            "entries": entries,
+            "total": len(lines),
+            "parsed": len(entries),
+            "failed": failed,
+            "success_rate": len(entries) / len(lines) if lines else 0,
+        }
 
-    def get_pattern_count(self) -> int:
-        """Get number of available patterns.
+    def get_batch_count(self, total_lines: int, batch_size: int = 100) -> int:
+        """Get number of batches needed.
+
+        Args:
+            total_lines: Total number of lines.
+            batch_size: Lines per batch (default 100).
 
         Returns:
-            Count of available patterns.
+            Number of batches.
         """
-        return len(PATTERNS)
+        return (total_lines + batch_size - 1) // batch_size if total_lines > 0 else 0
 
-    def is_json_pattern(self) -> bool:
-        """Check if parser uses JSON pattern.
+    def get_batch_info(self, total_lines: int, batch_size: int = 100) -> Dict[str, Any]:
+        """Get batch processing information.
+
+        Args:
+            total_lines: Total number of lines.
+            batch_size: Lines per batch (default 100).
 
         Returns:
-            True if using json_log pattern.
+            Dictionary with batch info.
         """
-        return self.pattern_name == "json_log"
+        batches = self.get_batch_count(total_lines, batch_size)
+        return {
+            "total_lines": total_lines,
+            "batch_size": batch_size,
+            "num_batches": batches,
+            "last_batch_size": total_lines % batch_size if total_lines % batch_size > 0 else batch_size,
+        }
