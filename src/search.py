@@ -297,6 +297,82 @@ class LogSearchIndex:
         """
         return list(self._field_index["level"].keys())
 
+    def search_with_cache(self, query: str, max_results: int = 100) -> List[LogEntry]:
+        """Search with result caching for repeated queries.
+
+        Args:
+            query: Search query string.
+            max_results: Maximum number of results (default 100).
+
+        Returns:
+            List of matching LogEntry objects.
+        """
+        cache_key = f"{query}:{max_results}"
+        if not hasattr(self, '_search_cache'):
+            self._search_cache = {}
+        if cache_key in self._search_cache:
+            return self._search_cache[cache_key]
+        results = self.search(query, max_results)
+        self._search_cache[cache_key] = results
+        return results
+
+    def clear_cache(self):
+        """Clear the search result cache."""
+        if hasattr(self, '_search_cache'):
+            self._search_cache.clear()
+
+    def get_cache_size(self) -> int:
+        """Get number of cached search results.
+
+        Returns:
+            Number of cached queries.
+        """
+        if not hasattr(self, '_search_cache'):
+            return 0
+        return len(self._search_cache)
+
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Get cache statistics.
+
+        Returns:
+            Dictionary with cache stats.
+        """
+        if not hasattr(self, '_search_cache'):
+            return {"size": 0, "keys": []}
+        return {
+            "size": len(self._search_cache),
+            "keys": list(self._search_cache.keys()),
+        }
+
+    def search_batch(self, queries: List[str], max_results: int = 100) -> Dict[str, List[LogEntry]]:
+        """Search multiple queries at once.
+
+        Args:
+            queries: List of query strings.
+            max_results: Maximum results per query (default 100).
+
+        Returns:
+            Dictionary mapping query to results.
+        """
+        results = {}
+        for query in queries:
+            results[query] = self.search_with_cache(query, max_results)
+        return results
+
+    def search_batch_count(self, queries: List[str]) -> Dict[str, int]:
+        """Get result counts for multiple queries.
+
+        Args:
+            queries: List of query strings.
+
+        Returns:
+            Dictionary mapping query to result count.
+        """
+        results = {}
+        for query in queries:
+            results[query] = self.count(query)
+        return results
+
     def has_entries(self) -> bool:
         """Check if index has any entries.
 
