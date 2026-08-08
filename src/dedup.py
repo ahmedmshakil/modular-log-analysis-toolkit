@@ -599,3 +599,159 @@ class LogDeduplicator:
         """
         return f"{self.get_unique_ratio():.1f}%"
 
+    def deduplicate_batch(self, entries: List[LogEntry], batch_size: int = 1000) -> Tuple[List[LogEntry], Dict[str, int]]:
+        """Deduplicate entries in batches for better memory efficiency.
+
+        Args:
+            entries: List of log entries to deduplicate.
+            batch_size: Number of entries per batch (default 1000).
+
+        Returns:
+            Tuple of (unique entries, duplicate counts by hash).
+        """
+        if not entries:
+            return [], {}
+        if not isinstance(entries, list):
+            raise TypeError("entries must be a list")
+
+        unique = []
+        counts: Dict[str, int] = defaultdict(int)
+
+        for i in range(0, len(entries), batch_size):
+            batch = entries[i:i + batch_size]
+            for entry in batch:
+                if not isinstance(entry, LogEntry):
+                    continue
+                h = self._hash_entry(entry)
+                counts[h] += 1
+                if h not in self._seen:
+                    self._seen[h] = 1
+                    unique.append(entry)
+
+        return unique, dict(counts)
+
+    def deduplicate_with_stats(self, entries: List[LogEntry]) -> Dict[str, Any]:
+        """Deduplicate entries with detailed statistics.
+
+        Args:
+            entries: List of log entries to deduplicate.
+
+        Returns:
+            Dictionary with deduplication results and stats.
+        """
+        if not entries:
+            return {"unique": [], "counts": {}, "stats": {}}
+
+        unique, counts = self.deduplicate(entries)
+
+        # Calculate stats
+        total = len(entries)
+        unique_count = len(unique)
+        duplicate_count = total - unique_count
+        dedup_rate = (duplicate_count / total * 100) if total > 0 else 0
+
+        return {
+            "unique": unique,
+            "counts": counts,
+            "stats": {
+                "total": total,
+                "unique": unique_count,
+                "duplicates": duplicate_count,
+                "dedup_rate": round(dedup_rate, 2),
+                "hash_cache_size": len(self._hash_cache),
+                "seen_hashes": len(self._seen),
+            },
+        }
+
+    def get_duplicate_groups(self, entries: List[LogEntry], min_count: int = 2) -> List[Dict[str, Any]]:
+        """Get groups of duplicate entries.
+
+        Args:
+            entries: List of log entries to analyze.
+            min_count: Minimum count to be considered a group (default 2).
+
+        Returns:
+            List of duplicate groups with entry and count.
+        """
+        hash_to_entries: Dict[str, List[LogEntry]] = defaultdict(list)
+
+        for entry in entries:
+            if not isinstance(entry, LogEntry):
+                continue
+            h = self._hash_entry(entry)
+            hash_to_entries[h].append(entry)
+
+        groups = []
+        for h, group_entries in hash_to_entries.items():
+            if len(group_entries) >= min_count:
+                groups.append({
+                    "hash": h,
+                    "count": len(group_entries),
+                    "entry": group_entries[0],
+                    "message": group_entries[0].message[:100],
+                })
+
+        return sorted(groups, key=lambda x: x["count"], reverse=True)
+
+    def optimize_hash_cache(self) -> Dict[str, Any]:
+        """Optimize hash cache by removing stale entries.
+
+        Returns:
+            Dictionary with optimization results.
+        """
+        initial_size = len(self._hash_cache)
+
+        # Remove entries for objects that no longer exist
+        valid_keys = set()
+        for entry_id in self._hash_cache.keys():
+            try:
+                # Check if object still exists
+                import ctypes
+                ctypes.cast(entry_id, ctypes.py_object)
+                valid_keys.add(entry_id)
+            except (ValueError, TypeError):
+                pass
+
+        # Rebuild cache with only valid entries
+        new_cache = {k: v for k, v in self._hash_cache.items() if k in valid_keys}
+        removed = initial_size - len(new_cache)
+
+        self._hash_cache = new_cache
+
+        return {
+            "initial_size": initial_size,
+            "final_size": len(new_cache),
+            "removed": removed,
+            "removal_rate": round(removed / initial_size * 100, 2) if initial_size > 0 else 0,
+        }
+
+    def get_dedup_performance(self, entries: List[LogEntry]) -> Dict[str, Any]:
+        """Get deduplication performance metrics.
+
+        Args:
+            entries: List of log entries to analyze.
+
+        Returns:
+            Dictionary with performance metrics.
+        """
+        import time
+
+        # Time the deduplication
+        start = time.time()
+        unique, counts = self.deduplicate(entries)
+        elapsed = time.time() - start
+
+        total = len(entries)
+        unique_count = len(unique)
+        rate = total / elapsed if elapsed > 0 else 0
+
+        return {
+            "total_entries": total,
+            "unique_entries": unique_count,
+            "duplicates": total - unique_count,
+            "dedup_rate": round((total - unique_count) / total * 100, 2) if total > 0 else 0,
+            "elapsed_seconds": round(elapsed, 4),
+            "entries_per_second": round(rate, 2),
+            "hash_cache_hits": len(self._hash_cache),
+        }
+
