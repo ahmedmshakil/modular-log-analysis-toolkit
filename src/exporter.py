@@ -1,5 +1,6 @@
 """Export log analysis results to various formats."""
 
+import os
 import csv
 import json
 from io import StringIO
@@ -697,3 +698,116 @@ class LogExporter:
         """
         formats = LogExporter.get_supported_formats()
         return ", ".join(formats)
+
+    @staticmethod
+    def detect_format(file_path: str) -> Dict[str, Any]:
+        """Detect export format from file extension.
+
+        Args:
+            file_path: Path to file.
+
+        Returns:
+            Dictionary with format info.
+        """
+        path = Path(file_path)
+        ext = path.suffix.lower()
+
+        format_map = {
+            ".json": "json",
+            ".csv": "csv",
+            ".txt": "text",
+            ".log": "text",
+            ".html": "html",
+            ".xml": "xml",
+        }
+
+        detected = format_map.get(ext, "unknown")
+
+        return {
+            "file": str(path),
+            "extension": ext,
+            "detected_format": detected,
+            "is_supported": detected != "unknown",
+        }
+
+    @staticmethod
+    def validate_export_path(file_path: str) -> Dict[str, Any]:
+        """Validate export file path.
+
+        Args:
+            file_path: Path to export file.
+
+        Returns:
+            Dictionary with validation result.
+        """
+        path = Path(file_path)
+
+        # Check parent directory
+        parent = path.parent
+        if not parent.exists():
+            return {"valid": False, "error": f"Parent directory does not exist: {parent}"}
+
+        # Check write permission
+        if not os.access(parent, os.W_OK):
+            return {"valid": False, "error": f"No write permission: {parent}"}
+
+        # Check if file exists
+        exists = path.exists()
+
+        return {
+            "valid": True,
+            "error": None,
+            "path": str(path),
+            "exists": exists,
+            "parent_exists": True,
+        }
+
+    @staticmethod
+    def get_export_stats(entries: List[LogEntry]) -> Dict[str, Any]:
+        """Get export statistics.
+
+        Args:
+            entries: List of log entries.
+
+        Returns:
+            Dictionary with export stats.
+        """
+        if not entries:
+            return {"total": 0, "size_estimate_kb": 0}
+
+        # Estimate size
+        size_estimate = 0
+        for entry in entries:
+            size_estimate += len(entry.message) + 50  # Rough estimate
+
+        return {
+            "total": len(entries),
+            "size_estimate_kb": round(size_estimate / 1024, 2),
+            "levels": LogExporter.get_level_distribution(entries),
+            "sources": len(LogExporter.get_source_distribution(entries)),
+        }
+
+    @staticmethod
+    def get_export_preview(entries: List[LogEntry], limit: int = 5) -> List[Dict[str, Any]]:
+        """Get preview of entries to export.
+
+        Args:
+            entries: List of log entries.
+            limit: Number of entries to preview.
+
+        Returns:
+            List of entry dictionaries.
+        """
+        if not entries:
+            return []
+
+        preview = []
+        for entry in entries[:limit]:
+            preview.append({
+                "timestamp": entry.timestamp.isoformat(),
+                "level": entry.level.value,
+                "source": entry.source,
+                "message": entry.message[:100] + "..." if len(entry.message) > 100 else entry.message,
+            })
+
+        return preview
