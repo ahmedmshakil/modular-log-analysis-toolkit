@@ -115,11 +115,12 @@ class LogFilter:
         self._filters.append(_filter)
         return self
 
-    def by_regex(self, pattern: str) -> "LogFilter":
+    def by_regex(self, pattern: str, flags: int = 0) -> "LogFilter":
         """Filter by regex pattern match on message.
 
         Args:
             pattern: Regular expression pattern to match.
+            flags: Regex compilation flags (e.g., re.IGNORECASE).
 
         Returns:
             Self for method chaining.
@@ -129,19 +130,58 @@ class LogFilter:
         """
         if not pattern or not isinstance(pattern, str):
             raise ValueError("Pattern must be a non-empty string")
+        # Create cache key with flags
+        cache_key = f"{pattern}:{flags}"
         # Use cached compiled regex if available
-        if pattern in self._regex_cache:
-            compiled = self._regex_cache[pattern]
+        if cache_key in self._regex_cache:
+            compiled = self._regex_cache[cache_key]
         else:
             try:
-                compiled = re.compile(pattern)
-                self._regex_cache[pattern] = compiled
+                compiled = re.compile(pattern, flags)
+                self._regex_cache[cache_key] = compiled
             except re.error as e:
                 raise ValueError(f"Invalid regex pattern: {e}")
         def _filter(entry: LogEntry) -> bool:
             if not entry.message:
                 return False
-            return bool(compiled.search(entry.message))
+            try:
+                return bool(compiled.search(entry.message))
+            except Exception:
+                return False
+        self._filters.append(_filter)
+        return self
+
+    def by_regex_safe(self, pattern: str, flags: int = 0) -> "LogFilter":
+        """Filter by regex with graceful error handling.
+
+        Args:
+            pattern: Regular expression pattern to match.
+            flags: Regex compilation flags.
+
+        Returns:
+            Self for method chaining.
+        """
+        if not pattern or not isinstance(pattern, str):
+            return self
+
+        cache_key = f"{pattern}:{flags}"
+        if cache_key in self._regex_cache:
+            compiled = self._regex_cache[cache_key]
+        else:
+            try:
+                compiled = re.compile(pattern, flags)
+                self._regex_cache[cache_key] = compiled
+            except re.error:
+                return self
+
+        def _filter(entry: LogEntry) -> bool:
+            if not entry.message:
+                return False
+            try:
+                return bool(compiled.search(entry.message))
+            except Exception:
+                return False
+
         self._filters.append(_filter)
         return self
 
