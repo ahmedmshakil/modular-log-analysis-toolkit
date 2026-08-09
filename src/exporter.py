@@ -811,3 +811,107 @@ class LogExporter:
             })
 
         return preview
+
+    @staticmethod
+    def export_batch(entries: List[LogEntry], output_dir: str, prefix: str = "logs", batch_size: int = 1000) -> Dict[str, Any]:
+        """Export entries in batches for large datasets.
+
+        Args:
+            entries: List of log entries to export.
+            output_dir: Directory to write export files.
+            prefix: Filename prefix for exported files.
+            batch_size: Number of entries per batch (default 1000).
+
+        Returns:
+            Dictionary with export results.
+        """
+        out = Path(output_dir)
+        out.mkdir(parents=True, exist_ok=True)
+
+        results = {
+            "total": len(entries),
+            "batch_size": batch_size,
+            "num_batches": 0,
+            "files": [],
+        }
+
+        for i in range(0, len(entries), batch_size):
+            batch = entries[i:i + batch_size]
+            batch_num = i // batch_size + 1
+            batch_prefix = f"{prefix}_batch{batch_num}"
+
+            batch_files = {}
+            batch_files["json"] = LogExporter.to_json(batch, str(out / f"{batch_prefix}.json"))
+            batch_files["csv"] = LogExporter.to_csv(batch, str(out / f"{batch_prefix}.csv"))
+            batch_files["text"] = LogExporter.to_text(batch, str(out / f"{batch_prefix}.txt"))
+
+            results["files"].append({
+                "batch": batch_num,
+                "entries": len(batch),
+                "files": batch_files,
+            })
+
+        results["num_batches"] = len(results["files"])
+        return results
+
+    @staticmethod
+    def export_by_level(entries: List[LogEntry], output_dir: str, prefix: str = "logs") -> Dict[str, str]:
+        """Export entries grouped by log level.
+
+        Args:
+            entries: List of log entries to export.
+            output_dir: Directory to write export files.
+            prefix: Filename prefix for exported files.
+
+        Returns:
+            Dictionary mapping level names to output file paths.
+        """
+        out = Path(output_dir)
+        out.mkdir(parents=True, exist_ok=True)
+
+        # Group entries by level
+        level_groups: Dict[str, List[LogEntry]] = {}
+        for entry in entries:
+            level = entry.level.value
+            if level not in level_groups:
+                level_groups[level] = []
+            level_groups[level].append(entry)
+
+        # Export each level group
+        results = {}
+        for level, level_entries in level_groups.items():
+            level_prefix = f"{prefix}_{level.lower()}"
+            results[level] = LogExporter.to_json(level_entries, str(out / f"{level_prefix}.json"))
+
+        return results
+
+    @staticmethod
+    def export_by_source(entries: List[LogEntry], output_dir: str, prefix: str = "logs") -> Dict[str, str]:
+        """Export entries grouped by source.
+
+        Args:
+            entries: List of log entries to export.
+            output_dir: Directory to write export files.
+            prefix: Filename prefix for exported files.
+
+        Returns:
+            Dictionary mapping source names to output file paths.
+        """
+        out = Path(output_dir)
+        out.mkdir(parents=True, exist_ok=True)
+
+        # Group entries by source
+        source_groups: Dict[str, List[LogEntry]] = {}
+        for entry in entries:
+            source = entry.source or "unknown"
+            if source not in source_groups:
+                source_groups[source] = []
+            source_groups[source].append(entry)
+
+        # Export each source group
+        results = {}
+        for source, source_entries in source_groups.items():
+            source_prefix = f"{prefix}_{source.lower().replace(' ', '_')}"
+            results[source] = LogExporter.to_json(source_entries, str(out / f"{source_prefix}.json"))
+
+        return results
