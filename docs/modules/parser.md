@@ -328,6 +328,58 @@ for ts in timestamps:
         print(f"{ts} -> {entry.timestamp}")
 ```
 
+### Batch Processing
+
+```python
+from src.parser import LogParser
+
+parser = LogParser(pattern_name="standard")
+lines = list(read_log_lines("large_app.log"))
+
+# Parse in batches for better performance
+entries = parser.parse_batch(lines, batch_size=500)
+print(f"Parsed {len(entries)} entries")
+
+# Parse with statistics
+result = parser.parse_batch_with_stats(lines, batch_size=500)
+print(f"Total: {result['total']}")
+print(f"Parsed: {result['parsed']}")
+print(f"Failed: {result['failed']}")
+print(f"Success Rate: {result['success_rate']:.1%}")
+
+# Get batch information
+batch_info = parser.get_batch_info(len(lines), batch_size=500)
+print(f"Total Lines: {batch_info['total_lines']}")
+print(f"Batch Size: {batch_info['batch_size']}")
+print(f"Num Batches: {batch_info['num_batches']}")
+print(f"Last Batch Size: {batch_info['last_batch_size']}")
+```
+
+### Timestamp Parsing with Edge Cases
+
+```python
+from src.parser import LogParser
+
+parser = LogParser(pattern_name="standard")
+
+# Handle various timestamp formats including edge cases
+timestamps = [
+    "2024-01-15 10:30:45",      # Standard
+    "2024-01-15T10:30:45",      # ISO format with T
+    "2024-01-15T10:30:45Z",     # UTC timezone suffix
+    "2024-01-15T10:30:45+00:00", # UTC offset
+    "15/Jan/2024:10:30:45",     # Apache
+    "Jan 15 10:30:45",          # Syslog
+    "2024/01/15 10:30:45",      # Alternative
+    "01/15/2024 10:30:45",      # US format
+]
+
+for ts in timestamps:
+    entry = parser.parse_line(f"{ts} [INFO] Test message")
+    if entry:
+        print(f"{ts} -> {entry.timestamp}")
+```
+
 ## See Also
 
 - [Models](models.md) - LogEntry and LogLevel definitions
