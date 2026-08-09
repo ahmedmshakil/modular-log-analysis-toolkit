@@ -12,6 +12,7 @@ class LogAggregator:
 
     def __init__(self, entries: List[LogEntry]):
         self.entries = entries
+        self._cache: Dict[str, Any] = {}
 
     def __repr__(self) -> str:
         return f"LogAggregator(entries={len(self.entries)})"
@@ -1297,4 +1298,86 @@ class LogAggregator:
             return "No sources"
         parts = [f"{s}: {c}" for s, c in sources]
         return ", ".join(parts)
+
+    def clear_cache(self) -> None:
+        """Clear the internal cache."""
+        self._cache.clear()
+
+    def get_cache_size(self) -> int:
+        """Get number of cached results.
+
+        Returns:
+            Number of cached items.
+        """
+        return len(self._cache)
+
+    def get_cached_level_counts(self) -> Dict[str, int]:
+        """Get level counts with caching.
+
+        Returns:
+            Dictionary mapping level to count.
+        """
+        if "level_counts" not in self._cache:
+            self._cache["level_counts"] = dict(Counter(e.level.value for e in self.entries))
+        return self._cache["level_counts"]
+
+    def get_cached_sources(self) -> List[str]:
+        """Get unique sources with caching.
+
+        Returns:
+            List of unique source strings.
+        """
+        if "sources" not in self._cache:
+            self._cache["sources"] = list({e.source for e in self.entries if e.source})
+        return self._cache["sources"]
+
+    def get_cached_timestamps(self) -> List[datetime]:
+        """Get timestamps with caching.
+
+        Returns:
+            List of datetime objects.
+        """
+        if "timestamps" not in self._cache:
+            self._cache["timestamps"] = [e.timestamp for e in self.entries]
+        return self._cache["timestamps"]
+
+    def get_cached_error_entries(self) -> List[LogEntry]:
+        """Get error entries with caching.
+
+        Returns:
+            List of error/critical entries.
+        """
+        if "error_entries" not in self._cache:
+            self._cache["error_entries"] = [
+                e for e in self.entries
+                if e.level in (LogLevel.ERROR, LogLevel.CRITICAL)
+            ]
+        return self._cache["error_entries"]
+
+    def get_cached_warning_entries(self) -> List[LogEntry]:
+        """Get warning entries with caching.
+
+        Returns:
+            List of warning entries.
+        """
+        if "warning_entries" not in self._cache:
+            self._cache["warning_entries"] = [
+                e for e in self.entries
+                if e.level == LogLevel.WARN
+            ]
+        return self._cache["warning_entries"]
+
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Get cache statistics.
+
+        Returns:
+            Dictionary with cache stats.
+        """
+        return {
+            "size": len(self._cache),
+            "keys": list(self._cache.keys()),
+            "memory_estimate_kb": sum(
+                len(str(v)) for v in self._cache.values()
+            ) / 1024,
+        }
 
