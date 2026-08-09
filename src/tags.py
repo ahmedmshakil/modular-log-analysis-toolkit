@@ -628,12 +628,147 @@ class TagManager:
             for r in self._rules if r.priority >= min_priority
         ]
 
-    def get_average_priority(self) -> float:
-        """Get average rule priority.
+    def get_tag_distribution(self) -> Dict[str, int]:
+        """Get distribution of tags across rules.
 
         Returns:
-            Average priority.
+            Dictionary mapping tag name to rule count.
+        """
+        distribution: Dict[str, int] = {}
+        for rule in self._rules:
+            distribution[rule.tag] = distribution.get(rule.tag, 0) + 1
+        return distribution
+
+    def get_tag_distribution_formatted(self) -> str:
+        """Get formatted tag distribution string.
+
+        Returns:
+            Formatted distribution string.
+        """
+        dist = self.get_tag_distribution()
+        if not dist:
+            return "No tags"
+        parts = [f"{tag}: {count}" for tag, count in sorted(dist.items(), key=lambda x: x[1], reverse=True)]
+        return ", ".join(parts)
+
+    def get_condition_stats(self) -> Dict[str, Any]:
+        """Get statistics about rule conditions.
+
+        Returns:
+            Dictionary with condition stats.
         """
         if not self._rules:
-            return 0.0
-        return round(sum(r.priority for r in self._rules) / len(self._rules), 2)
+            return {"total_conditions": 0, "avg_conditions_per_rule": 0}
+
+        total_conditions = sum(len(r.conditions) for r in self._rules)
+        return {
+            "total_conditions": total_conditions,
+            "avg_conditions_per_rule": round(total_conditions / len(self._rules), 2),
+            "max_conditions": max(len(r.conditions) for r in self._rules),
+            "min_conditions": min(len(r.conditions) for r in self._rules),
+        }
+
+    def get_priority_distribution(self) -> Dict[int, int]:
+        """Get distribution of rules by priority.
+
+        Returns:
+            Dictionary mapping priority to rule count.
+        """
+        distribution: Dict[int, int] = {}
+        for rule in self._rules:
+            distribution[rule.priority] = distribution.get(rule.priority, 0) + 1
+        return distribution
+
+    def get_priority_distribution_formatted(self) -> str:
+        """Get formatted priority distribution string.
+
+        Returns:
+            Formatted priority distribution string.
+        """
+        dist = self.get_priority_distribution()
+        if not dist:
+            return "No rules"
+        parts = [f"P{p}: {c}" for p, c in sorted(dist.items(), reverse=True)]
+        return ", ".join(parts)
+
+    def get_color_distribution(self) -> Dict[str, int]:
+        """Get distribution of tag colors.
+
+        Returns:
+            Dictionary mapping color to count.
+        """
+        distribution: Dict[str, int] = {}
+        for rule in self._rules:
+            distribution[rule.color] = distribution.get(rule.color, 0) + 1
+        return distribution
+
+    def get_rules_summary(self) -> Dict[str, Any]:
+        """Get comprehensive rules summary.
+
+        Returns:
+            Dictionary with rules summary.
+        """
+        return {
+            "total_rules": len(self._rules),
+            "unique_tags": len(self.get_all_tag_names()),
+            "tag_distribution": self.get_tag_distribution(),
+            "priority_distribution": self.get_priority_distribution(),
+            "avg_priority": self.get_average_priority(),
+            "condition_stats": self.get_condition_stats(),
+        }
+
+    def get_rules_summary_formatted(self) -> str:
+        """Get formatted rules summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        summary = self.get_rules_summary()
+        return (
+            f"Rules: {summary['total_rules']}, "
+            f"Tags: {summary['unique_tags']}, "
+            f"Avg Priority: {summary['avg_priority']:.1f}"
+        )
+
+    def get_manual_tag_stats(self) -> Dict[str, Any]:
+        """Get statistics about manual tags.
+
+        Returns:
+            Dictionary with manual tag stats.
+        """
+        if not self._manual_tags:
+            return {"total_entries": 0, "total_tags": 0, "avg_tags_per_entry": 0}
+
+        total_tags = sum(len(tags) for tags in self._manual_tags.values())
+        return {
+            "total_entries": len(self._manual_tags),
+            "total_tags": total_tags,
+            "avg_tags_per_entry": round(total_tags / len(self._manual_tags), 2) if self._manual_tags else 0,
+            "unique_tags": len(set().union(*self._manual_tags.values())) if self._manual_tags else 0,
+        }
+
+    def get_unique_condition_fields(self) -> List[str]:
+        """Get list of unique condition fields used in rules.
+
+        Returns:
+            List of field names.
+        """
+        fields = set()
+        for rule in self._rules:
+            fields.update(rule.conditions.keys())
+        return sorted(list(fields))
+
+    def get_rules_by_tag(self, tag: str) -> List[Dict]:
+        """Get all rules for a specific tag.
+
+        Args:
+            tag: Tag name to filter by.
+
+        Returns:
+            List of rule dictionaries.
+        """
+        return [
+            {"name": r.name, "tag": r.tag, "conditions": r.conditions,
+             "color": r.color, "priority": r.priority}
+            for r in self._rules if r.tag == tag
+        ]
