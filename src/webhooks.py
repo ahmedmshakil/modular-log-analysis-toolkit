@@ -12,7 +12,7 @@ from .models import LogEntry, LogLevel
 class WebhookSender:
     """Send webhook notifications for log events."""
 
-    def __init__(self, url: str, headers: Optional[Dict[str, str]] = None, timeout: int = 10):
+    def __init__(self, url: str, headers: Optional[Dict[str, str]] = None, timeout: int = 10, max_retries: int = 3):
         if not url or not isinstance(url, str):
             raise ValueError("URL must be a non-empty string")
         if not url.startswith(("http://", "https://")):
@@ -22,8 +22,10 @@ class WebhookSender:
         self.url = url
         self.headers = headers or {"Content-Type": "application/json"}
         self.timeout = max(1, min(int(timeout), 120))
+        self.max_retries = max(0, min(max_retries, 10))
         self._sent_count = 0
         self._error_count = 0
+        self._retry_count = 0
         self._last_error: Optional[str] = None
 
     def __repr__(self) -> str:
@@ -67,7 +69,7 @@ class WebhookSender:
         return self._post(payload)
 
     def _post(self, payload: Dict) -> bool:
-        """POST JSON payload to webhook URL."""
+        """POST JSON payload to webhook URL with retry support."""
         try:
             data = json.dumps(payload, default=str).encode("utf-8")
         except (TypeError, ValueError):
@@ -81,16 +83,61 @@ class WebhookSender:
 
         req = urllib.request.Request(self.url, data=data, headers=self.headers, method="POST")
 
-        try:
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-                self._sent_count += 1
-                return resp.status == 200
-        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
-            self._error_count += 1
-            return False
-        except Exception:
-            self._error_count += 1
-            return False
+        # Try with retries
+        for attempt in range(self.max_retries + 1):
+            try:
+                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                    self._sent_count += 1
+                    if attempt > 0:
+                        self._retry_count += attempt
+                    return resp.status == 200
+            except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
+                if attempt < self.max_retries:
+                    continue
+                self._error_count += 1
+                self._last_error = str(e)
+                return False
+            except Exception as e:
+                if attempt < self.max_retries:
+                    continue
+                self._error_count += 1
+                self._last_error = str(e)
+                return False
+
+        self._error_count += 1
+        return False
+
+    def send_with_retry(self, entry: LogEntry, extra: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Send alert with detailed retry information.
+
+        Args:
+            entry: The log entry to send as an alert.
+            extra: Additional data to include in the payload.
+
+        Returns:
+            Dictionary with send result and retry info.
+        """
+        initial_retries = self._retry_count
+        success = self.send_alert(entry, extra)
+        retries_used = self._retry_count - initial_retries
+
+        return {
+            "success": success,
+            "retries_used": retries_used,
+            "max_retries": self.max_retries,
+            "url": self.url,
+        }
+
+    @property
+    def retry_count(self) -> int:
+        """Get total number of retries performed."""
+        return self._retry_count
+
+    def reset_stats(self):
+        """Reset send statistics."""
+        self._sent_count = 0
+        self._error_count = 0
+        self._retry_count = 0
 
     @property
     def stats(self) -> Dict[str, int]:
