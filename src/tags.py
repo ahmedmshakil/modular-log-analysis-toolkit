@@ -772,3 +772,143 @@ class TagManager:
              "color": r.color, "priority": r.priority}
             for r in self._rules if r.tag == tag
         ]
+
+    def batch_apply_rules(self, entries: List[Dict], batch_size: int = 100) -> Dict[str, Any]:
+        """Apply rules to entries in batches.
+
+        Args:
+            entries: List of entry dictionaries to tag.
+            batch_size: Number of entries per batch.
+
+        Returns:
+            Dictionary with batch results.
+        """
+        if not entries:
+            return {"total": 0, "tagged": 0, "batches": 0}
+
+        results = {
+            "total": len(entries),
+            "tagged": 0,
+            "batches": 0,
+            "details": [],
+        }
+
+        for i in range(0, len(entries), batch_size):
+            batch = entries[i:i + batch_size]
+            batch_num = i // batch_size + 1
+
+            # Apply rules to batch
+            tagged_count = 0
+            for entry in batch:
+                line_num = entry.get("line_number", 0)
+                tags = set(entry.get("tags", []))
+
+                for rule in self._rules:
+                    if rule.matches(entry):
+                        tags.add(rule.tag)
+                        tagged_count += 1
+
+                entry["tags"] = list(tags)
+
+            results["tagged"] += tagged_count
+            results["batches"] += 1
+            results["details"].append({
+                "batch": batch_num,
+                "entries": len(batch),
+                "tagged": tagged_count,
+            })
+
+        return results
+
+    def batch_add_manual_tags(self, tags_map: Dict[int, List[str]]) -> Dict[str, Any]:
+        """Add manual tags to multiple entries at once.
+
+        Args:
+            tags_map: Dictionary mapping line numbers to lists of tags.
+
+        Returns:
+            Dictionary with batch results.
+        """
+        results = {
+            "total": len(tags_map),
+            "added": 0,
+            "failed": 0,
+        }
+
+        for line_number, tags in tags_map.items():
+            try:
+                for tag in tags:
+                    self.add_manual_tag(line_number, tag)
+                results["added"] += 1
+            except Exception:
+                results["failed"] += 1
+
+        return results
+
+    def batch_remove_tags(self, tags: List[str]) -> Dict[str, Any]:
+        """Remove multiple tags from all entries.
+
+        Args:
+            tags: List of tag names to remove.
+
+        Returns:
+            Dictionary with removal results.
+        """
+        results = {
+            "total": len(tags),
+            "removed": 0,
+            "not_found": 0,
+        }
+
+        for tag in tags:
+            # Remove from rules
+            initial_count = len(self._rules)
+            self._rules = [r for r in self._rules if r.tag != tag]
+            if len(self._rules) < initial_count:
+                results["removed"] += 1
+            else:
+                results["not_found"] += 1
+
+            # Remove from manual tags
+            for line_number in list(self._manual_tags.keys()):
+                if tag in self._manual_tags[line_number]:
+                    self._manual_tags[line_number].discard(tag)
+                    if not self._manual_tags[line_number]:
+                        del self._manual_tags[line_number]
+
+        return results
+
+    def get_tag_usage_stats(self) -> Dict[str, Any]:
+        """Get tag usage statistics.
+
+        Returns:
+            Dictionary with tag usage stats.
+        """
+        rule_tags = [r.tag for r in self._rules]
+        manual_tags = []
+        for tags in self._manual_tags.values():
+            manual_tags.extend(tags)
+
+        all_tags = rule_tags + manual_tags
+
+        return {
+            "total_tags": len(all_tags),
+            "rule_tags": len(rule_tags),
+            "manual_tags": len(manual_tags),
+            "unique_tags": len(set(all_tags)),
+            "tag_distribution": dict(Counter(all_tags)),
+        }
+
+    def get_tag_usage_stats_formatted(self) -> str:
+        """Get formatted tag usage statistics string.
+
+        Returns:
+            Formatted tag usage stats string.
+        """
+        stats = self.get_tag_usage_stats()
+        return (
+            f"Total: {stats['total_tags']}, "
+            f"Rule: {stats['rule_tags']}, "
+            f"Manual: {stats['manual_tags']}, "
+            f"Unique: {stats['unique_tags']}"
+        )
