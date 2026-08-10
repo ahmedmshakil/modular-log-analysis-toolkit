@@ -22,22 +22,80 @@ class RetentionPolicy:
     def __post_init__(self):
         if self.patterns is None:
             self.patterns = ["*.log"]
-        if not isinstance(self.max_age_days, int):
-            raise TypeError(f"max_age_days must be an integer, got {type(self.max_age_days).__name__}")
+
+        # Validate name
+        if not self.name or not isinstance(self.name, str):
+            raise ValueError("name must be a non-empty string")
+
+        # Validate max_age_days
+        if not isinstance(self.max_age_days, (int, float)):
+            raise TypeError(f"max_age_days must be a number, got {type(self.max_age_days).__name__}")
         if self.max_age_days < 0:
             raise ValueError("max_age_days must be non-negative")
-        if not isinstance(self.compress_after_days, int):
-            raise TypeError(f"compress_after_days must be an integer, got {type(self.compress_after_days).__name__}")
+
+        # Validate compress_after_days
+        if not isinstance(self.compress_after_days, (int, float)):
+            raise TypeError(f"compress_after_days must be a number, got {type(self.compress_after_days).__name__}")
         if self.compress_after_days < 0:
             raise ValueError("compress_after_days must be non-negative")
-        if not isinstance(self.delete_after_days, int):
-            raise TypeError(f"delete_after_days must be an integer, got {type(self.delete_after_days).__name__}")
+
+        # Validate delete_after_days
+        if not isinstance(self.delete_after_days, (int, float)):
+            raise TypeError(f"delete_after_days must be a number, got {type(self.delete_after_days).__name__}")
         if self.delete_after_days < 0:
             raise ValueError("delete_after_days must be non-negative")
+
+        # Validate max_size_mb
         if not isinstance(self.max_size_mb, (int, float)):
             raise TypeError(f"max_size_mb must be a number, got {type(self.max_size_mb).__name__}")
         if self.max_size_mb < 0:
             raise ValueError("max_size_mb must be non-negative")
+
+        # Validate patterns
+        if not isinstance(self.patterns, list):
+            raise TypeError(f"patterns must be a list, got {type(self.patterns).__name__}")
+        for pattern in self.patterns:
+            if not isinstance(pattern, str):
+                raise TypeError(f"Each pattern must be a string, got {type(pattern).__name__}")
+
+        # Convert float to int for integer fields
+        self.max_age_days = int(self.max_age_days)
+        self.compress_after_days = int(self.compress_after_days)
+        self.delete_after_days = int(self.delete_after_days)
+
+    def validate(self) -> Dict[str, Any]:
+        """Validate the retention policy.
+
+        Returns:
+            Dictionary with validation result.
+        """
+        errors = []
+
+        if not self.name:
+            errors.append("name is required")
+
+        if self.max_age_days < 0:
+            errors.append("max_age_days must be non-negative")
+
+        if self.compress_after_days < 0:
+            errors.append("compress_after_days must be non-negative")
+
+        if self.delete_after_days < 0:
+            errors.append("delete_after_days must be non-negative")
+
+        if self.max_size_mb < 0:
+            errors.append("max_size_mb must be non-negative")
+
+        if self.compress_after_days > 0 and self.compress_after_days >= self.max_age_days:
+            errors.append("compress_after_days should be less than max_age_days")
+
+        if self.delete_after_days > 0 and self.delete_after_days <= self.compress_after_days:
+            errors.append("delete_after_days should be greater than compress_after_days")
+
+        return {
+            "valid": len(errors) == 0,
+            "errors": errors,
+        }
 
     def __repr__(self) -> str:
         return (
