@@ -480,6 +480,58 @@ manager.reset()
 print("All rules and tags cleared")
 ```
 
+### Batch Operations
+
+```python
+# Apply rules to entries in batches
+entries = [
+    {"line_number": 1, "level": "ERROR", "message": "Database connection failed"},
+    {"line_number": 2, "level": "INFO", "message": "User logged in"},
+    # ... more entries
+]
+
+result = manager.batch_apply_rules(entries, batch_size=100)
+print(f"Total: {result['total']}")
+print(f"Tagged: {result['tagged']}")
+print(f"Batches: {result['batches']}")
+
+# Batch add manual tags
+tags_map = {
+    1: ["critical", "database"],
+    2: ["info", "auth"],
+    3: ["warning", "network"],
+}
+result = manager.batch_add_manual_tags(tags_map)
+print(f"Added: {result['added']}")
+print(f"Failed: {result['failed']}")
+
+# Batch remove tags
+tags_to_remove = ["old_tag", "temp_tag"]
+result = manager.batch_remove_tags(tags_to_remove)
+print(f"Removed: {result['removed']}")
+print(f"Not found: {result['not_found']}")
+```
+
+### Tag Statistics
+
+```python
+# Get tag usage statistics
+stats = manager.get_tag_usage_stats()
+print(f"Total tags: {stats['total_tags']}")
+print(f"Rule tags: {stats['rule_tags']}")
+print(f"Manual tags: {stats['manual_tags']}")
+print(f"Unique tags: {stats['unique_tags']}")
+
+# Get formatted stats
+print(manager.get_tag_usage_stats_formatted())
+
+# Get comprehensive summary
+summary = manager.get_rules_summary()
+print(f"Total rules: {summary['total_rules']}")
+print(f"Unique tags: {summary['unique_tags']}")
+print(f"Avg priority: {summary['avg_priority']:.1f}")
+```
+
 ## See Also
 
 - [Models](models.md) - LogEntry structure
