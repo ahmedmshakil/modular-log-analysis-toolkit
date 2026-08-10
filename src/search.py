@@ -864,10 +864,141 @@ class LogSearchIndex:
         """
         return f"{len(self.get_unique_levels())} unique levels"
 
-    def get_index_size_formatted(self) -> str:
-        """Get formatted index size string.
+    def add_batch_optimized(self, entries: List[LogEntry], batch_size: int = 1000) -> Dict[str, Any]:
+        """Add entries to index in optimized batches.
+
+        Args:
+            entries: List of entries to index.
+            batch_size: Number of entries per batch.
 
         Returns:
-            Formatted index size string.
+            Dictionary with indexing results.
         """
-        return f"{len(self._entries)} entries, {len(self._index)} words"
+        if not entries:
+            return {"total": 0, "indexed": 0, "batches": 0}
+
+        results = {
+            "total": len(entries),
+            "indexed": 0,
+            "batches": 0,
+            "words_added": 0,
+        }
+
+        for i in range(0, len(entries), batch_size):
+            batch = entries[i:i + batch_size]
+            batch_num = i // batch_size + 1
+
+            for entry in batch:
+                idx = len(self._entries)
+                self._entries.append(entry)
+
+                # Index words from message
+                words = self._tokenize(entry.message)
+                for word in words:
+                    self._index[word].add(idx)
+                    results["words_added"] += 1
+
+                # Index fields
+                self._field_index["level"][entry.level.value].add(idx)
+                if entry.source:
+                    self._field_index["source"][entry.source.lower()].add(idx)
+
+            results["indexed"] += len(batch)
+            results["batches"] += 1
+
+        return results
+
+    def rebuild_index(self) -> Dict[str, Any]:
+        """Rebuild the entire index from scratch.
+
+        Returns:
+            Dictionary with rebuild results.
+        """
+        old_word_count = len(self._index)
+        old_entry_count = len(self._entries)
+
+        # Clear index
+        self._index.clear()
+        self._field_index["level"].clear()
+        self._field_index["source"].clear()
+
+        # Re-index all entries
+        entries = self._entries.copy()
+        self._entries.clear()
+
+        for entry in entries:
+            self.add(entry)
+
+        return {
+            "old_entries": old_entry_count,
+            "new_entries": len(self._entries),
+            "old_words": old_word_count,
+            "new_words": len(self._index),
+        }
+
+    def get_index_stats(self) -> Dict[str, Any]:
+        """Get comprehensive index statistics.
+
+        Returns:
+            Dictionary with index stats.
+        """
+        return {
+            "entries": len(self._entries),
+            "words": len(self._index),
+            "levels": len(self._field_index["level"]),
+            "sources": len(self._field_index["source"]),
+            "avg_words_per_entry": round(
+                sum(len(indices) for indices in self._index.values()) / max(1, len(self._entries)),
+                2
+            ),
+        }
+
+    def get_index_stats_formatted(self) -> str:
+        """Get formatted index statistics string.
+
+        Returns:
+            Formatted index stats string.
+        """
+        stats = self.get_index_stats()
+        return (
+            f"Entries: {stats['entries']}, "
+            f"Words: {stats['words']}, "
+            f"Levels: {stats['levels']}, "
+            f"Sources: {stats['sources']}"
+        )
+
+    def optimize_index(self) -> Dict[str, Any]:
+        """Optimize index by removing empty word entries.
+
+        Returns:
+            Dictionary with optimization results.
+        """
+        initial_words = len(self._index)
+
+        # Remove words with no entries
+        empty_words = [word for word, indices in self._index.items() if not indices]
+        for word in empty_words:
+            del self._index[word]
+
+        return {
+            "initial_words": initial_words,
+            "final_words": len(self._index),
+            "removed": len(empty_words),
+        }
+
+    def get_word_frequency_stats(self) -> Dict[str, Any]:
+        """Get word frequency statistics.
+
+        Returns:
+            Dictionary with word frequency stats.
+        """
+        if not self._index:
+            return {"total_words": 0, "avg_frequency": 0, "max_frequency": 0}
+
+        frequencies = [len(indices) for indices in self._index.values()]
+        return {
+            "total_words": len(self._index),
+            "avg_frequency": round(sum(frequencies) / len(frequencies), 2),
+            "max_frequency": max(frequencies),
+            "min_frequency": min(frequencies),
+        }
