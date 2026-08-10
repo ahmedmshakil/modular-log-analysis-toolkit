@@ -915,3 +915,162 @@ class LogExporter:
             results[source] = LogExporter.to_json(source_entries, str(out / f"{source_prefix}.json"))
 
         return results
+
+    @staticmethod
+    def export_with_options(entries: List[LogEntry], output_path: str, options: Dict[str, Any]) -> Dict[str, Any]:
+        """Export entries with custom options.
+
+        Args:
+            entries: List of log entries to export.
+            output_path: Path to write the export file.
+            options: Export options dictionary.
+
+        Returns:
+            Dictionary with export results.
+        """
+        if not entries:
+            return {"success": False, "error": "No entries to export"}
+
+        # Parse options
+        format_type = options.get("format", "json")
+        indent = options.get("indent", 2)
+        encoding = options.get("encoding", "utf-8")
+        include_metadata = options.get("include_metadata", True)
+        filter_level = options.get("filter_level")
+        filter_source = options.get("filter_source")
+
+        # Apply filters
+        filtered_entries = entries
+        if filter_level:
+            filtered_entries = [e for e in filtered_entries if e.level.value == filter_level]
+        if filter_source:
+            filtered_entries = [e for e in filtered_entries if e.source == filter_source]
+
+        if not filtered_entries:
+            return {"success": False, "error": "No entries match filters"}
+
+        # Export based on format
+        try:
+            if format_type == "json":
+                result_path = LogExporter.to_json(filtered_entries, output_path, indent, encoding)
+            elif format_type == "csv":
+                result_path = LogExporter.to_csv(filtered_entries, output_path, encoding)
+            elif format_type == "text":
+                result_path = LogExporter.to_text(filtered_entries, output_path, encoding)
+            else:
+                return {"success": False, "error": f"Unsupported format: {format_type}"}
+
+            return {
+                "success": True,
+                "path": result_path,
+                "format": format_type,
+                "entries": len(filtered_entries),
+                "original_entries": len(entries),
+                "filtered": len(entries) - len(filtered_entries),
+            }
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @staticmethod
+    def export_summary(entries: List[LogEntry], output_path: str) -> Dict[str, Any]:
+        """Export a summary report of the entries.
+
+        Args:
+            entries: List of log entries.
+            output_path: Path to write the summary.
+
+        Returns:
+            Dictionary with export results.
+        """
+        if not entries:
+            return {"success": False, "error": "No entries to summarize"}
+
+        try:
+            # Generate summary
+            level_counts = {}
+            source_counts = {}
+            for entry in entries:
+                level_counts[entry.level.value] = level_counts.get(entry.level.value, 0) + 1
+                if entry.source:
+                    source_counts[entry.source] = source_counts.get(entry.source, 0) + 1
+
+            summary = {
+                "total_entries": len(entries),
+                "level_distribution": level_counts,
+                "source_distribution": source_counts,
+                "time_range": {
+                    "start": min(e.timestamp for e in entries).isoformat(),
+                    "end": max(e.timestamp for e in entries).isoformat(),
+                },
+                "error_rate": round(
+                    level_counts.get("ERROR", 0) / len(entries) * 100, 2
+                ) if entries else 0,
+            }
+
+            # Write summary
+            path = Path(output_path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with open(path, "w") as f:
+                json.dump(summary, f, indent=2)
+
+            return {
+                "success": True,
+                "path": str(path),
+                "summary": summary,
+            }
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @staticmethod
+    def export_filtered(entries: List[LogEntry], output_path: str, filters: Dict[str, Any]) -> Dict[str, Any]:
+        """Export entries with filters applied.
+
+        Args:
+            entries: List of log entries to export.
+            output_path: Path to write the export file.
+            filters: Filters to apply.
+
+        Returns:
+            Dictionary with export results.
+        """
+        if not entries:
+            return {"success": False, "error": "No entries to export"}
+
+        # Apply filters
+        filtered = entries.copy()
+
+        if "level" in filters:
+            level = filters["level"]
+            filtered = [e for e in filtered if e.level.value == level]
+
+        if "source" in filters:
+            source = filters["source"]
+            filtered = [e for e in filtered if e.source == source]
+
+        if "keyword" in filters:
+            keyword = filters["keyword"].lower()
+            filtered = [e for e in filtered if keyword in e.message.lower()]
+
+        if "start_time" in filters:
+            start_time = filters["start_time"]
+            filtered = [e for e in filtered if e.timestamp >= start_time]
+
+        if "end_time" in filters:
+            end_time = filters["end_time"]
+            filtered = [e for e in filtered if e.timestamp <= end_time]
+
+        if not filtered:
+            return {"success": False, "error": "No entries match filters"}
+
+        # Export filtered entries
+        try:
+            result_path = LogExporter.to_json(filtered, output_path)
+            return {
+                "success": True,
+                "path": result_path,
+                "entries": len(filtered),
+                "original_entries": len(entries),
+                "filters_applied": filters,
+            }
+        except Exception as e:
+            return {"success": False, "error": str(e)}
