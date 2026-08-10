@@ -598,46 +598,172 @@ def get_file_type_formatted(file_path: str) -> str:
     return f"Type: {get_file_type(file_path)}"
 
 
-def get_supported_text_extensions_formatted() -> str:
-    """Get formatted text extensions string.
+def read_log_safe(file_path: str, encoding: str = "utf-8") -> Dict[str, Any]:
+    """Read log file with comprehensive error handling.
+
+    Args:
+        file_path: Path to the log file.
+        encoding: File encoding (default: utf-8).
 
     Returns:
-        Formatted text extensions string.
+        Dictionary with read results.
     """
-    return ", ".join(get_supported_text_extensions())
+    path = Path(file_path)
+
+    if not path.exists():
+        return {"success": False, "error": "File not found", "lines": []}
+
+    if not path.is_file():
+        return {"success": False, "error": "Not a regular file", "lines": []}
+
+    try:
+        lines = []
+        with open(path, "r", encoding=encoding) as f:
+            for line in f:
+                lines.append(line.rstrip("\n"))
+
+        return {
+            "success": True,
+            "error": None,
+            "lines": lines,
+            "count": len(lines),
+            "file": str(path),
+            "size_bytes": path.stat().st_size,
+        }
+    except UnicodeDecodeError as e:
+        return {"success": False, "error": f"Encoding error: {e}", "lines": []}
+    except PermissionError:
+        return {"success": False, "error": "Permission denied", "lines": []}
+    except Exception as e:
+        return {"success": False, "error": str(e), "lines": []}
 
 
-def get_supported_log_extensions_formatted() -> str:
-    """Get formatted log extensions string.
+def read_compressed_log_safe(file_path: str, encoding: str = "utf-8") -> Dict[str, Any]:
+    """Read compressed log file with comprehensive error handling.
+
+    Args:
+        file_path: Path to the compressed log file.
+        encoding: File encoding (default: utf-8).
 
     Returns:
-        Formatted log extensions string.
+        Dictionary with read results.
     """
-    return ", ".join(get_supported_log_extensions())
+    path = Path(file_path)
+
+    if not path.exists():
+        return {"success": False, "error": "File not found", "lines": []}
+
+    try:
+        lines = []
+        with gzip.open(file_path, "rt", encoding=encoding) as f:
+            for line in f:
+                lines.append(line.rstrip("\n"))
+
+        return {
+            "success": True,
+            "error": None,
+            "lines": lines,
+            "count": len(lines),
+            "file": str(path),
+            "compressed": True,
+        }
+    except gzip.BadGzipFile:
+        return {"success": False, "error": "Not a valid gzip file", "lines": []}
+    except UnicodeDecodeError as e:
+        return {"success": False, "error": f"Encoding error: {e}", "lines": []}
+    except Exception as e:
+        return {"success": False, "error": str(e), "lines": []}
 
 
-def get_all_extensions_formatted() -> str:
-    """Get formatted all extensions string.
+def get_file_info(file_path: str) -> Dict[str, Any]:
+    """Get comprehensive file information.
+
+    Args:
+        file_path: Path to the file.
 
     Returns:
-        Formatted all extensions string.
+        Dictionary with file info.
     """
-    return ", ".join(sorted(get_all_supported_extensions()))
+    path = Path(file_path)
+
+    if not path.exists():
+        return {"exists": False, "error": "File not found"}
+
+    try:
+        stat = path.stat()
+        return {
+            "exists": True,
+            "error": None,
+            "name": path.name,
+            "path": str(path.absolute()),
+            "size_bytes": stat.st_size,
+            "size_mb": round(stat.st_size / (1024 * 1024), 2),
+            "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+            "is_file": path.is_file(),
+            "is_dir": path.is_dir(),
+            "extension": path.suffix,
+            "is_compressed": path.suffix == ".gz",
+            "is_log": path.suffix in [".log", ".txt", ".gz"],
+        }
+    except Exception as e:
+        return {"exists": True, "error": str(e)}
 
 
-def get_encoding_count_formatted() -> str:
-    """Get formatted encoding count string.
+def validate_file_path(file_path: str) -> Dict[str, Any]:
+    """Validate a file path for log reading.
+
+    Args:
+        file_path: Path to validate.
 
     Returns:
-        Formatted encoding count string.
+        Dictionary with validation result.
     """
-    return f"{get_encoding_count()} encodings"
+    if not file_path or not isinstance(file_path, str):
+        return {"valid": False, "error": "Path must be a non-empty string"}
+
+    path = Path(file_path)
+
+    if not path.exists():
+        return {"valid": False, "error": "File not found"}
+
+    if not path.is_file():
+        return {"valid": False, "error": "Not a regular file"}
+
+    try:
+        with open(path, "r") as f:
+            f.read(1)
+        return {"valid": True, "error": None}
+    except PermissionError:
+        return {"valid": False, "error": "Permission denied"}
+    except UnicodeDecodeError:
+        return {"valid": False, "error": "File is not text-readable"}
+    except Exception as e:
+        return {"valid": False, "error": str(e)}
 
 
-def get_supported_encodings_formatted() -> str:
-    """Get formatted supported encodings string.
+def get_file_stats(file_path: str) -> Dict[str, Any]:
+    """Get file statistics.
+
+    Args:
+        file_path: Path to the file.
 
     Returns:
-        Formatted supported encodings string.
+        Dictionary with file stats.
     """
-    return ", ".join(get_supported_encodings())
+    path = Path(file_path)
+
+    if not path.exists():
+        return {"exists": False}
+
+    try:
+        stat = path.stat()
+        return {
+            "exists": True,
+            "size_bytes": stat.st_size,
+            "size_mb": round(stat.st_size / (1024 * 1024), 2),
+            "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+            "extension": path.suffix,
+            "is_compressed": path.suffix == ".gz",
+        }
+    except Exception as e:
+        return {"exists": True, "error": str(e)}
