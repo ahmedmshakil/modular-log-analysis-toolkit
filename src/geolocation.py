@@ -747,21 +747,120 @@ class GeoLookup:
         """
         return f"{self.get_cache_usage_percent():.1f}%"
 
-    def get_lookup_efficiency(self) -> float:
-        """Get lookup efficiency (cache hits per total lookups).
+    def optimize_cache(self) -> Dict[str, Any]:
+        """Optimize cache by removing least recently used entries.
 
         Returns:
-            Lookup efficiency percentage.
+            Dictionary with optimization results.
         """
-        total = self.get_total_lookups()
-        if total == 0:
-            return 0.0
-        return round(self._cache_hits / total * 100, 2)
+        initial_size = len(self._cache)
 
-    def get_lookup_efficiency_formatted(self) -> str:
-        """Get formatted lookup efficiency string.
+        # If cache is near capacity, remove oldest entries
+        if len(self._cache) >= self._cache_size * 0.9:
+            # Remove 20% of cache (oldest entries)
+            remove_count = int(self._cache_size * 0.2)
+            keys_to_remove = list(self._cache.keys())[:remove_count]
+            for key in keys_to_remove:
+                del self._cache[key]
+
+        return {
+            "initial_size": initial_size,
+            "final_size": len(self._cache),
+            "removed": initial_size - len(self._cache),
+            "cache_size_limit": self._cache_size,
+        }
+
+    def batch_lookup_cached(self, ips: List[str]) -> Dict[str, Optional[GeoLocation]]:
+        """Look up multiple IPs with caching optimization.
+
+        Args:
+            ips: List of IP addresses to look up.
 
         Returns:
-            Formatted lookup efficiency string.
+            Dictionary mapping IP to GeoLocation.
         """
-        return f"{self.get_lookup_efficiency():.1f}%"
+        results = {}
+        uncached_ips = []
+
+        # Check cache first
+        for ip in ips:
+            if ip in self._cache:
+                self._cache_hits += 1
+                results[ip] = self._cache[ip]
+            else:
+                uncached_ips.append(ip)
+
+        # Look up uncached IPs
+        for ip in uncached_ips:
+            result = self.lookup(ip)
+            results[ip] = result
+
+        return results
+
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Get comprehensive cache statistics.
+
+        Returns:
+            Dictionary with cache stats.
+        """
+        return {
+            "size": len(self._cache),
+            "max_size": self._cache_size,
+            "usage_percent": self.get_cache_usage_percent(),
+            "hit_rate": self.cache_hit_rate,
+            "efficiency": self.get_lookup_efficiency(),
+            "total_lookups": self.get_total_lookups(),
+            "cache_hits": self._cache_hits,
+        }
+
+    def preload_cache(self, ips: List[str]) -> Dict[str, Any]:
+        """Preload cache with IP lookups.
+
+        Args:
+            ips: List of IPs to preload.
+
+        Returns:
+            Dictionary with preload results.
+        """
+        results = {
+            "total": len(ips),
+            "loaded": 0,
+            "failed": 0,
+        }
+
+        for ip in ips:
+            if ip not in self._cache:
+                result = self.lookup(ip)
+                if result:
+                    results["loaded"] += 1
+                else:
+                    results["failed"] += 1
+
+        return results
+
+    def get_cache_entries(self) -> List[Dict[str, Any]]:
+        """Get all cached entries.
+
+        Returns:
+            List of cached entry dictionaries.
+        """
+        return [
+            {"ip": ip, "location": loc.to_dict()}
+            for ip, loc in self._cache.items()
+        ]
+
+    def clear_and_reset(self) -> Dict[str, Any]:
+        """Clear cache and reset statistics.
+
+        Returns:
+            Dictionary with reset results.
+        """
+        cache_size = len(self._cache)
+        self._cache.clear()
+        self._lookup_count = 0
+        self._cache_hits = 0
+
+        return {
+            "cleared_entries": cache_size,
+            "stats_reset": True,
+        }
