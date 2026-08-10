@@ -626,28 +626,152 @@ class WebhookRouter:
             return "none"
         return ", ".join(names)
 
-    def get_endpoints_dict(self) -> List[Dict[str, Any]]:
-        """Get endpoints as dictionaries.
+    def validate_endpoint(self, name: str, url: str) -> Dict[str, Any]:
+        """Validate endpoint configuration.
+
+        Args:
+            name: Endpoint name.
+            url: Endpoint URL.
 
         Returns:
-            List of endpoint dictionaries.
+            Dictionary with validation result.
         """
-        return [
-            {
-                "name": name,
+        errors = []
+
+        if not name or not isinstance(name, str):
+            errors.append("Name must be a non-empty string")
+        elif name in self._senders:
+            errors.append(f"Endpoint '{name}' already exists")
+
+        if not url or not isinstance(url, str):
+            errors.append("URL must be a non-empty string")
+        elif not url.startswith(("http://", "https://")):
+            errors.append("URL must start with http:// or https://")
+
+        return {
+            "valid": len(errors) == 0,
+            "errors": errors,
+        }
+
+    def get_endpoint_health(self) -> Dict[str, Any]:
+        """Get health status of all endpoints.
+
+        Returns:
+            Dictionary with health status.
+        """
+        endpoints = {}
+        healthy = 0
+        unhealthy = 0
+
+        for name, sender in self._senders.items():
+            stats = sender.stats
+            total = stats["sent"] + stats["errors"]
+            success_rate = (stats["sent"] / total * 100) if total > 0 else 0
+
+            is_healthy = success_rate >= 90
+            if is_healthy:
+                healthy += 1
+            else:
+                unhealthy += 1
+
+            endpoints[name] = {
                 "url": sender.url,
-                "stats": sender.stats,
+                "healthy": is_healthy,
+                "success_rate": round(success_rate, 2),
+                "stats": stats,
             }
-            for name, sender in self._senders.items()
-        ]
 
-    def get_endpoints_formatted(self) -> str:
-        """Get formatted endpoints string.
+        return {
+            "total": len(self._senders),
+            "healthy": healthy,
+            "unhealthy": unhealthy,
+            "endpoints": endpoints,
+        }
+
+    def get_endpoint_health_formatted(self) -> str:
+        """Get formatted endpoint health string.
 
         Returns:
-            Formatted endpoints string.
+            Formatted health string.
         """
-        endpoints = self.get_endpoints_dict()
-        if not endpoints:
-            return "none"
-        return ", ".join(f"{e['name']}({e['url']})" for e in endpoints)
+        health = self.get_endpoint_health()
+        return (
+            f"Total: {health['total']}, "
+            f"Healthy: {health['healthy']}, "
+            f"Unhealthy: {health['unhealthy']}"
+        )
+
+    def test_endpoint(self, name: str) -> Dict[str, Any]:
+        """Test an endpoint by sending a test message.
+
+        Args:
+            name: Endpoint name to test.
+
+        Returns:
+            Dictionary with test result.
+        """
+        if name not in self._senders:
+            return {"success": False, "error": f"Endpoint '{name}' not found"}
+
+        sender = self._senders[name]
+
+        # Create test entry
+        from .models import LogEntry, LogLevel
+        test_entry = LogEntry(
+            timestamp=datetime.now(),
+            level=LogLevel.INFO,
+            message="Test webhook message",
+            source="webhook_test",
+        )
+
+        try:
+            success = sender.send_alert(test_entry, {"test": True})
+            return {
+                "success": success,
+                "endpoint": name,
+                "url": sender.url,
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "endpoint": name,
+                "url": sender.url,
+                "error": str(e),
+            }
+
+    def get_router_stats(self) -> Dict[str, Any]:
+        """Get comprehensive router statistics.
+
+        Returns:
+            Dictionary with router stats.
+        """
+        total_sent = 0
+        total_errors = 0
+
+        for sender in self._senders.values():
+            stats = sender.stats
+            total_sent += stats["sent"]
+            total_errors += stats["errors"]
+
+        return {
+            "endpoints": len(self._senders),
+            "total_sent": total_sent,
+            "total_errors": total_errors,
+            "success_rate": round(
+                total_sent / (total_sent + total_errors) * 100, 2
+            ) if (total_sent + total_errors) > 0 else 0,
+        }
+
+    def get_router_stats_formatted(self) -> str:
+        """Get formatted router statistics string.
+
+        Returns:
+            Formatted router stats string.
+        """
+        stats = self.get_router_stats()
+        return (
+            f"Endpoints: {stats['endpoints']}, "
+            f"Sent: {stats['total_sent']}, "
+            f"Errors: {stats['total_errors']}, "
+            f"Success: {stats['success_rate']:.1f}%"
+        )
