@@ -738,42 +738,124 @@ class PluginManager:
         """
         return self.get_stats_formatted()
 
-    def get_total_count_formatted(self) -> str:
-        """Get formatted total count string.
+    def get_plugin_versions(self) -> Dict[str, str]:
+        """Get versions of all registered plugins.
 
         Returns:
-            Formatted total count string.
+            Dictionary mapping plugin name to version.
         """
-        return f"{len(self._plugins)} plugins"
+        return {name: plugin.version for name, plugin in self._plugins.items()}
 
-    def get_enabled_count_formatted(self) -> str:
-        """Get formatted enabled count string.
+    def get_plugin_versions_formatted(self) -> str:
+        """Get formatted plugin versions string.
 
         Returns:
-            Formatted enabled count string.
+            Formatted versions string.
         """
-        return f"{self.get_enabled_count()} enabled"
+        versions = self.get_plugin_versions()
+        if not versions:
+            return "No plugins"
+        return ", ".join(f"{name}({ver})" for name, ver in versions.items())
 
-    def get_disabled_count_formatted(self) -> str:
-        """Get formatted disabled count string.
+    def get_plugins_by_type(self, plugin_type: Type) -> List[str]:
+        """Get plugins of a specific type.
+
+        Args:
+            plugin_type: Type to filter by.
 
         Returns:
-            Formatted disabled count string.
+            List of plugin names.
         """
-        return f"{self.get_disabled_count()} disabled"
+        return [
+            name for name, plugin in self._plugins.items()
+            if isinstance(plugin, plugin_type)
+        ]
 
-    def get_enabled_rate_formatted(self) -> str:
-        """Get formatted enabled rate string.
+    def get_plugin_info(self, name: str) -> Optional[Dict[str, Any]]:
+        """Get detailed information about a plugin.
+
+        Args:
+            name: Plugin name.
 
         Returns:
-            Formatted enabled rate string.
+            Dictionary with plugin info, or None if not found.
         """
-        return f"{self.get_enabled_rate_percent():.1f}%"
+        if name not in self._plugins:
+            return None
 
-    def get_disabled_rate_formatted(self) -> str:
-        """Get formatted disabled rate string.
+        plugin = self._plugins[name]
+        return {
+            "name": name,
+            "version": plugin.version,
+            "enabled": self._enabled.get(name, False),
+            "type": type(plugin).__name__,
+            "module": type(plugin).__module__,
+        }
+
+    def get_all_plugins_info(self) -> List[Dict[str, Any]]:
+        """Get information about all plugins.
 
         Returns:
-            Formatted disabled rate string.
+            List of plugin info dictionaries.
         """
-        return f"{self.get_disabled_rate_percent():.1f}%"
+        return [self.get_plugin_info(name) for name in self._plugins]
+
+    def get_plugins_summary(self) -> Dict[str, Any]:
+        """Get comprehensive plugins summary.
+
+        Returns:
+            Dictionary with plugins summary.
+        """
+        return {
+            "total": len(self._plugins),
+            "enabled": self.get_enabled_count(),
+            "disabled": self.get_disabled_count(),
+            "enabled_rate": self.get_enabled_rate_percent(),
+            "versions": self.get_plugin_versions(),
+            "types": list(set(type(p).__name__ for p in self._plugins.values())),
+        }
+
+    def get_plugins_summary_formatted(self) -> str:
+        """Get formatted plugins summary string.
+
+        Returns:
+            Formatted summary string.
+        """
+        summary = self.get_plugins_summary()
+        return (
+            f"Plugins: {summary['total']}, "
+            f"Enabled: {summary['enabled']}, "
+            f"Types: {len(summary['types'])}"
+        )
+
+    def has_plugins(self) -> bool:
+        """Check if any plugins are registered.
+
+        Returns:
+            True if plugins exist.
+        """
+        return len(self._plugins) > 0
+
+    def has_enabled_plugins(self) -> bool:
+        """Check if any plugins are enabled.
+
+        Returns:
+            True if enabled plugins exist.
+        """
+        return self.get_enabled_count() > 0
+
+    def get_plugin_names_sorted(self) -> List[str]:
+        """Get sorted list of plugin names.
+
+        Returns:
+            Sorted list of plugin names.
+        """
+        return sorted(self._plugins.keys())
+
+    def get_enabled_plugin_names_sorted(self) -> List[str]:
+        """Get sorted list of enabled plugin names.
+
+        Returns:
+            Sorted list of enabled plugin names.
+        """
+        return sorted([name for name, enabled in self._enabled.items() if enabled])
