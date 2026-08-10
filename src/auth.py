@@ -1038,16 +1038,130 @@ class AuthManager:
             json.dump(data, f, indent=2)
 
     def _load_users(self):
-        """Load users from file."""
+        """Load users from file with error handling."""
         path = self.data_dir / "users.json"
-        if path.exists():
+        if not path.exists():
+            return
+
+        try:
             with open(path) as f:
                 data = json.load(f)
-            for name, info in data.items():
+        except json.JSONDecodeError as e:
+            print(f"Warning: Failed to parse users.json: {e}")
+            return
+        except Exception as e:
+            print(f"Warning: Failed to load users: {e}")
+            return
+
+        for name, info in data.items():
+            try:
+                if not isinstance(info, dict):
+                    continue
+                if "password_hash" not in info:
+                    continue
+
+                last_login = None
+                if info.get("last_login"):
+                    try:
+                        last_login = datetime.fromisoformat(info["last_login"])
+                    except (ValueError, TypeError):
+                        pass
+
                 self._users[name] = User(
                     username=name,
                     password_hash=info["password_hash"],
                     role=info.get("role", "viewer"),
-                    last_login=datetime.fromisoformat(info["last_login"]) if info.get("last_login") else None,
+                    last_login=last_login,
                     active=info.get("active", True),
                 )
+            except Exception as e:
+                print(f"Warning: Failed to load user '{name}': {e}")
+                continue
+
+    def validate_user_data(self, username: str, password: str, role: str = "viewer") -> Dict[str, Any]:
+        """Validate user creation data.
+
+        Args:
+            username: Username to validate.
+            password: Password to validate.
+            role: Role to validate.
+
+        Returns:
+            Dictionary with validation result.
+        """
+        errors = []
+
+        if not username or not isinstance(username, str):
+            errors.append("Username must be a non-empty string")
+        elif len(username) < 3:
+            errors.append("Username must be at least 3 characters")
+        elif len(username) > 50:
+            errors.append("Username must be at most 50 characters")
+        elif not username.isalnum():
+            errors.append("Username must contain only alphanumeric characters")
+
+        if not password or not isinstance(password, str):
+            errors.append("Password must be a non-empty string")
+        elif len(password) < 8:
+            errors.append("Password must be at least 8 characters")
+
+        if role not in self.ROLES:
+            errors.append(f"Invalid role: {role}. Must be one of: {', '.join(self.ROLES.keys())}")
+
+        return {
+            "valid": len(errors) == 0,
+            "errors": errors,
+        }
+
+    def validate_session_token(self, token: str) -> Dict[str, Any]:
+        """Validate a session token.
+
+        Args:
+            token: Session token to validate.
+
+        Returns:
+            Dictionary with validation result.
+        """
+        if not token or not isinstance(token, str):
+            return {"valid": False, "error": "Token must be a non-empty string"}
+
+        if token not in self._sessions:
+            return {"valid": False, "error": "Invalid token"}
+
+        session = self._sessions[token]
+        if datetime.now() > session["expires"]:
+            del self._sessions[token]
+            return {"valid": False, "error": "Token expired"}
+
+        return {
+            "valid": True,
+            "error": None,
+            "username": session["username"],
+        }
+
+    def get_auth_stats(self) -> Dict[str, Any]:
+        """Get authentication statistics.
+
+        Returns:
+            Dictionary with auth stats.
+        """
+        return {
+            "total_users": len(self._users),
+            "active_users": self.get_active_count(),
+            "inactive_users": self.get_inactive_count(),
+            "active_sessions": len(self._sessions),
+            "roles": self.get_role_distribution(),
+        }
+
+    def get_auth_stats_formatted(self) -> str:
+        """Get formatted auth statistics string.
+
+        Returns:
+            Formatted auth stats string.
+        """
+        stats = self.get_auth_stats()
+        return (
+            f"Users: {stats['total_users']}, "
+            f"Active: {stats['active_users']}, "
+            f"Sessions: {stats['active_sessions']}"
+        )
