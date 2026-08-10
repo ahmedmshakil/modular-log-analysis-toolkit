@@ -468,6 +468,64 @@ for t in threads:
 print(f"Cache size: {cache.stats['size']}")
 ```
 
+### Memory Usage Tracking
+
+```python
+from src.cache import LRUCache
+
+cache = LRUCache(max_size=1000)
+
+# Add some items
+for i in range(100):
+    cache.put(f"key_{i}", f"value_{i}" * 100)
+
+# Get memory usage
+usage = cache.get_memory_usage()
+print(f"Total: {usage['total_kb']:.2f} KB")
+print(f"Entries: {usage['entry_count']}")
+print(f"Avg Key Size: {usage['avg_key_size']:.2f} bytes")
+print(f"Avg Value Size: {usage['avg_value_size']:.2f} bytes")
+
+# Get formatted memory usage
+print(f"Memory: {cache.get_memory_usage_formatted()}")
+
+# Get memory per entry
+print(f"Per Entry: {cache.get_memory_per_entry_formatted()}")
+
+# Get comprehensive memory stats
+stats = cache.get_memory_stats()
+print(f"Cache Stats: {stats['cache_stats']}")
+print(f"Memory Stats: {stats['memory']}")
+```
+
+### Cache Eviction
+
+```python
+from src.cache import QueryCache
+
+cache = QueryCache(max_size=100)
+
+# Add queries
+for i in range(150):
+    cache.store_results(f"query_{i}", [f"result_{i}"])
+
+# Auto-evict to reach target usage
+evicted = cache.auto_evict(target_usage=80.0)
+print(f"Evicted: {evicted} entries")
+
+# Evict by age
+evicted = cache.evict_by_age(max_age_seconds=3600)
+print(f"Evicted by age: {evicted}")
+
+# Evict by popularity
+evicted = cache.evict_by_popularity(min_popularity=5)
+print(f"Evicted by popularity: {evicted}")
+
+# Get eviction candidates
+candidates = cache.get_eviction_candidates(count=10)
+print(f"Candidates: {candidates}")
+```
+
 ## See Also
 
 - [Search](search.md) - Search query caching
