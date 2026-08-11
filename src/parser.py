@@ -619,3 +619,107 @@ class LogParser:
             "num_batches": batches,
             "last_batch_size": total_lines % batch_size if total_lines % batch_size > 0 else batch_size,
         }
+
+    def validate_line(self, line: str) -> Dict[str, Any]:
+        """Validate a log line without parsing.
+
+        Args:
+            line: Log line to validate.
+
+        Returns:
+            Dictionary with validation result.
+        """
+        if not line or not isinstance(line, str):
+            return {"valid": False, "error": "Line must be a non-empty string"}
+
+        line = line.strip()
+        if not line:
+            return {"valid": False, "error": "Line is empty"}
+
+        match = self.pattern.match(line)
+        if not match:
+            return {"valid": False, "error": "Line does not match pattern"}
+
+        groups = match.groupdict()
+        return {
+            "valid": True,
+            "error": None,
+            "groups": groups,
+            "has_timestamp": bool(groups.get("timestamp")),
+            "has_level": bool(groups.get("level")),
+            "has_message": bool(groups.get("message")),
+        }
+
+    def validate_lines(self, lines: List[str]) -> Dict[str, Any]:
+        """Validate multiple log lines.
+
+        Args:
+            lines: List of log lines to validate.
+
+        Returns:
+            Dictionary with validation results.
+        """
+        if not lines:
+            return {"total": 0, "valid": 0, "invalid": 0, "errors": []}
+
+        results = {
+            "total": len(lines),
+            "valid": 0,
+            "invalid": 0,
+            "errors": [],
+        }
+
+        for i, line in enumerate(lines, 1):
+            validation = self.validate_line(line)
+            if validation["valid"]:
+                results["valid"] += 1
+            else:
+                results["invalid"] += 1
+                results["errors"].append({
+                    "line": i,
+                    "error": validation["error"],
+                })
+
+        return results
+
+    def get_parse_stats(self, lines: List[str]) -> Dict[str, Any]:
+        """Get parsing statistics for a list of lines.
+
+        Args:
+            lines: List of log lines to analyze.
+
+        Returns:
+            Dictionary with parse stats.
+        """
+        if not lines:
+            return {"total": 0, "parsed": 0, "failed": 0, "success_rate": 0}
+
+        parsed = 0
+        failed = 0
+
+        for line in lines:
+            if self.parse_line(line):
+                parsed += 1
+            else:
+                failed += 1
+
+        return {
+            "total": len(lines),
+            "parsed": parsed,
+            "failed": failed,
+            "success_rate": round(parsed / len(lines) * 100, 2) if lines else 0,
+        }
+
+    def get_pattern_info(self) -> Dict[str, Any]:
+        """Get information about the current pattern.
+
+        Returns:
+            Dictionary with pattern info.
+        """
+        return {
+            "name": self.pattern_name,
+            "is_custom": self.has_custom_pattern(),
+            "groups": self.get_pattern_groups(),
+            "group_count": self.get_pattern_group_count(),
+            "pattern_string": self.get_pattern_string()[:100] + "..." if len(self.get_pattern_string()) > 100 else self.get_pattern_string(),
+        }
