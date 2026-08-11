@@ -266,6 +266,73 @@ LogExporter.to_json(entries, "compact.json", indent=None)
 LogExporter.to_json(entries, "pretty.json", indent=4)
 ```
 
+### Batch Export with Splits
+
+```python
+# Export in batches for large datasets
+result = LogExporter.export_batch(entries, "output", prefix="logs", batch_size=1000)
+print(f"Total: {result['total']}")
+print(f"Batches: {result['num_batches']}")
+for batch in result['files']:
+    print(f"Batch {batch['batch']}: {batch['entries']} entries")
+```
+
+### Export by Level
+
+```python
+# Export entries grouped by log level
+result = LogExporter.export_by_level(entries, "output", prefix="logs")
+for level, path in result.items():
+    print(f"{level}: {path}")
+```
+
+### Export by Source
+
+```python
+# Export entries grouped by source
+result = LogExporter.export_by_source(entries, "output", prefix="logs")
+for source, path in result.items():
+    print(f"{source}: {path}")
+```
+
+### Export with Options
+
+```python
+# Export with custom options
+options = {
+    "format": "json",
+    "indent": 4,
+    "encoding": "utf-8",
+    "filter_level": "ERROR",
+    "filter_source": "database",
+}
+result = LogExporter.export_with_options(entries, "filtered.json", options)
+print(f"Exported: {result['entries']} entries")
+print(f"Filtered: {result['filtered']} entries")
+```
+
+### Export Summary
+
+```python
+# Export summary report
+result = LogExporter.export_summary(entries, "summary.json")
+print(f"Total: {result['summary']['total_entries']}")
+print(f"Error Rate: {result['summary']['error_rate']}%")
+```
+
+### Format Detection
+
+```python
+# Detect format from file extension
+info = LogExporter.detect_format("logs.json")
+print(f"Format: {info['detected_format']}")
+print(f"Supported: {info['is_supported']}")
+
+# Validate export path
+result = LogExporter.validate_export_path("output/logs.json")
+print(f"Valid: {result['valid']}")
+```
+
 ## See Also
 
 - [Models](models.md) - LogEntry and AnalysisResult structures
