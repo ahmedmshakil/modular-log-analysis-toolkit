@@ -64,12 +64,50 @@ class LogFilter:
             Self for method chaining.
 
         Raises:
-            ValueError: If no levels provided.
+            ValueError: If no levels provided or invalid level.
         """
         if not levels:
             raise ValueError("At least one level must be provided")
+
+        # Validate levels
+        valid_levels = set(LogLevel)
+        for level in levels:
+            if not isinstance(level, LogLevel):
+                raise ValueError(f"Invalid level: {level}. Must be a LogLevel enum value")
+
         def _filter(entry: LogEntry) -> bool:
             return entry.level in levels
+        self._filters.append(_filter)
+        return self
+
+    def by_level_safe(self, *levels) -> "LogFilter":
+        """Filter by log level with safe validation.
+
+        Args:
+            *levels: One or more level values (string or LogLevel).
+
+        Returns:
+            Self for method chaining.
+        """
+        if not levels:
+            return self
+
+        # Convert string levels to LogLevel
+        valid_levels = []
+        for level in levels:
+            if isinstance(level, LogLevel):
+                valid_levels.append(level)
+            elif isinstance(level, str):
+                try:
+                    valid_levels.append(LogLevel(level.upper()))
+                except ValueError:
+                    continue
+
+        if not valid_levels:
+            return self
+
+        def _filter(entry: LogEntry) -> bool:
+            return entry.level in valid_levels
         self._filters.append(_filter)
         return self
 
