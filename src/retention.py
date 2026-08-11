@@ -809,10 +809,79 @@ class RetentionManager:
 
         return results
 
-    def get_summary_string(self) -> str:
-        """Get summary string.
+    def schedule_rotation(self, pattern: str = "*.log", interval_hours: int = 24, max_rotations: int = 5) -> Dict[str, Any]:
+        """Schedule log rotation.
+
+        Args:
+            pattern: File pattern to match.
+            interval_hours: Rotation interval in hours.
+            max_rotations: Maximum rotations per file.
 
         Returns:
-            Summary string.
+            Dictionary with schedule info.
         """
-        return self.get_stats_formatted()
+        if interval_hours < 1:
+            raise ValueError("interval_hours must be at least 1")
+        if max_rotations < 1:
+            raise ValueError("max_rotations must be at least 1")
+
+        schedule = {
+            "pattern": pattern,
+            "interval_hours": interval_hours,
+            "max_rotations": max_rotations,
+            "next_rotation": (datetime.now() + timedelta(hours=interval_hours)).isoformat(),
+        }
+
+        return schedule
+
+    def get_rotation_schedule(self) -> Dict[str, Any]:
+        """Get rotation schedule information.
+
+        Returns:
+            Dictionary with schedule info.
+        """
+        # Count files matching patterns
+        log_files = list(self.log_directory.glob("*.log"))
+        compressed_files = list(self.log_directory.glob("*.log.gz"))
+
+        return {
+            "log_files": len(log_files),
+            "compressed_files": len(compressed_files),
+            "total_files": len(log_files) + len(compressed_files),
+            "directory": str(self.log_directory),
+        }
+
+    def get_rotation_stats(self) -> Dict[str, Any]:
+        """Get rotation statistics.
+
+        Returns:
+            Dictionary with rotation stats.
+        """
+        total_rotations = 0
+        files_with_rotations = 0
+
+        for file_path in self.log_directory.glob("*.log"):
+            if file_path.is_file():
+                status = self.get_rotation_status(str(file_path))
+                if status["rotation_count"] > 0:
+                    files_with_rotations += 1
+                    total_rotations += status["rotation_count"]
+
+        return {
+            "total_rotations": total_rotations,
+            "files_with_rotations": files_with_rotations,
+            "avg_rotations": round(total_rotations / max(1, files_with_rotations), 2),
+        }
+
+    def get_rotation_stats_formatted(self) -> str:
+        """Get formatted rotation statistics string.
+
+        Returns:
+            Formatted rotation stats string.
+        """
+        stats = self.get_rotation_stats()
+        return (
+            f"Total Rotations: {stats['total_rotations']}, "
+            f"Files: {stats['files_with_rotations']}, "
+            f"Avg: {stats['avg_rotations']:.1f}"
+        )
