@@ -34,6 +34,32 @@
 
 ---
 
+## Module Overview
+
+| Module | Purpose | Key Features |
+|--------|---------|--------------|
+| **models.py** | Data structures | `LogEntry`, `AnalysisResult`, `LogLevel` enum |
+| **reader.py** | File handling | Text/compressed reading, file validation, encoding detection |
+| **parser.py** | Log parsing | Multi-format support, batch parsing, pattern detection |
+| **filter.py** | Log filtering | Level/time/keyword/regex filters, validation, safe fallbacks |
+| **aggregator.py** | Statistics | Error rates, time distributions, source analysis, caching |
+| **exporter.py** | Output formats | JSON/CSV/text export, batch export, format detection |
+| **alerts.py** | Notifications | Threshold alerts, Slack/email/webhook delivery |
+| **cli.py** | Command line | Click-based CLI, multiple commands |
+| **web.py** | Dashboard | Flask web UI, real-time monitoring |
+| **plugins.py** | Extensions | Plugin loading, hooks, type management |
+| **dedup.py** | Deduplication | SHA-256 hashing, collision detection, batch dedup |
+| **streaming.py** | Large files | Memory-efficient processing, progress tracking, ETA |
+| **search.py** | Full-text search | Indexed search, batch operations, cache, word frequency |
+| **retention.py** | Log lifecycle | Compression, rotation scheduling, cleanup policies |
+| **geolocation.py** | IP lookup | Country/city/org lookup, batch processing, caching |
+| **tags.py** | Categorization | Auto-tagging rules, manual tags, batch operations |
+| **webhooks.py** | HTTP notifications | Webhook routing, retry mechanism, endpoint health |
+| **auth.py** | Authentication | User management, session tokens, role-based access |
+| **cache.py** | Caching layer | LRU cache, query cache, memory tracking, eviction |
+
+---
+
 ## Project Structure
 
 ```
