@@ -14,7 +14,7 @@ class LogDeduplicator:
         self.ignore_timestamp = ignore_timestamp
         self._seen: Dict[str, int] = {}
         self._hash_cache: Dict[int, str] = {}
-        self._hash_content: Dict[str, str] = {}
+        self._content_map: Dict[str, str] = {}
 
     def __repr__(self) -> str:
         return f"LogDeduplicator(seen={len(self._seen)}, ignore_timestamp={self.ignore_timestamp})"
@@ -35,11 +35,15 @@ class LogDeduplicator:
         h = self._hash_entry(entry)
         return h in self._seen
 
-    def _hash_entry(self, entry: LogEntry) -> str:
-        """Generate hash for a log entry with collision detection."""
-        entry_id = id(entry)
-        if entry_id in self._hash_cache:
-            return self._hash_cache[entry_id]
+    def _build_content(self, entry: LogEntry) -> str:
+        """Build content string from entry for hashing.
+
+        Args:
+            entry: LogEntry to build content from.
+
+        Returns:
+            Content string.
+        """
         parts = [
             entry.level.value,
             entry.message,
@@ -47,14 +51,38 @@ class LogDeduplicator:
         ]
         if not self.ignore_timestamp:
             parts.append(entry.timestamp.isoformat())
-        content = "|".join(parts)
+        return "|".join(parts)
 
-        # Use SHA-256 for better collision resistance
-        hash_val = hashlib.sha256(content.encode()).hexdigest()[:32]
+    def _content_map(self, content: str) -> str:
+        """Hash content string with SHA-256.
+
+        Args:
+            content: Content string to hash.
+
+        Returns:
+            Hash string.
+        """
+        return hashlib.sha256(content.encode()).hexdigest()[:32]
+
+    def _hash_entry(self, entry: LogEntry) -> str:
+        """Generate hash for a log entry with collision detection.
+
+        Args:
+            entry: LogEntry to hash.
+
+        Returns:
+            Hash string.
+        """
+        entry_id = id(entry)
+        if entry_id in self._hash_cache:
+            return self._hash_cache[entry_id]
+
+        content = self._build_content(entry)
+        hash_val = self._content_map(content)
 
         # Store content for collision detection
-        if hash_val not in self._hash_content:
-            self._hash_content[hash_val] = content
+        if hash_val not in self._content_map:
+            self._content_map[hash_val] = content
 
         self._hash_cache[entry_id] = hash_val
         return hash_val
@@ -69,15 +97,8 @@ class LogDeduplicator:
         Returns:
             True if hash matches entry content.
         """
-        parts = [
-            entry.level.value,
-            entry.message,
-            entry.source or "",
-        ]
-        if not self.ignore_timestamp:
-            parts.append(entry.timestamp.isoformat())
-        content = "|".join(parts)
-        return self._hash_content.get(hash_val) == content
+        content = self._build_content(entry)
+        return self._content_map.get(hash_val) == content
 
     def deduplicate(self, entries: List[LogEntry]) -> Tuple[List[LogEntry], Dict[str, int]]:
         """Remove duplicates, return unique entries and counts.
