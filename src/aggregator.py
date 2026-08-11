@@ -1381,3 +1381,91 @@ class LogAggregator:
             ) / 1024,
         }
 
+    def get_cached_hour_distribution(self) -> Dict[int, int]:
+        """Get hour distribution with caching.
+
+        Returns:
+            Dictionary mapping hour to count.
+        """
+        if "hour_distribution" not in self._cache:
+            self._cache["hour_distribution"] = dict(Counter(e.timestamp.hour for e in self.entries))
+        return self._cache["hour_distribution"]
+
+    def get_cached_day_distribution(self) -> Dict[str, int]:
+        """Get day distribution with caching.
+
+        Returns:
+            Dictionary mapping day name to count.
+        """
+        if "day_distribution" not in self._cache:
+            self._cache["day_distribution"] = dict(Counter(e.timestamp.strftime("%A") for e in self.entries))
+        return self._cache["day_distribution"]
+
+    def get_cached_source_counts(self) -> Dict[str, int]:
+        """Get source counts with caching.
+
+        Returns:
+            Dictionary mapping source to count.
+        """
+        if "source_counts" not in self._cache:
+            self._cache["source_counts"] = dict(Counter(e.source for e in self.entries if e.source))
+        return self._cache["source_counts"]
+
+    def get_cached_error_rate(self) -> float:
+        """Get error rate with caching.
+
+        Returns:
+            Error rate percentage.
+        """
+        if "error_rate" not in self._cache:
+            if not self.entries:
+                self._cache["error_rate"] = 0.0
+            else:
+                errors = sum(1 for e in self.entries if e.level in (LogLevel.ERROR, LogLevel.CRITICAL))
+                self._cache["error_rate"] = round(errors / len(self.entries) * 100, 2)
+        return self._cache["error_rate"]
+
+    def get_cached_warning_rate(self) -> float:
+        """Get warning rate with caching.
+
+        Returns:
+            Warning rate percentage.
+        """
+        if "warning_rate" not in self._cache:
+            if not self.entries:
+                self._cache["warning_rate"] = 0.0
+            else:
+                warnings = sum(1 for e in self.entries if e.level == LogLevel.WARN)
+                self._cache["warning_rate"] = round(warnings / len(self.entries) * 100, 2)
+        return self._cache["warning_rate"]
+
+    def get_cached_entries_per_hour(self) -> float:
+        """Get entries per hour with caching.
+
+        Returns:
+            Average entries per hour.
+        """
+        if "entries_per_hour" not in self._cache:
+            timestamps = self.get_cached_timestamps()
+            if len(timestamps) < 2:
+                self._cache["entries_per_hour"] = 0.0
+            else:
+                time_span = (max(timestamps) - min(timestamps)).total_seconds() / 3600
+                self._cache["entries_per_hour"] = round(len(self.entries) / max(1, time_span), 2)
+        return self._cache["entries_per_hour"]
+
+    def get_performance_stats(self) -> Dict[str, Any]:
+        """Get performance statistics.
+
+        Returns:
+            Dictionary with performance stats.
+        """
+        return {
+            "total_entries": len(self.entries),
+            "cache_size": len(self._cache),
+            "error_rate": self.get_cached_error_rate(),
+            "warning_rate": self.get_cached_warning_rate(),
+            "entries_per_hour": self.get_cached_entries_per_hour(),
+            "unique_sources": len(self.get_cached_source_counts()),
+        }
+
