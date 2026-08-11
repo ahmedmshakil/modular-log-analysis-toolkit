@@ -864,3 +864,99 @@ class GeoLookup:
             "cleared_entries": cache_size,
             "stats_reset": True,
         }
+
+    def get_country_distribution(self) -> Dict[str, int]:
+        """Get distribution of cached locations by country.
+
+        Returns:
+            Dictionary mapping country to count.
+        """
+        distribution: Dict[str, int] = {}
+        for geo in self._cache.values():
+            if geo.country:
+                distribution[geo.country] = distribution.get(geo.country, 0) + 1
+        return distribution
+
+    def get_country_distribution_formatted(self) -> str:
+        """Get formatted country distribution string.
+
+        Returns:
+            Formatted distribution string.
+        """
+        dist = self.get_country_distribution()
+        if not dist:
+            return "No cached locations"
+        top_countries = sorted(dist.items(), key=lambda x: x[1], reverse=True)[:5]
+        return ", ".join(f"{country}: {count}" for country, count in top_countries)
+
+    def get_city_distribution(self) -> Dict[str, int]:
+        """Get distribution of cached locations by city.
+
+        Returns:
+            Dictionary mapping city to count.
+        """
+        distribution: Dict[str, int] = {}
+        for geo in self._cache.values():
+            if geo.city:
+                distribution[geo.city] = distribution.get(geo.city, 0) + 1
+        return distribution
+
+    def get_org_distribution(self) -> Dict[str, int]:
+        """Get distribution of cached locations by organization.
+
+        Returns:
+            Dictionary mapping organization to count.
+        """
+        distribution: Dict[str, int] = {}
+        for geo in self._cache.values():
+            if geo.org:
+                distribution[geo.org] = distribution.get(geo.org, 0) + 1
+        return distribution
+
+    def get_geo_stats(self) -> Dict[str, Any]:
+        """Get comprehensive geolocation statistics.
+
+        Returns:
+            Dictionary with geo stats.
+        """
+        return {
+            "cached_ips": len(self._cache),
+            "total_lookups": self._lookup_count,
+            "cache_hits": self._cache_hits,
+            "hit_rate": self.cache_hit_rate,
+            "countries": len(self.get_country_distribution()),
+            "cities": len(self.get_city_distribution()),
+            "organizations": len(self.get_org_distribution()),
+            "top_country": max(self.get_country_distribution().items(), key=lambda x: x[1])[0] if self.get_country_distribution() else None,
+        }
+
+    def get_geo_stats_formatted(self) -> str:
+        """Get formatted geolocation statistics string.
+
+        Returns:
+            Formatted geo stats string.
+        """
+        stats = self.get_geo_stats()
+        return (
+            f"Cached: {stats['cached_ips']}, "
+            f"Countries: {stats['countries']}, "
+            f"Cities: {stats['cities']}, "
+            f"Hit Rate: {stats['hit_rate']:.1f}%"
+        )
+
+    def get_location_summary(self) -> Dict[str, Any]:
+        """Get location summary for cached IPs.
+
+        Returns:
+            Dictionary with location summary.
+        """
+        countries = self.get_country_distribution()
+        cities = self.get_city_distribution()
+
+        return {
+            "total_cached": len(self._cache),
+            "unique_countries": len(countries),
+            "unique_cities": len(cities),
+            "top_countries": sorted(countries.items(), key=lambda x: x[1], reverse=True)[:5],
+            "top_cities": sorted(cities.items(), key=lambda x: x[1], reverse=True)[:5],
+        }
