@@ -36,6 +36,9 @@ PATTERNS = {
 class LogParser:
     """Parse log lines into structured LogEntry objects."""
 
+    # Class-level cache for compiled custom patterns to avoid recompilation
+    _pattern_cache: Dict[str, Pattern] = {}
+
     DEFAULT_TIMESTAMP_FORMATS = [
         "%Y-%m-%d %H:%M:%S",
         "%Y-%m-%dT%H:%M:%S",
@@ -49,10 +52,15 @@ class LogParser:
         if custom_pattern:
             if not isinstance(custom_pattern, str):
                 raise TypeError("custom_pattern must be a string")
-            try:
-                self.pattern: Pattern = re.compile(custom_pattern)
-            except re.error as e:
-                raise ValueError(f"Invalid custom pattern: {e}")
+            # Use cached compiled pattern if available
+            if custom_pattern in LogParser._pattern_cache:
+                self.pattern: Pattern = LogParser._pattern_cache[custom_pattern]
+            else:
+                try:
+                    self.pattern = re.compile(custom_pattern)
+                    LogParser._pattern_cache[custom_pattern] = self.pattern
+                except re.error as e:
+                    raise ValueError(f"Invalid custom pattern: {e}")
         elif pattern_name in PATTERNS:
             self.pattern = PATTERNS[pattern_name]
         else:
@@ -742,3 +750,20 @@ class LogParser:
             "group_count": self.get_pattern_group_count(),
             "pattern_string": self.get_pattern_string()[:100] + "..." if len(self.get_pattern_string()) > 100 else self.get_pattern_string(),
         }
+
+    @classmethod
+    def clear_pattern_cache(cls) -> None:
+        """Clear the compiled pattern cache.
+
+        Useful for freeing memory when many custom patterns were used.
+        """
+        cls._pattern_cache.clear()
+
+    @classmethod
+    def get_pattern_cache_size(cls) -> int:
+        """Get number of cached custom patterns.
+
+        Returns:
+            Count of cached compiled patterns.
+        """
+        return len(cls._pattern_cache)
