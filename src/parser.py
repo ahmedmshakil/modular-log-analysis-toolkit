@@ -19,6 +19,12 @@ PATTERNS = {
         r"\[(?P<timestamp>[^\]]+)\]\s+"
         r'"(?P<request>[^"]*)"\s+(?P<status>\d+)\s+(?P<size>\S+)'
     ),
+    "nginx": re.compile(
+        r"(?P<ip>\S+)\s+-\s+\S+\s+"
+        r"\[(?P<timestamp>[^\]]+)\]\s+"
+        r'"(?P<request>[^"]*)"\s+(?P<status>\d+)\s+(?P<size>\d+)\s+'
+        r'"(?P<referrer>[^"]*)"\s+"(?P<user_agent>[^"]*)"'
+    ),
     "json_log": re.compile(r"^\{.*\}$"),
     "standard": re.compile(
         r"(?P<timestamp>\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})\s+"
@@ -84,11 +90,16 @@ class LogParser:
         level = self._parse_level(groups.get("level", "INFO"))
         message = groups.get("message", line)
 
+        # Build source from available groups
+        source = groups.get("host") or groups.get("program")
+        if not source and groups.get("ip"):
+            source = groups.get("ip")
+
         return LogEntry(
             timestamp=timestamp,
             level=level,
             message=message,
-            source=groups.get("host") or groups.get("program"),
+            source=source,
             line_number=line_number,
             raw=line,
         )
@@ -298,6 +309,14 @@ class LogParser:
             True if using apache pattern.
         """
         return self.pattern_name == "apache"
+
+    def is_nginx_pattern(self) -> bool:
+        """Check if parser uses nginx pattern.
+
+        Returns:
+            True if using nginx pattern.
+        """
+        return self.pattern_name == "nginx"
 
     def get_stats_dict(self) -> Dict[str, Any]:
         """Get parser statistics as dictionary.
