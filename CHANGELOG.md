@@ -2,6 +2,30 @@
 
 All notable changes to modular-log-analysis-toolkit will be documented in this file.
 
+## [1.3.0] - 2026-08-12
+
+### Added
+
+- Nginx log pattern support to `LogParser` with referrer and user-agent fields
+- LRU caching for compiled custom patterns in `LogParser` to avoid recompilation
+- Comparison operators (`__lt__`, `__gt__`, `__le__`, `__ge__`) to `LogEntry` for sorting by timestamp and severity
+- `clear_pattern_cache` and `get_pattern_cache_size` class methods to `LogParser`
+- `is_nginx_pattern` method to `LogParser`
+
+### Fixed
+
+- Duplicate method definitions in `LogEntry` (has_tag, has_metadata, get_tags_as_string, etc.)
+- Duplicate method definitions in `AnalysisResult` (has_errors, has_sources)
+- Property/method conflict for `has_errors` and `has_sources` in `AnalysisResult`
+
+### Changed
+
+- Removed redundant `_alt` methods from `LogAggregator` (30+ duplicate methods)
+- Removed duplicate non-alt methods from `LogAggregator`
+- Added input validation to `AlertManager.set_threshold` for metric, value, and severity
+- Added callable validation to `AlertManager.register_callback`
+- Improved `LogParser.parse_line` to use IP as source when host/program unavailable
+
 ## [1.2.0] - 2026-06-30
 
 ### Added
