@@ -10,6 +10,23 @@
   <img src="img/bottom.png" alt="Dashboard" width="48%">
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.3.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/python-3.8+-green.svg" alt="Python">
+  <img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="License">
+  <img src="https://img.shields.io/badge/status-active-brightgreen.svg" alt="Status">
+</p>
+
+---
+
+## What's New in v1.3.0
+
+- **Nginx Pattern Support** — Parse nginx access logs with referrer and user-agent extraction
+- **Pattern Caching** — Custom regex patterns are now cached for better performance
+- **LogEntry Sorting** — Entries can be sorted by timestamp and severity using comparison operators
+- **Code Cleanup** — Removed 30+ duplicate methods from aggregator module
+- **Better Validation** — AlertManager now validates inputs more strictly
+
 ---
 
 ## Features
@@ -40,7 +57,7 @@
 |--------|---------|--------------|
 | **models.py** | Data structures | `LogEntry`, `AnalysisResult`, `LogLevel` enum |
 | **reader.py** | File handling | Text/compressed reading, file validation, encoding detection |
-| **parser.py** | Log parsing | Multi-format support, batch parsing, pattern detection |
+| **parser.py** | Log parsing | Multi-format support (standard, syslog, apache, nginx), batch parsing, pattern caching |
 | **filter.py** | Log filtering | Level/time/keyword/regex filters, validation, safe fallbacks |
 | **aggregator.py** | Statistics | Error rates, time distributions, source analysis, caching |
 | **exporter.py** | Output formats | JSON/CSV/text export, batch export, format detection |
