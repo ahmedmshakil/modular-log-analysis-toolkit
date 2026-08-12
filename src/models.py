@@ -54,6 +54,64 @@ class LogEntry:
         """Make LogEntry hashable for use in sets and dicts."""
         return hash((self.timestamp, self.level, self.message, self.source))
 
+    def __lt__(self, other: object) -> bool:
+        """Compare entries by timestamp, then by severity.
+
+        Args:
+            other: Another LogEntry to compare with.
+
+        Returns:
+            True if this entry is less than other.
+
+        Raises:
+            TypeError: If other is not a LogEntry.
+        """
+        if not isinstance(other, LogEntry):
+            return NotImplemented
+        if self.timestamp != other.timestamp:
+            return self.timestamp < other.timestamp
+        return self.severity_rank < other.severity_rank
+
+    def __gt__(self, other: object) -> bool:
+        """Compare entries by timestamp, then by severity.
+
+        Args:
+            other: Another LogEntry to compare with.
+
+        Returns:
+            True if this entry is greater than other.
+
+        Raises:
+            TypeError: If other is not a LogEntry.
+        """
+        if not isinstance(other, LogEntry):
+            return NotImplemented
+        if self.timestamp != other.timestamp:
+            return self.timestamp > other.timestamp
+        return self.severity_rank > other.severity_rank
+
+    def __le__(self, other: object) -> bool:
+        """Compare entries by timestamp, then by severity.
+
+        Args:
+            other: Another LogEntry to compare with.
+
+        Returns:
+            True if this entry is less than or equal to other.
+        """
+        return self == other or self < other
+
+    def __ge__(self, other: object) -> bool:
+        """Compare entries by timestamp, then by severity.
+
+        Args:
+            other: Another LogEntry to compare with.
+
+        Returns:
+            True if this entry is greater than or equal to other.
+        """
+        return self == other or self > other
+
     def __repr__(self) -> str:
         msg_preview = self.message[:50] if self.message else ""
         return f"LogEntry(level={self.level.value}, timestamp={self.timestamp}, message={msg_preview!r})"
