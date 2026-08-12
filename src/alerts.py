@@ -76,7 +76,25 @@ class AlertManager:
         return len(self.alerts)
 
     def set_threshold(self, metric: str, value: float, severity: AlertSeverity = AlertSeverity.MEDIUM):
-        """Set an alert threshold."""
+        """Set an alert threshold.
+
+        Args:
+            metric: Name of the metric to monitor.
+            value: Threshold value to trigger alert.
+            severity: Alert severity level.
+
+        Raises:
+            TypeError: If metric is not a string or value is not a number.
+            ValueError: If metric is empty or value is negative.
+        """
+        if not isinstance(metric, str) or not metric.strip():
+            raise TypeError("metric must be a non-empty string")
+        if not isinstance(value, (int, float)):
+            raise TypeError("value must be a number")
+        if value < 0:
+            raise ValueError("value must be non-negative")
+        if not isinstance(severity, AlertSeverity):
+            raise TypeError("severity must be an AlertSeverity enum")
         self.thresholds[metric] = {"value": value, "severity": severity}
 
     def check(self, metric: str, current_value: float) -> Optional[Alert]:
@@ -112,7 +130,16 @@ class AlertManager:
         return None
 
     def register_callback(self, callback: Callable[[Alert], None]):
-        """Register a notification callback."""
+        """Register a notification callback.
+
+        Args:
+            callback: Function to call when an alert is triggered.
+
+        Raises:
+            TypeError: If callback is not callable.
+        """
+        if not callable(callback):
+            raise TypeError("callback must be callable")
         self.callbacks.append(callback)
 
     def _notify(self, alert: Alert):
