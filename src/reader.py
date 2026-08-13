@@ -6,6 +6,23 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional
 
+__all__ = [
+    "read_log_lines",
+    "read_compressed_log",
+    "get_file_size",
+    "count_lines",
+    "read_log_lines_with_numbers",
+    "format_size",
+    "detect_encoding",
+    "file_exists",
+    "is_compressed",
+    "get_file_info",
+    "read_log_safe",
+    "read_compressed_log_safe",
+    "validate_file_path",
+    "get_file_stats",
+]
+
 
 def read_log_lines(file_path: str, encoding: str = "utf-8") -> Iterator[str]:
     """Read log file line by line with memory efficiency.
