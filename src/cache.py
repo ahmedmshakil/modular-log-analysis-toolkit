@@ -5,7 +5,7 @@ import hashlib
 import json
 import threading
 from collections import OrderedDict
-from typing import Any, Optional, Callable, Dict
+from typing import Any, List, Optional, Callable, Dict
 from functools import wraps
 
 

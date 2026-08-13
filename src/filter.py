@@ -3,7 +3,7 @@
 import re
 from collections import Counter
 from datetime import datetime
-from typing import List, Optional, Callable
+from typing import Any, Dict, List, Optional, Callable
 
 from .models import LogEntry, LogLevel
 

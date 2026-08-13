@@ -2,7 +2,7 @@
 
 import re
 from datetime import datetime
-from typing import Optional, List, Pattern
+from typing import Any, Dict, Optional, List, Pattern
 
 from .models import LogEntry, LogLevel
 

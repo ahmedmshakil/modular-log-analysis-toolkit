@@ -4,7 +4,7 @@ import gzip
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Iterator, Optional
+from typing import Any, Dict, Iterator, List, Optional
 
 
 def read_log_lines(file_path: str, encoding: str = "utf-8") -> Iterator[str]:
