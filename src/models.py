@@ -289,14 +289,6 @@ class LogEntry:
         """
         return key in self.tags
 
-    def has_metadata(self) -> bool:
-        """Check if entry has any metadata.
-
-        Returns:
-            True if metadata exists.
-        """
-        return len(self.metadata) > 0
-
     def get_tags_as_string(self) -> str:
         """Get tags as formatted string.
 
