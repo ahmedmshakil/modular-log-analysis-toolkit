@@ -461,23 +461,6 @@ class TagManager:
         """
         return len(self.get_rules_by_priority(min_priority))
 
-    def get_rules_dict(self) -> List[Dict[str, Any]]:
-        """Get rules as dictionaries.
-
-        Returns:
-            List of rule dictionaries.
-        """
-        return [
-            {
-                "name": r.name,
-                "tag": r.tag,
-                "conditions": r.conditions,
-                "color": r.color,
-                "priority": r.priority,
-            }
-            for r in self._rules
-        ]
-
     def get_rules_formatted(self) -> str:
         """Get formatted rules string.
 
@@ -488,52 +471,6 @@ class TagManager:
         if not rules:
             return "none"
         return ", ".join(f"{r['name']}({r['tag']})" for r in rules)
-
-    def get_rule_count_formatted(self) -> str:
-        """Get formatted rule count string.
-
-        Returns:
-            Formatted rule count string.
-        """
-        return f"{self.get_rule_count()} rules"
-
-    def get_manual_tag_count_formatted(self) -> str:
-        """Get formatted manual tag count string.
-
-        Returns:
-            Formatted manual tag count string.
-        """
-        return f"{self.get_manual_tag_count()} manual tags"
-
-    def get_unique_tag_count_formatted(self) -> str:
-        """Get formatted unique tag count string.
-
-        Returns:
-            Formatted unique tag count string.
-        """
-        return f"{len(self.get_all_tag_names())} unique tags"
-
-    def get_tag_names_formatted(self) -> str:
-        """Get formatted tag names string.
-
-        Returns:
-            Formatted tag names string.
-        """
-        names = self.get_all_tag_names()
-        if not names:
-            return "none"
-        return ", ".join(names)
-
-    def get_rule_names_formatted(self) -> str:
-        """Get formatted rule names string.
-
-        Returns:
-            Formatted rule names string.
-        """
-        names = [r.name for r in self._rules]
-        if not names:
-            return "none"
-        return ", ".join(names)
 
     def get_tags_for_entry_formatted(self, entry_dict: Dict) -> str:
         """Get formatted tags for entry string.
@@ -548,85 +485,6 @@ class TagManager:
         if not tags:
             return "none"
         return ", ".join(tags)
-
-    def get_rules_dict(self) -> List[Dict[str, Any]]:
-        """Get rules as dictionaries.
-
-        Returns:
-            List of rule dictionaries.
-        """
-        return [
-            {
-                "name": r.name,
-                "tag": r.tag,
-                "conditions": r.conditions,
-                "color": r.color,
-                "priority": r.priority,
-            }
-            for r in self._rules
-        ]
-
-    def get_rule_count(self) -> int:
-        """Get number of rules.
-
-        Returns:
-            Count of rules.
-        """
-        return len(self._rules)
-
-    def get_manual_tag_count(self) -> int:
-        """Get number of manual tags.
-
-        Returns:
-            Count of manual tags.
-        """
-        return sum(len(tags) for tags in self._manual_tags.values())
-
-    def get_unique_tag_count(self) -> int:
-        """Get number of unique tags.
-
-        Returns:
-            Count of unique tags.
-        """
-        return len(self.get_all_tag_names())
-
-    def get_tags_for_entry(self, entry_dict: Dict) -> List[str]:
-        """Get all matching tags for an entry.
-
-        Args:
-            entry_dict: Entry dictionary to check.
-
-        Returns:
-            List of matching tag names.
-        """
-        tags = []
-        for rule in self._rules:
-            if rule.matches(entry_dict):
-                tags.append(rule.tag)
-        return tags
-
-    def get_all_tag_names(self) -> List[str]:
-        """Get list of all unique tag names from rules.
-
-        Returns:
-            List of tag names.
-        """
-        return list(set(r.tag for r in self._rules))
-
-    def get_rules_by_priority(self, min_priority: int = 0) -> List[Dict]:
-        """Get rules filtered by minimum priority.
-
-        Args:
-            min_priority: Minimum priority level.
-
-        Returns:
-            List of rule dictionaries.
-        """
-        return [
-            {"name": r.name, "tag": r.tag, "conditions": r.conditions,
-             "color": r.color, "priority": r.priority}
-            for r in self._rules if r.priority >= min_priority
-        ]
 
     def get_tag_distribution(self) -> Dict[str, int]:
         """Get distribution of tags across rules.
