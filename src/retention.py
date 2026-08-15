@@ -401,31 +401,6 @@ class RetentionManager:
             "has_files": self.has_files(),
         }
 
-    def get_actions_log(self) -> List[Dict]:
-        """Get actions log.
-
-        Returns:
-            List of action dictionaries.
-        """
-        return list(self._actions_log)
-
-    def get_policies_dict(self) -> List[Dict[str, Any]]:
-        """Get all policies as dictionaries.
-
-        Returns:
-            List of policy dictionaries.
-        """
-        return [
-            {
-                "name": p.name,
-                "max_age_days": p.max_age_days,
-                "compress_after_days": p.compress_after_days,
-                "delete_after_days": p.delete_after_days,
-                "max_size_mb": p.max_size_mb,
-            }
-            for p in self.policies
-        ]
-
     def get_compressed_count(self) -> int:
         """Get count of compressed files.
 
@@ -565,23 +540,6 @@ class RetentionManager:
         if not names:
             return "none"
         return ", ".join(names)
-
-    def get_policies_dict(self) -> List[Dict[str, Any]]:
-        """Get policies as dictionaries.
-
-        Returns:
-            List of policy dictionaries.
-        """
-        return [
-            {
-                "name": p.name,
-                "max_age_days": p.max_age_days,
-                "compress_after_days": p.compress_after_days,
-                "delete_after_days": p.delete_after_days,
-                "max_size_mb": p.max_size_mb,
-            }
-            for p in self.policies
-        ]
 
     def get_policies_formatted(self) -> str:
         """Get formatted policies string.
