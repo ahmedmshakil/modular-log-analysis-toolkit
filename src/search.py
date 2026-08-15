@@ -2,9 +2,11 @@
 
 import re
 from collections import defaultdict
-from typing import List, Dict, Set, Tuple, Optional
+from typing import Any, List, Dict, Set, Tuple, Optional
 
 from .models import LogEntry
+
+__all__ = ["LogSearchIndex"]
 
 
 class LogSearchIndex:
