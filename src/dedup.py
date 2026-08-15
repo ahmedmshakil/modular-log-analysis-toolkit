@@ -586,14 +586,6 @@ class LogDeduplicator:
         """
         return f"{self.get_duplicate_summary_count()} summary entries"
 
-    def get_summary_string(self) -> str:
-        """Get summary string.
-
-        Returns:
-            Summary string.
-        """
-        return self.get_stats_formatted()
-
     def get_duplicate_efficiency(self) -> float:
         """Get duplicate efficiency (duplicates found / total processed).
 
