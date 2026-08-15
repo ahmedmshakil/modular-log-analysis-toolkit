@@ -9,6 +9,8 @@ from typing import List, Dict, Any, Optional
 
 from .models import LogEntry, AnalysisResult
 
+__all__ = ["LogExporter"]
+
 
 class LogExporter:
     """Export log entries and analysis results."""
