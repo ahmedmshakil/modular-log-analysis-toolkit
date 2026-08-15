@@ -816,54 +816,6 @@ class LogSearchIndex:
         """
         return f"{self.get_source_diversity():.1f}%"
 
-    def get_entry_count_formatted(self) -> str:
-        """Get formatted entry count string.
-
-        Returns:
-            Formatted entry count string.
-        """
-        return f"{len(self._entries)} entries"
-
-    def get_word_count_formatted(self) -> str:
-        """Get formatted word count string.
-
-        Returns:
-            Formatted word count string.
-        """
-        return f"{len(self._index)} words"
-
-    def get_source_count_formatted(self) -> str:
-        """Get formatted source count string.
-
-        Returns:
-            Formatted source count string.
-        """
-        return f"{len(self._field_index['source'])} sources"
-
-    def get_level_count_formatted(self) -> str:
-        """Get formatted level count string.
-
-        Returns:
-            Formatted level count string.
-        """
-        return f"{len(self._field_index['level'])} levels"
-
-    def get_unique_source_count_formatted(self) -> str:
-        """Get formatted unique source count string.
-
-        Returns:
-            Formatted unique source count string.
-        """
-        return f"{len(self.get_unique_sources())} unique sources"
-
-    def get_unique_level_count_formatted(self) -> str:
-        """Get formatted unique level count string.
-
-        Returns:
-            Formatted unique level count string.
-        """
-        return f"{len(self.get_unique_levels())} unique levels"
-
     def add_batch_optimized(self, entries: List[LogEntry], batch_size: int = 1000) -> Dict[str, Any]:
         """Add entries to index in optimized batches.
 
