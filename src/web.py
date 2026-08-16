@@ -840,18 +840,6 @@ def get_api_endpoints_descriptions_formatted() -> str:
     return ", ".join(f"{k}: {v}" for k, v in endpoints.items())
 
 
-def get_entries_count_formatted(entries: List[LogEntry]) -> str:
-    """Get formatted entries count string.
-
-    Args:
-        entries: List of log entries.
-
-    Returns:
-        Formatted entries count string.
-    """
-    return f"{get_entries_count(entries)} entries"
-
-
 def has_entries_formatted(entries: List[LogEntry]) -> str:
     """Get formatted has entries string.
 
@@ -862,70 +850,6 @@ def has_entries_formatted(entries: List[LogEntry]) -> str:
         Formatted has entries string.
     """
     return "yes" if has_entries(entries) else "no"
-
-
-def get_endpoint_count_formatted() -> str:
-    """Get formatted endpoint count string.
-
-    Returns:
-        Formatted endpoint count string.
-    """
-    return f"{get_endpoint_count()} endpoints"
-
-
-def get_api_endpoints_formatted() -> str:
-    """Get formatted API endpoints string.
-
-    Returns:
-        Formatted API endpoints string.
-    """
-    endpoints = get_api_endpoints()
-    return ", ".join(endpoints.keys())
-
-
-def get_dashboard_info_formatted(host: str = "localhost", port: int = 8080) -> str:
-    """Get formatted dashboard info string.
-
-    Args:
-        host: Dashboard host.
-        port: Dashboard port.
-
-    Returns:
-        Formatted dashboard info string.
-    """
-    info = get_dashboard_info(host, port)
-    return f"URL: {info['url']}, Endpoints: {info['endpoints']}"
-
-
-def get_entries_count_formatted(entries: List[LogEntry]) -> str:
-    """Get formatted entries count string.
-
-    Args:
-        entries: List of log entries.
-
-    Returns:
-        Formatted entries count string.
-    """
-    return f"{get_entries_count(entries)} entries"
-
-
-def get_endpoint_count_formatted() -> str:
-    """Get formatted endpoint count string.
-
-    Returns:
-        Formatted endpoint count string.
-    """
-    return f"{get_endpoint_count()} endpoints"
-
-
-def get_api_endpoints_formatted() -> str:
-    """Get formatted API endpoints string.
-
-    Returns:
-        Formatted API endpoints string.
-    """
-    endpoints = get_api_endpoints()
-    return ", ".join(endpoints.keys())
 
 
 if __name__ == "__main__":
