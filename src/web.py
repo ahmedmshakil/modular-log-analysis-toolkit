@@ -1,5 +1,7 @@
 """Web dashboard server for real-time log monitoring."""
 
+__all__ = ["DashboardHandler", "start_dashboard"]
+
 import json
 import os
 from datetime import datetime

@@ -1,5 +1,7 @@
 """User authentication and access control for log viewer."""
 
+__all__ = ["User", "AuthManager"]
+
 import hashlib
 import json
 import os

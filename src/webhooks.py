@@ -1,5 +1,7 @@
 """Webhook notification system for log alerts."""
 
+__all__ = ["WebhookSender", "WebhookRouter"]
+
 import json
 import urllib.request
 import urllib.error

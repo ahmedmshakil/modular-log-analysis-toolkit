@@ -1,5 +1,7 @@
 """Plugin system for custom log parsers and processors."""
 
+__all__ = ["LogPlugin", "PluginManager"]
+
 import importlib
 import os
 from abc import ABC, abstractmethod
