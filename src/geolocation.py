@@ -175,10 +175,6 @@ class GeoLookup:
         self._lookup_count = 0
         self._cache_hits = 0
 
-    def cache_size(self) -> int:
-        """Get number of entries in cache."""
-        return len(self._cache)
-
     def is_cached(self, ip: str) -> bool:
         """Check if an IP is already cached.
 
