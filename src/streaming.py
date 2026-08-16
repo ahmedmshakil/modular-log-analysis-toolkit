@@ -1,5 +1,7 @@
 """Streaming mode for processing large log files."""
 
+__all__ = ["LogStream"]
+
 import time
 from typing import Iterator, Callable, Optional, List
 from pathlib import Path

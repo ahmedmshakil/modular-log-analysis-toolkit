@@ -1,5 +1,7 @@
 """IP geolocation lookup for network log entries."""
 
+__all__ = ["GeoLookup"]
+
 import re
 import json
 import urllib.error
