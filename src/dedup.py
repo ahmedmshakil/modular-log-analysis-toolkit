@@ -2,7 +2,7 @@
 
 import hashlib
 from collections import defaultdict
-from typing import List, Dict, Tuple
+from typing import Any, Dict, List, Tuple
 
 from .models import LogEntry
 

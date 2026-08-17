@@ -5,7 +5,7 @@ import gzip
 import shutil
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
 
 

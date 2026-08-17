@@ -6,7 +6,7 @@ import importlib
 import os
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Dict, List, Optional, Type
+from typing import Any, Dict, List, Optional, Type
 
 from .models import LogEntry
 
