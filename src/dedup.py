@@ -140,7 +140,7 @@ class LogDeduplicator:
         """Count total duplicates found."""
         return sum(count - 1 for count in self._seen.values() if count > 1)
 
-    def reset(self):
+    def reset(self) -> None:
         """Clear deduplication state."""
         self._seen.clear()
         self._hash_cache.clear()
@@ -182,7 +182,7 @@ class LogDeduplicator:
         duplicates = [(h, count) for h, count in self._seen.items() if count > 1]
         return sorted(duplicates, key=lambda x: x[1], reverse=True)[:limit]
 
-    def clear_hash_cache(self):
+    def clear_hash_cache(self) -> None:
         """Clear the hash computation cache."""
         self._hash_cache.clear()
 
