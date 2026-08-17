@@ -1,5 +1,7 @@
 """Custom tag and label system for log categorization."""
 
+__all__ = ["TagRule", "TagManager"]
+
 import json
 from typing import Any, Dict, List, Optional, Set
 from dataclasses import dataclass, field

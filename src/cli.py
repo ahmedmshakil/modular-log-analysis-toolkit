@@ -1,5 +1,7 @@
 """Command-line interface for modular-log-analysis-toolkit."""
 
+__all__ = ["main"]
+
 import argparse
 import sys
 from datetime import datetime

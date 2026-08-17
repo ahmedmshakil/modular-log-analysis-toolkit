@@ -1,5 +1,7 @@
 """Log deduplication by hash comparison."""
 
+__all__ = ["LogDeduplicator"]
+
 import hashlib
 from collections import defaultdict
 from typing import Any, Dict, List, Tuple

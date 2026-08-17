@@ -1,5 +1,7 @@
 """Log retention policy configuration and enforcement."""
 
+__all__ = ["RetentionPolicy", "RetentionManager"]
+
 import os
 import gzip
 import shutil
