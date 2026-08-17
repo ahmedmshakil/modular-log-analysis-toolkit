@@ -3,7 +3,7 @@
 __all__ = ["LogStream"]
 
 import time
-from typing import Iterator, Callable, Optional, List
+from typing import Any, Callable, Dict, Iterator, List, Optional
 from pathlib import Path
 
 from .models import LogEntry
