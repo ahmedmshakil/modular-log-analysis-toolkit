@@ -1,5 +1,7 @@
 """Log aggregation and statistics module."""
 
+__all__ = ["LogAggregator"]
+
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 from typing import List, Dict, Tuple, Optional

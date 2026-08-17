@@ -1,5 +1,7 @@
 """Log parsing engine with pattern matching support."""
 
+__all__ = ["LogParser"]
+
 import re
 from datetime import datetime
 from typing import Any, Dict, Optional, List, Pattern

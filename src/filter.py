@@ -1,5 +1,7 @@
 """Log filtering and query engine."""
 
+__all__ = ["LogFilter"]
+
 import re
 from collections import Counter
 from datetime import datetime
