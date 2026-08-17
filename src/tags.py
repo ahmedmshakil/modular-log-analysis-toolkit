@@ -48,7 +48,7 @@ class TagManager:
         self._manual_tags: Dict[int, Set[str]] = {}  # line_number -> tags
         self._tag_colors: Dict[str, str] = {}
 
-    def add_rule(self, rule: TagRule):
+    def add_rule(self, rule: TagRule) -> None:
         """Add an automatic tagging rule."""
         if not rule.name or not rule.tag:
             raise ValueError("Rule must have a name and tag")
@@ -67,7 +67,7 @@ class TagManager:
                 continue
         return added
 
-    def remove_rule(self, name: str):
+    def remove_rule(self, name: str) -> None:
         """Remove a tagging rule by name."""
         self._rules = [r for r in self._rules if r.name != name]
 
@@ -102,13 +102,13 @@ class TagManager:
             entry["tags"] = list(tags)
         return entries
 
-    def add_manual_tag(self, line_number: int, tag: str):
+    def add_manual_tag(self, line_number: int, tag: str) -> None:
         """Manually add a tag to an entry."""
         if line_number not in self._manual_tags:
             self._manual_tags[line_number] = set()
         self._manual_tags[line_number].add(tag)
 
-    def remove_manual_tag(self, line_number: int, tag: str):
+    def remove_manual_tag(self, line_number: int, tag: str) -> None:
         """Remove a manual tag."""
         if line_number in self._manual_tags:
             self._manual_tags[line_number].discard(tag)
@@ -129,7 +129,7 @@ class TagManager:
         """Get color for a tag."""
         return self._tag_colors.get(tag, "#808080")
 
-    def reset(self):
+    def reset(self) -> None:
         """Clear all rules, manual tags, and color mappings."""
         self._rules.clear()
         self._manual_tags.clear()
@@ -145,7 +145,7 @@ class TagManager:
         """Get total number of manual tags applied."""
         return sum(len(tags) for tags in self._manual_tags.values())
 
-    def export_rules(self, path: str):
+    def export_rules(self, path: str) -> None:
         """Export rules to JSON file."""
         data = [
             {"name": r.name, "tag": r.tag, "conditions": r.conditions,
@@ -196,7 +196,7 @@ class TagManager:
             for r in self._rules
         ]
 
-    def clear_manual_tags(self):
+    def clear_manual_tags(self) -> None:
         """Clear all manual tags while keeping rules."""
         self._manual_tags.clear()
 

@@ -129,7 +129,7 @@ class RetentionManager:
     def __repr__(self) -> str:
         return f"RetentionManager(dir={self.log_directory}, policies={len(self.policies)})"
 
-    def add_policy(self, policy: RetentionPolicy):
+    def add_policy(self, policy: RetentionPolicy) -> None:
         """Add a retention policy.
 
         Args:
@@ -272,7 +272,7 @@ class RetentionManager:
         """
         return self._actions_log[-1] if self._actions_log else None
 
-    def clear_actions_log(self):
+    def clear_actions_log(self) -> None:
         """Clear the actions history."""
         self._actions_log.clear()
 
