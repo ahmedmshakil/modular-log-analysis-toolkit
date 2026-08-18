@@ -692,40 +692,6 @@ def read_compressed_log_safe(file_path: str, encoding: str = "utf-8") -> Dict[st
         return {"success": False, "error": str(e), "lines": []}
 
 
-def get_file_info(file_path: str) -> Dict[str, Any]:
-    """Get comprehensive file information.
-
-    Args:
-        file_path: Path to the file.
-
-    Returns:
-        Dictionary with file info.
-    """
-    path = Path(file_path)
-
-    if not path.exists():
-        return {"exists": False, "error": "File not found"}
-
-    try:
-        stat = path.stat()
-        return {
-            "exists": True,
-            "error": None,
-            "name": path.name,
-            "path": str(path.absolute()),
-            "size_bytes": stat.st_size,
-            "size_mb": round(stat.st_size / (1024 * 1024), 2),
-            "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
-            "is_file": path.is_file(),
-            "is_dir": path.is_dir(),
-            "extension": path.suffix,
-            "is_compressed": path.suffix == ".gz",
-            "is_log": path.suffix in [".log", ".txt", ".gz"],
-        }
-    except Exception as e:
-        return {"exists": True, "error": str(e)}
-
-
 def validate_file_path(file_path: str) -> Dict[str, Any]:
     """Validate a file path for log reading.
 
