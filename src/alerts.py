@@ -77,7 +77,7 @@ class AlertManager:
         """Get total number of alerts."""
         return len(self.alerts)
 
-    def set_threshold(self, metric: str, value: float, severity: AlertSeverity = AlertSeverity.MEDIUM):
+    def set_threshold(self, metric: str, value: float, severity: AlertSeverity = AlertSeverity.MEDIUM) -> None:
         """Set an alert threshold.
 
         Args:
@@ -131,7 +131,7 @@ class AlertManager:
             return alert
         return None
 
-    def register_callback(self, callback: Callable[[Alert], None]):
+    def register_callback(self, callback: Callable[[Alert], None]) -> None:
         """Register a notification callback.
 
         Args:
@@ -144,7 +144,7 @@ class AlertManager:
             raise TypeError("callback must be callable")
         self.callbacks.append(callback)
 
-    def _notify(self, alert: Alert):
+    def _notify(self, alert: Alert) -> None:
         """Send notifications for an alert."""
         for callback in self.callbacks:
             try:
@@ -156,7 +156,7 @@ class AlertManager:
         """Get unacknowledged alerts."""
         return [a for a in self.alerts if not a.acknowledged]
 
-    def acknowledge(self, index: int):
+    def acknowledge(self, index: int) -> None:
         """Acknowledge an alert by index.
 
         Args:
@@ -173,14 +173,14 @@ class AlertManager:
         self.alerts[index].acknowledged = True
         self.alerts[index].acknowledged_at = datetime.now()
 
-    def export_alerts(self, output_path: str):
+    def export_alerts(self, output_path: str) -> None:
         """Export alerts to JSON file."""
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w") as f:
             json.dump([a.to_dict() for a in self.alerts], f, indent=2)
 
-    def clear_alerts(self):
+    def clear_alerts(self) -> None:
         """Remove all alerts from the manager."""
         with self._lock:
             self.alerts.clear()
