@@ -36,7 +36,7 @@ class LRUCache:
             self._misses += 1
             return None
 
-    def put(self, key: str, value: Any):
+    def put(self, key: str, value: Any) -> None:
         """Put item in cache.
 
         Args:
@@ -52,30 +52,30 @@ class LRUCache:
             if len(self._cache) > self._max_size:
                 self._cache.popitem(last=False)
 
-    def invalidate(self, key: str):
+    def invalidate(self, key: str) -> None:
         """Remove item from cache."""
         with self._lock:
             self._cache.pop(key, None)
 
-    def invalidate_pattern(self, prefix: str):
+    def invalidate_pattern(self, prefix: str) -> None:
         """Remove all cache keys matching a prefix."""
         with self._lock:
             keys_to_remove = [k for k in self._cache if k.startswith(prefix)]
             for key in keys_to_remove:
                 del self._cache[key]
 
-    def clear(self):
+    def clear(self) -> None:
         """Clear all cached items."""
         with self._lock:
             self._cache.clear()
 
-    def invalidate_keys(self, keys: list):
+    def invalidate_keys(self, keys: list) -> None:
         """Remove multiple items from cache by key."""
         with self._lock:
             for key in keys:
                 self._cache.pop(key, None)
 
-    def reset_stats(self):
+    def reset_stats(self) -> None:
         """Reset hit/miss statistics."""
         with self._lock:
             self._hits = 0
@@ -138,7 +138,7 @@ class LRUCache:
                 result[key] = value
         return result
 
-    def put_many(self, items: Dict[str, Any]):
+    def put_many(self, items: Dict[str, Any]) -> None:
         """Put multiple items in cache at once.
 
         Args:
@@ -272,7 +272,7 @@ class QueryCache:
         self._popular_queries[query] = self._popular_queries.get(query, 0) + 1
         return self._cache.get(query)
 
-    def store_results(self, query: str, results: list):
+    def store_results(self, query: str, results: list) -> None:
         """Cache search results.
 
         Args:
@@ -288,12 +288,12 @@ class QueryCache:
         sorted_queries = sorted(self._popular_queries.items(), key=lambda x: x[1], reverse=True)
         return sorted_queries[:limit]
 
-    def clear(self):
+    def clear(self) -> None:
         """Clear all cached queries and statistics."""
         self._cache.clear()
         self._popular_queries.clear()
 
-    def clear_stats(self):
+    def clear_stats(self) -> None:
         """Clear only the query popularity statistics."""
         self._popular_queries.clear()
 
