@@ -5,7 +5,7 @@ __all__ = ["WebhookSender", "WebhookRouter"]
 import json
 import urllib.request
 import urllib.error
-from typing import Dict, Optional, Any
+from typing import Dict, List, Optional, Any
 from datetime import datetime
 
 from .models import LogEntry, LogLevel
@@ -135,7 +135,7 @@ class WebhookSender:
         """Get total number of retries performed."""
         return self._retry_count
 
-    def reset_stats(self):
+    def reset_stats(self) -> None:
         """Reset send statistics."""
         self._sent_count = 0
         self._error_count = 0
@@ -146,7 +146,7 @@ class WebhookSender:
         """Get webhook send statistics."""
         return {"sent": self._sent_count, "errors": self._error_count}
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset all sender state including stats."""
         self.reset_stats()
         self.headers = {"Content-Type": "application/json"}
@@ -220,7 +220,7 @@ class WebhookRouter:
         """
         return {name: sender.stats for name, sender in self._senders.items()}
 
-    def clear(self):
+    def clear(self) -> None:
         """Remove all registered endpoints."""
         self._senders.clear()
 
@@ -262,7 +262,7 @@ class WebhookRouter:
         """
         return sum(sender.stats["errors"] for sender in self._senders.values())
 
-    def reset_all_stats(self):
+    def reset_all_stats(self) -> None:
         """Reset statistics for all endpoints."""
         for sender in self._senders.values():
             sender.reset_stats()
