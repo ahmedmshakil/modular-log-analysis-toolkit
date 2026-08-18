@@ -29,7 +29,7 @@ class LogStream:
         status = "stopped" if self._stopped else ("paused" if self._paused else "active")
         return f"LogStream({self.file_path.name}, {self._processed} processed, {status})"
 
-    def stream(self, callback: Callable[[LogEntry], None], batch_size: int = 1):
+    def stream(self, callback: Callable[[LogEntry], None], batch_size: int = 1) -> None:
         """Stream entries through a callback function.
 
         Args:
@@ -54,7 +54,7 @@ class LogStream:
             else:
                 self._errors += 1
 
-    def stream_batch(self, callback: Callable[[List[LogEntry]], None], batch_size: int = 100):
+    def stream_batch(self, callback: Callable[[List[LogEntry]], None], batch_size: int = 100) -> None:
         """Stream entries in batches.
 
         Args:
@@ -89,7 +89,7 @@ class LogStream:
             callback(batch)
 
     def stream_filtered(self, callback: Callable[[LogEntry], None],
-                        level_filter: Optional[List[str]] = None):
+                        level_filter: Optional[List[str]] = None) -> None:
         """Stream with filtering applied.
 
         Args:
@@ -102,22 +102,22 @@ class LogStream:
             callback(entry)
         self.stream(_process)
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset stream state for reuse."""
         self._paused = False
         self._stopped = False
         self._processed = 0
         self._errors = 0
 
-    def pause(self):
+    def pause(self) -> None:
         """Pause streaming."""
         self._paused = True
 
-    def resume(self):
+    def resume(self) -> None:
         """Resume streaming."""
         self._paused = False
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop streaming."""
         self._stopped = True
         self._paused = False
@@ -132,7 +132,7 @@ class LogStream:
             "stopped": self._stopped,
         }
 
-    def reset_stats(self):
+    def reset_stats(self) -> None:
         """Reset streaming statistics."""
         self._processed = 0
         self._errors = 0
