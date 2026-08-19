@@ -229,7 +229,7 @@ class LogSearchIndex:
                    if word.startswith(prefix)]
         return sorted(matches, key=lambda x: x[1], reverse=True)[:limit]
 
-    def clear(self):
+    def clear(self) -> None:
         """Clear the entire search index."""
         self._index.clear()
         self._entries.clear()
@@ -318,7 +318,7 @@ class LogSearchIndex:
         self._search_cache[cache_key] = results
         return results
 
-    def clear_cache(self):
+    def clear_cache(self) -> None:
         """Clear the search result cache."""
         if hasattr(self, '_search_cache'):
             self._search_cache.clear()
