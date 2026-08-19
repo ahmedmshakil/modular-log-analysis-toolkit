@@ -166,12 +166,12 @@ class GeoLookup:
             return 0.0
         return round(self._cache_hits / total * 100, 2)
 
-    def reset_stats(self):
+    def reset_stats(self) -> None:
         """Reset lookup statistics."""
         self._lookup_count = 0
         self._cache_hits = 0
 
-    def clear_cache(self):
+    def clear_cache(self) -> None:
         """Clear the geolocation cache."""
         self._cache.clear()
         self._lookup_count = 0
