@@ -205,7 +205,7 @@ class LogEntry:
         """
         return self.metadata.get(key)
 
-    def set_tag(self, key: str, value: str):
+    def set_tag(self, key: str, value: str) -> None:
         """Set a tag value.
 
         Args:
@@ -214,7 +214,7 @@ class LogEntry:
         """
         self.tags[key] = value
 
-    def set_metadata(self, key: str, value: Any):
+    def set_metadata(self, key: str, value: Any) -> None:
         """Set a metadata value.
 
         Args:
@@ -237,11 +237,11 @@ class LogEntry:
             return True
         return False
 
-    def clear_tags(self):
+    def clear_tags(self) -> None:
         """Clear all tags."""
         self.tags.clear()
 
-    def clear_metadata(self):
+    def clear_metadata(self) -> None:
         """Clear all metadata."""
         self.metadata.clear()
 
