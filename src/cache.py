@@ -225,7 +225,7 @@ class LRUCache:
 _global_cache = LRUCache()
 
 
-def cached(ttl: int = 300):
+def cached(ttl: int = 300) -> Callable:
     """Decorator to cache function results with TTL in seconds."""
     def decorator(func: Callable) -> Callable:
         @wraps(func)
