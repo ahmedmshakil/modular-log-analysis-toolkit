@@ -499,14 +499,6 @@ class RetentionManager:
         """
         return f"{len(self.policies)} policies"
 
-    def get_compression_rate_formatted(self) -> str:
-        """Get formatted compression rate string.
-
-        Returns:
-            Formatted compression rate string.
-        """
-        return f"{self.get_compression_rate():.1f}%"
-
     def get_stats_formatted(self) -> str:
         """Get formatted stats string.
 
