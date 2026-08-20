@@ -771,7 +771,7 @@ class AuthManager:
         """
         return f"{self.get_role_diversity():.1f}%"
 
-    def _save_users(self):
+    def _save_users(self) -> None:
         """Save users to file."""
         data = {}
         for name, user in self._users.items():
@@ -786,7 +786,7 @@ class AuthManager:
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
 
-    def _load_users(self):
+    def _load_users(self) -> None:
         """Load users from file with error handling."""
         path = self.data_dir / "users.json"
         if not path.exists():
