@@ -32,7 +32,7 @@ class LogSearchIndex:
         """Get the number of indexed entries."""
         return len(self._entries)
 
-    def add(self, entry: LogEntry):
+    def add(self, entry: LogEntry) -> None:
         """Add an entry to the index."""
         idx = len(self._entries)
         self._entries.append(entry)
@@ -47,7 +47,7 @@ class LogSearchIndex:
         if entry.source:
             self._field_index["source"][entry.source.lower()].add(idx)
 
-    def add_batch(self, entries: List[LogEntry]):
+    def add_batch(self, entries: List[LogEntry]) -> None:
         """Add multiple entries to the index."""
         for entry in entries:
             self.add(entry)
