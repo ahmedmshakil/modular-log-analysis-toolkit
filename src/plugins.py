@@ -59,7 +59,7 @@ class PluginManager:
         """Check if a plugin is registered."""
         return name in self._plugins
 
-    def register(self, plugin: LogPlugin):
+    def register(self, plugin: LogPlugin) -> None:
         """Register a plugin.
 
         Args:
@@ -76,7 +76,7 @@ class PluginManager:
         self._enabled[plugin.name] = True
         plugin.on_startup()
 
-    def unregister(self, name: str):
+    def unregister(self, name: str) -> None:
         """Unregister a plugin."""
         if name in self._plugins:
             self._plugins[name].on_shutdown()
@@ -92,12 +92,12 @@ class PluginManager:
                 removed += 1
         return removed
 
-    def enable(self, name: str):
+    def enable(self, name: str) -> None:
         """Enable a plugin."""
         if name in self._enabled:
             self._enabled[name] = True
 
-    def disable(self, name: str):
+    def disable(self, name: str) -> None:
         """Disable a plugin."""
         if name in self._enabled:
             self._enabled[name] = False
@@ -241,7 +241,7 @@ class PluginManager:
             "disabled": len(self._plugins) - enabled_count,
         }
 
-    def load_from_directory(self, directory: str):
+    def load_from_directory(self, directory: str) -> None:
         """Load plugins from a directory."""
         plugin_dir = Path(directory)
         if not plugin_dir.exists():
