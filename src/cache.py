@@ -258,7 +258,7 @@ class QueryCache:
         """Get number of cached queries."""
         return self._cache.size
 
-    def get_results(self, query: str) -> Optional[list]:
+    def get_results(self, query: str) -> Optional[List]:
         """Get cached search results.
 
         Args:
