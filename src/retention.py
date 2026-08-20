@@ -21,7 +21,7 @@ class RetentionPolicy:
     max_size_mb: float = 0
     patterns: List[str] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.patterns is None:
             self.patterns = ["*.log"]
 
@@ -215,7 +215,7 @@ class RetentionManager:
         self._actions_log.extend(actions)
         return actions
 
-    def _compress_file(self, path: Path):
+    def _compress_file(self, path: Path) -> None:
         """Compress a log file with gzip."""
         gz_path = path.with_suffix(path.suffix + ".gz")
         with open(path, "rb") as f_in:
@@ -223,7 +223,7 @@ class RetentionManager:
                 shutil.copyfileobj(f_in, f_out)
         path.unlink()
 
-    def _rotate_file(self, path: Path):
+    def _rotate_file(self, path: Path) -> None:
         """Rotate a log file."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         rotated = path.with_name(f"{path.stem}_{timestamp}{path.suffix}")
