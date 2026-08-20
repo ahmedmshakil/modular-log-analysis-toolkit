@@ -758,14 +758,6 @@ class LogSearchIndex:
         """
         return f"Entries: {len(self._entries)}, Words: {len(self._index)}, Sources: {len(self._field_index['source'])}, Levels: {len(self._field_index['level'])}"
 
-    def get_summary_string(self) -> str:
-        """Get summary string.
-
-        Returns:
-            Summary string.
-        """
-        return self.get_stats_formatted()
-
     def get_words_per_entry(self) -> float:
         """Get words per entry ratio.
 
