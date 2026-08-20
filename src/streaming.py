@@ -96,7 +96,7 @@ class LogStream:
             callback: Function to call for each matching entry.
             level_filter: List of level strings to include.
         """
-        def _process(entry: LogEntry):
+        def _process(entry: LogEntry) -> None:
             if level_filter and entry.level.value not in level_filter:
                 return
             callback(entry)
