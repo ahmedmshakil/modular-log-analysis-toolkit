@@ -58,7 +58,7 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
-def main(argv: Optional[List[str]] = None):
+def main(argv: Optional[List[str]] = None) -> None:
     """Main entry point for the CLI."""
     parser = build_parser()
     args = parser.parse_args(argv)

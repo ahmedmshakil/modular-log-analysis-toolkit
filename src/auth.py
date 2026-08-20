@@ -155,7 +155,7 @@ class AuthManager:
             return False
         return permission in self.ROLES.get(user.role, [])
 
-    def logout(self, token: str):
+    def logout(self, token: str) -> None:
         """Invalidate a session."""
         self._sessions.pop(token, None)
 
