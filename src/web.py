@@ -391,7 +391,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
 
     entries: List[LogEntry] = []
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         if self.path == "/":
             self._serve_dashboard()
         elif self.path == "/api/stats":
@@ -407,7 +407,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         else:
             self.send_error(404)
 
-    def _serve_dashboard(self):
+    def _serve_dashboard(self) -> None:
         html = f"""<!DOCTYPE html>
 <html>
 <head><title>modular-log-analysis-toolkit Dashboard</title>
@@ -469,7 +469,7 @@ refresh(); setInterval(refresh, 5000);
         self.end_headers()
         self.wfile.write(html.encode())
 
-    def _serve_stats(self):
+    def _serve_stats(self) -> None:
         agg = LogAggregator(self.entries)
         result = agg.summary()
         data = {
@@ -480,22 +480,22 @@ refresh(); setInterval(refresh, 5000);
         }
         self._json_response(data)
 
-    def _serve_entries(self):
+    def _serve_entries(self) -> None:
         limit = min(100, len(self.entries))
         data = [e.to_dict() for e in self.entries[-limit:]]
         self._json_response(data)
 
-    def _serve_errors(self):
+    def _serve_errors(self) -> None:
         errors = [e.to_dict() for e in self.entries if e.level in (LogLevel.ERROR, LogLevel.CRITICAL)]
         self._json_response(errors[-50:])
 
-    def _json_response(self, data):
+    def _json_response(self, data) -> None:
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
         self.wfile.write(json.dumps(data, default=str).encode())
 
-    def _serve_docs_index(self):
+    def _serve_docs_index(self) -> None:
         """Serve documentation index page with sidebar."""
         html = f"""<!DOCTYPE html>
 <html>
@@ -566,7 +566,7 @@ body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color
         self.end_headers()
         self.wfile.write(html.encode())
 
-    def _serve_docs_file(self, filename):
+    def _serve_docs_file(self, filename) -> None:
         """Serve a documentation file with sidebar."""
         docs_dir = Path(__file__).parent.parent / "docs"
         file_path = docs_dir / filename
@@ -666,11 +666,11 @@ body {{ font-family: 'Segoe UI', monospace; background: var(--bg-primary); color
         self.end_headers()
         self.wfile.write(html.encode())
 
-    def log_message(self, format, *args):
+    def log_message(self, format, *args) -> None:
         pass  # Suppress request logs
 
 
-def start_dashboard(host: str = "0.0.0.0", port: int = 8080, entries: List[LogEntry] = None):
+def start_dashboard(host: str = "0.0.0.0", port: int = 8080, entries: List[LogEntry] = None) -> None:
     """Start the dashboard web server.
 
     Args:
