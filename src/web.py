@@ -13,7 +13,7 @@ from .aggregator import LogAggregator
 from .models import LogEntry, LogLevel
 
 
-def get_docs_structure():
+def get_docs_structure() -> List:
     """Get documentation file structure."""
     docs_dir = Path(__file__).parent.parent / "docs"
     if not docs_dir.exists():
@@ -34,7 +34,7 @@ def get_docs_structure():
     return structure
 
 
-def read_markdown(file_path):
+def read_markdown(file_path) -> str:
     """Read and convert markdown to HTML."""
     import re
     try:
@@ -200,7 +200,7 @@ def read_markdown(file_path):
         return f'<p style="color: red;">Error reading file: {e}</p>'
 
 
-def build_table(rows):
+def build_table(rows) -> str:
     """Build HTML table from rows."""
     if not rows:
         return ''
@@ -224,7 +224,7 @@ def build_table(rows):
     return html
 
 
-def get_theme_toggle():
+def get_theme_toggle() -> str:
     """Return theme toggle button HTML."""
     return '''
     <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Theme">
@@ -246,7 +246,7 @@ def get_theme_toggle():
     '''
 
 
-def get_theme_css():
+def get_theme_css() -> str:
     """Return CSS with both light and dark themes."""
     return '''
     :root {
@@ -357,7 +357,7 @@ def get_theme_css():
     '''
 
 
-def get_theme_js():
+def get_theme_js() -> str:
     """Return JavaScript for theme toggling."""
     return '''
     function toggleTheme() {
