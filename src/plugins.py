@@ -31,11 +31,11 @@ class LogPlugin(ABC):
         """Process log entries."""
         pass
 
-    def on_startup(self):
+    def on_startup(self) -> None:
         """Called when plugin is loaded."""
         pass
 
-    def on_shutdown(self):
+    def on_shutdown(self) -> None:
         """Called when plugin is unloaded."""
         pass
 
