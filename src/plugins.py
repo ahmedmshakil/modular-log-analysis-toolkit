@@ -416,14 +416,6 @@ class PluginManager:
             return "none"
         return ", ".join(names)
 
-    def get_enabled_rate_formatted(self) -> str:
-        """Get formatted enabled rate string.
-
-        Returns:
-            Formatted enabled rate string.
-        """
-        return f"{self.get_enabled_rate():.1f}%"
-
     def get_stats_formatted(self) -> str:
         """Get formatted stats string.
 
@@ -454,17 +446,6 @@ class PluginManager:
             return "none"
         return ", ".join(names)
 
-    def get_plugin_versions_formatted(self) -> str:
-        """Get formatted plugin versions string.
-
-        Returns:
-            Formatted plugin versions string.
-        """
-        versions = self.get_plugin_versions()
-        if not versions:
-            return "none"
-        return ", ".join(f"{k}:{v}" for k, v in versions.items())
-
     def get_enabled_rate_percent(self) -> float:
         """Get enabled rate as percentage.
 
@@ -484,38 +465,6 @@ class PluginManager:
         if not self._plugins:
             return 0.0
         return round(self.get_disabled_count() / len(self._plugins) * 100, 2)
-
-    def get_disabled_rate_formatted(self) -> str:
-        """Get formatted disabled rate string.
-
-        Returns:
-            Formatted disabled rate string.
-        """
-        return f"{self.get_disabled_rate_percent():.1f}%"
-
-    def get_total_count_formatted(self) -> str:
-        """Get formatted total count string.
-
-        Returns:
-            Formatted total count string.
-        """
-        return f"{len(self._plugins)} plugins"
-
-    def get_enabled_count_formatted(self) -> str:
-        """Get formatted enabled count string.
-
-        Returns:
-            Formatted enabled count string.
-        """
-        return f"{self.get_enabled_count()} enabled"
-
-    def get_disabled_count_formatted(self) -> str:
-        """Get formatted disabled count string.
-
-        Returns:
-            Formatted disabled count string.
-        """
-        return f"{self.get_disabled_count()} disabled"
 
     def get_plugin_names_list(self) -> List[str]:
         """Get plugin names as list.
